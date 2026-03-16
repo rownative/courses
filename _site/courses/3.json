@@ -1,0 +1,65 @@
+{
+  "id": "3",
+  "name": "Tail of the Lake",
+  "country": "United States",
+  "center_lat": 47.644784,
+  "center_lon": -122.340126,
+  "distance_m": 704,
+  "notes": "October head race on Lake Union in Seattle. Great spectator viewing from Gas Works Park.",
+  "status": "established",
+  "submitted_by": "migrated from Rowsandall",
+  "polygons": [
+    {
+      "name": "Start",
+      "order": 0,
+      "points": [
+        {
+          "lat": 47.6452437875043,
+          "lon": -122.345630039259
+        },
+        {
+          "lat": 47.6450096411809,
+          "lon": -122.345105027181
+        },
+        {
+          "lat": 47.6462124517405,
+          "lon": -122.34402035971
+        },
+        {
+          "lat": 47.6464490673967,
+          "lon": -122.344568480026
+        },
+        {
+          "lat": 47.6452437875043,
+          "lon": -122.345630039259
+        }
+      ]
+    },
+    {
+      "name": "Finish",
+      "order": 1,
+      "points": [
+        {
+          "lat": 47.6445599802438,
+          "lon": -122.335465160197
+        },
+        {
+          "lat": 47.6430180772653,
+          "lon": -122.335564547304
+        },
+        {
+          "lat": 47.6430077871685,
+          "lon": -122.334940856536
+        },
+        {
+          "lat": 47.6445390894013,
+          "lon": -122.334874469418
+        },
+        {
+          "lat": 47.6445599802438,
+          "lon": -122.335465160197
+        }
+      ]
+    }
+  ]
+}

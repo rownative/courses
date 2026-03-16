@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="12">
+      <name>Brno - Prygl first 1k</name>
+      <open>1</open>
+      <description>rownative.icu Brno - Prygl first 1k</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>16.5023595725662,49.2447986941844,0 16.5054069647482,49.2449830444639,0 16.5051424841315,49.2458271161748,0 16.5018885524054,49.2459216840039,0 16.5018885524054,49.2459216840039,0 16.5023595725662,49.2447986941844,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>16.5082016325512,49.2354325768843,0 16.5082016325512,49.2354325768843,0 16.5111738260746,49.236400298221,0 16.5109896873161,49.2374912180831,0 16.5076035991814,49.2362814534138,0 16.5082016325512,49.2354325768843,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

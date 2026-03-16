@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="188">
+      <name>Seekonk R Narrows Southbound</name>
+      <open>1</open>
+      <description>rownative.icu Seekonk R Narrows Southbound</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.38141639923862,41.86914544072926,0 -71.38141639923862,41.86914544072926,0 -71.38049031388692,41.86923819901565,0 -71.38060325147144,41.86967134433222,0 -71.3818003376116,41.86954082332211,0 -71.38141639923862,41.86914544072926,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Must Row Through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37801386220903,41.86099537366502,0 -71.37747616987274,41.8610226598574,0 -71.37752398140381,41.86113129771312,0 -71.37802980252386,41.86109204252282,0 -71.37802980252386,41.86109204252282,0 -71.37801386220903,41.86099537366502,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37560664545475,41.85389512691268,0 -71.3753638745651,41.85390582986409,0 -71.37537597525537,41.8539773722559,0 -71.37560815813984,41.8539655425497,0 -71.37560815813984,41.8539655425497,0 -71.37560664545475,41.85389512691268,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

@@ -1,0 +1,71 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "courses/**"
+      - "scripts/**"
+      - "site/**"
+      - "kml/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Regenerate index and KML
+        run: |
+          if [ -f scripts/generate_index.py ]; then
+            python scripts/generate_index.py
+          fi
+          if [ -f scripts/generate_kml.py ]; then
+            python scripts/generate_kml.py
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Build site
+        run: |
+          mkdir -p _site
+          # Copy static site files
+          if [ -d site ]; then
+            cp -r site/* _site/
+          fi
+          # Copy index and KML for static serving
+          cp courses/index.json _site/ 2>/dev/null || true
+          mkdir -p _site/kml
+          cp kml/*.kml _site/kml/ 2>/dev/null || true
+          # Copy course JSON for detail view (optional)
+          mkdir -p _site/courses
+          cp courses/*.json _site/courses/ 2>/dev/null || true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

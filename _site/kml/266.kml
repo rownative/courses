@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="266">
+      <name>Rijnland Nieuwjaarswedstrijd 18.7 - Nieuwjaarswedstrijd 18.7</name>
+      <open>1</open>
+      <description>rownative.icu
+Van HM 18.7 naar HM 13.7</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>4.409518221718026,52.09080272322403,0 4.410033805818559,52.09064004927586,0 4.410273285277282,52.09088020795511,0 4.410273285277282,52.09088020795511,0 4.409751173526608,52.0910359398748,0 4.409518221718026,52.09080272322403,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>4.458877366616507,52.12300400260657,0 4.459069055877332,52.123143464044,0 4.459069055877332,52.123143464044,0 4.458598613097959,52.12335698831684,0 4.458407958409683,52.12321831203706,0 4.458877366616507,52.12300400260657,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

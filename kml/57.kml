@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="57">
+      <name>Head of Prague</name>
+      <open>1</open>
+      <description>rownative.icu Head of Prague</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>14.4056690624843,50.0386959744609,0 14.4079544291553,50.0383404551899,0 14.4079544291553,50.0383404551899,0 14.408827723083,50.0398459468952,0 14.4067806631021,50.0401625745879,0 14.4056690624843,50.0386959744609,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Veslarsky Ostrov</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>14.4160948368642,50.0581313307323,0 14.4179764448191,50.0580050840718,0 14.4183180616788,50.0595929388694,0 14.4183180616788,50.0595929388694,0 14.4161424100926,50.0596149809496,0 14.4160948368642,50.0581313307323,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>Bojka</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>14.410548413419,50.073055907438,0 14.410548413419,50.073055907438,0 14.4137574015069,50.0732062174988,0 14.4137751050745,50.0756613308129,0 14.4095112872074,50.0753727311162,0 14.410548413419,50.073055907438,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>14.4131830250237,50.0540024948973,0 14.4131830250237,50.0540024948973,0 14.4147150605973,50.0538540506324,0 14.4150937011269,50.0548728305292,0 14.4135810162996,50.05505593846,0 14.4131830250237,50.0540024948973,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

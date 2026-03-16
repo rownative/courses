@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="195">
+      <name>Wansbeck LDS and SBH 2024 - Wansbeck LDS and SBH 2024</name>
+      <open>1</open>
+      <description>rownative.icu
+North Rowing Long Distance Sculls and Cambois Small Boats Head short course for 2024</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Untitled polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.594111143794249,55.17055318431213,0 -1.593957529471857,55.17059721428448,0 -1.594174677609268,55.17081780558568,0 -1.594312293253688,55.1707776323436,0 -1.594312293253688,55.1707776323436,0 -1.594111143794249,55.17055318431213,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Untitled polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.592703198230563,55.17073180559564,0 -1.592624997930387,55.17074483859798,0 -1.592624997930387,55.17074483859798,0 -1.592656341606442,55.1709670511552,0 -1.592733819099234,55.17095930678009,0 -1.592703198230563,55.17073180559564,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>Untitled polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.589853881276394,55.17061446142781,0 -1.589801856943692,55.17059247832201,0 -1.589646643010186,55.17078183807675,0 -1.589711764676426,55.17079982098718,0 -1.589711764676426,55.17079982098718,0 -1.589853881276394,55.17061446142781,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>Untitled polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.578055325382391,55.16812371261825,0 -1.577843272640226,55.1680627526254,0 -1.577471609281826,55.16839438245613,0 -1.577696755890413,55.16850629631203,0 -1.577696755890413,55.16850629631203,0 -1.578055325382391,55.16812371261825,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP4</name>
+        <description>Untitled polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.57437783670928,55.16652464092606,0 -1.574034949662264,55.16642305744518,0 -1.573519983645335,55.16699315710089,0 -1.573814805185326,55.16707873319043,0 -1.573814805185326,55.16707873319043,0 -1.57437783670928,55.16652464092606,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Untitled polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.571772001181192,55.16595494954684,0 -1.571343913359631,55.16589179159939,0 -1.570895469829281,55.16644519132257,0 -1.571277826948647,55.16657403977902,0 -1.571277826948647,55.16657403977902,0 -1.571772001181192,55.16595494954684,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

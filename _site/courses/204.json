@@ -1,0 +1,65 @@
+{
+  "id": "204",
+  "name": "Twentsche Winter Wedstrijden (4 km) - Courses",
+  "country": "NLD",
+  "center_lat": 52.251522,
+  "center_lon": 6.731118,
+  "distance_m": 3989,
+  "notes": "4k Twentsche Winter Wedstrijden \r\nHengelo\n\n",
+  "status": "established",
+  "submitted_by": "migrated from Rowsandall",
+  "polygons": [
+    {
+      "name": "Finish",
+      "order": 0,
+      "points": [
+        {
+          "lat": 52.25046246467271,
+          "lon": 6.761424807955501
+        },
+        {
+          "lat": 52.25045526351433,
+          "lon": 6.761568109531466
+        },
+        {
+          "lat": 52.25045526351433,
+          "lon": 6.761568109531466
+        },
+        {
+          "lat": 52.25097865252224,
+          "lon": 6.761583163349318
+        },
+        {
+          "lat": 52.25098211192694,
+          "lon": 6.761484152256574
+        }
+      ]
+    },
+    {
+      "name": "Start",
+      "order": 1,
+      "points": [
+        {
+          "lat": 52.25212917657255,
+          "lon": 6.699151337719798
+        },
+        {
+          "lat": 52.25207354299227,
+          "lon": 6.702969398384266
+        },
+        {
+          "lat": 52.25256892212705,
+          "lon": 6.702960410116116
+        },
+        {
+          "lat": 52.2525572887486,
+          "lon": 6.69923447100933
+        },
+        {
+          "lat": 52.2525572887486,
+          "lon": 6.69923447100933
+        }
+      ]
+    }
+  ]
+}

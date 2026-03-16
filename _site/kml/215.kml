@@ -1,0 +1,200 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="215">
+      <name>Zwolsche Vecht - Zwolsche 3km rev W</name>
+      <open>1</open>
+      <description>rownative.icu Zwolsche Vecht - Zwolsche 3km rev W</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.133773255306756,52.54052021826685,0 6.134017551747313,52.54044212594295,0 6.134337426630974,52.54045530039506,0 6.134443840531825,52.54076238921503,0 6.13428661942589,52.54084917894338,0 6.13428661942589,52.54084917894338,0 6.133773255306756,52.54052021826685,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>WP1</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.131601319493337,52.54246455023777,0 6.132008642678537,52.54217563405416,0 6.132256525106601,52.54274867324375,0 6.132058079726932,52.54292773866697,0 6.132058079726932,52.54292773866697,0 6.131319418191714,52.54271036853568,0 6.131601319493337,52.54246455023777,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>WP2</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.129470706559095,52.54610398200296,0 6.129470706559095,52.54610398200296,0 6.130104367451732,52.54586265598746,0 6.130296850935024,52.54634709393861,0 6.129792853155614,52.54669476793005,0 6.129183230506832,52.54635149064544,0 6.129470706559095,52.54610398200296,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>WP3</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.127715698994061,52.54705326947067,0 6.128056925638401,52.54693611960228,0 6.128545183532577,52.54694033965873,0 6.128545183532577,52.54694033965873,0 6.128363478199336,52.54736987518361,0 6.127949089110574,52.5474950392374,0 6.127715698994061,52.54705326947067,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP4</name>
+        <description>WP4</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.123669466085153,52.54816838403042,0 6.124265825774804,52.54813611851898,0 6.124265825774804,52.54813611851898,0 6.124304658029375,52.54861001543033,0 6.123753262523861,52.54882395482197,0 6.123354170867159,52.5484984060993,0 6.123669466085153,52.54816838403042,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP5</name>
+        <description>WP5</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.122048464512382,52.54937596417118,0 6.122478236084552,52.54911188648203,0 6.122478236084552,52.54911188648203,0 6.122927408715661,52.54947023288518,0 6.122794092473636,52.54984034627981,0 6.121888429244764,52.54973042984248,0 6.122048464512382,52.54937596417118,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP6</name>
+        <description>WP6</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.120790940510073,52.55283668016044,0 6.121582238732719,52.55254359659146,0 6.121582238732719,52.55254359659146,0 6.121587603280146,52.55311662104054,0 6.121258721210348,52.55346973311379,0 6.120495472112903,52.55313378399724,0 6.120790940510073,52.55283668016044,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP7</name>
+        <description>WP7</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.119769681756388,52.55356074386485,0 6.120284680153416,52.55357227547725,0 6.120284680153416,52.55357227547725,0 6.120419132659245,52.55397358932806,0 6.119913672210928,52.55423809731659,0 6.119356694012805,52.5538315554322,0 6.119769681756388,52.55356074386485,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP8</name>
+        <description>WP8</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.115035025731168,52.55596894190721,0 6.115754855405855,52.55589271598976,0 6.116326264452974,52.55590973373673,0 6.116099991079455,52.55639978164942,0 6.116099991079455,52.55639978164942,0 6.115475657478717,52.55654457592694,0 6.115035025731168,52.55596894190721,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP9</name>
+        <description>WP9</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.107613524524704,52.55731765328774,0 6.108203900173912,52.55713092895008,0 6.108795886892217,52.5572409016666,0 6.108795886892217,52.5572409016666,0 6.108636812522641,52.55776738950233,0 6.107994934890495,52.5579320988887,0 6.107613524524704,52.55731765328774,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP10</name>
+        <description>WP10</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.104722666153659,52.5584609079902,0 6.105269390515962,52.55844264640316,0 6.105269390515962,52.55844264640316,0 6.105060323020107,52.55912565952504,0 6.10427703718887,52.5594541129807,0 6.103877583796667,52.5588813223292,0 6.104722666153659,52.5584609079902,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.101190105200203,52.56086534060011,0 6.101850556610884,52.56050900102849,0 6.101850556610884,52.56050900102849,0 6.102040079475826,52.56108208010746,0 6.101766014528209,52.56156893974874,0 6.101009632826098,52.56129440718354,0 6.101190105200203,52.56086534060011,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

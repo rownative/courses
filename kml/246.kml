@@ -1,0 +1,174 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="246">
+      <name>Gingerbread HOTS Duplicate</name>
+      <open>1</open>
+      <description>rownative.icu Gingerbread HOTS Duplicate</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.3873680049135,41.82245271304537,0 -71.38624223935213,41.82241597002047,0 -71.38611514395419,41.82250808750663,0 -71.38611514395419,41.82250808750663,0 -71.38705021890233,41.82265604038491,0 -71.3873680049135,41.82245271304537,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Must row through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.38506877631912,41.82371069473916,0 -71.38472948895961,41.82351238921756,0 -71.38457736375688,41.82375908108613,0 -71.38457736375688,41.82375908108613,0 -71.38497108615954,41.82389823735864,0 -71.38506877631912,41.82371069473916,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>Must row through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37972958115236,41.82651980511923,0 -71.37943937028184,41.82680589192839,0 -71.3805065386628,41.82712002361416,0 -71.38068824369677,41.82687610655159,0 -71.38068824369677,41.82687610655159,0 -71.37972958115236,41.82651980511923,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>Must row through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37862642781887,41.82889251206676,0 -71.37862642781887,41.82889251206676,0 -71.37809940490713,41.82879932996271,0 -71.37791182135982,41.82905891531795,0 -71.37846117601028,41.82909219394971,0 -71.37862642781887,41.82889251206676,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP4</name>
+        <description>Must row through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37737926460699,41.83463211249106,0 -71.37723501780927,41.83451570029177,0 -71.37657318744878,41.83458708251389,0 -71.37657318744878,41.83458708251389,0 -71.37655489615067,41.83463594848211,0 -71.37654778284033,41.83468254151254,0 -71.37660454084414,41.83477001955548,0 -71.37713456103064,41.83469650371084,0 -71.37737926460699,41.83463211249106,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP5</name>
+        <description>Must row through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.3767169199035,41.83811612442389,0 -71.37440403074746,41.837860609556,0 -71.37435809104304,41.83809953575164,0 -71.37560793822362,41.83836367552621,0 -71.37560793822362,41.83836367552621,0 -71.37652133308204,41.83850715959603,0 -71.3767169199035,41.83811612442389,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP6</name>
+        <description>Must row through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37216407111711,41.84335552845624,0 -71.37216407111711,41.84335552845624,0 -71.37120374940964,41.84319679941103,0 -71.37117335825397,41.84334621822125,0 -71.3721273064586,41.84350663202068,0 -71.37214482329736,41.84345192411227,0 -71.37216407111711,41.84335552845624,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP7</name>
+        <description>Must row through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37497108074633,41.85012312245546,0 -71.37497108074633,41.85012312245546,0 -71.37498879860502,41.84990128168252,0 -71.37399200493091,41.85008793968314,0 -71.37402320304685,41.85017719970868,0 -71.37401139097376,41.85024844181788,0 -71.37412134873813,41.85024182401591,0 -71.37497108074633,41.85012312245546,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP8</name>
+        <description>Must row through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37761474296418,41.85802333642062,0 -71.37757815671212,41.8578774192916,0 -71.37638494151714,41.85805118739747,0 -71.37638494151714,41.85805118739747,0 -71.37642730838118,41.85826087245726,0 -71.37759851328312,41.85817347399676,0 -71.37761474296418,41.85802333642062,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37784900907384,41.86108707430077,0 -71.37784900907384,41.86108707430077,0 -71.37791776951818,41.86105421718861,0 -71.37784619658532,41.8610409938205,0 -71.3766358028532,41.86106471531913,0 -71.37668058388807,41.86121449415273,0 -71.37784900907384,41.86108707430077,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

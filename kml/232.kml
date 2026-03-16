@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="232">
+      <name>HOTS Red Bridge to 18 to Red Bridge - Untitled project</name>
+      <open>1</open>
+      <description>rownative.icu
+Stake Race .  henderson to 18 back to henderson</description>
+      <Placemark>
+        <name>Start</name>
+        <description>start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37766526201506,41.82938590101921,0 -71.37766526201506,41.82938590101921,0 -71.37766526186203,41.82940429399862,0 -71.37821607104495,41.82943109596266,0 -71.3782174815004,41.82941060087965,0 -71.37766526201506,41.82938590101921,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>red #6</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.3765626484802,41.83463461336737,0 -71.37655024907173,41.83467319737247,0 -71.37655024907173,41.83467319737247,0 -71.3769967992871,41.83472271972943,0 -71.37700565101927,41.83468109978997,0 -71.3765626484802,41.83463461336737,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>green #13</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37215482173126,41.84346927592568,0 -71.37214914961464,41.84345026102996,0 -71.37120906199024,41.84346358265275,0 -71.37120906199024,41.84346358265275,0 -71.37117560688897,41.8437058972486,0 -71.37165260087637,41.84359514057107,0 -71.37215482173126,41.84346927592568,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37911744095682,41.82945668607035,0 -71.3785933865532,41.82944265707177,0 -71.3785933865532,41.82944265707177,0 -71.37859197605754,41.82945894802855,0 -71.37911051862544,41.82948378223222,0 -71.37911744095682,41.82945668607035,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP4</name>
+        <description>red #18 NB</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37401736905183,41.85016790024183,0 -71.37382207097647,41.85017630315973,0 -71.37382630122244,41.85019853593793,0 -71.37401995426264,41.85018155503552,0 -71.37401995426264,41.85018155503552,0 -71.37401736905183,41.85016790024183,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>red #18 SB</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37423694610509,41.85014838460984,0 -71.37401854413831,41.85016702491617,0 -71.37402136432853,41.85018243033985,0 -71.37424963046657,41.85016693990884,0 -71.37424963046657,41.85016693990884,0 -71.37423694610509,41.85014838460984,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

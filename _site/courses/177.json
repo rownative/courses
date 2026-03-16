@@ -1,0 +1,65 @@
+{
+  "id": "177",
+  "name": "CCRC - Catterline to Stonehaven",
+  "country": "United Kingdom",
+  "center_lat": 56.92669,
+  "center_lon": -2.20713,
+  "distance_m": 7259,
+  "notes": "\n\nCatterline Pier to Stonehaven harbour entrance",
+  "status": "established",
+  "submitted_by": "migrated from Rowsandall",
+  "polygons": [
+    {
+      "name": "Start",
+      "order": 0,
+      "points": [
+        {
+          "lat": 56.89309049283623,
+          "lon": -2.215586992390737
+        },
+        {
+          "lat": 56.89292377480074,
+          "lon": -2.214866546812682
+        },
+        {
+          "lat": 56.89480286045669,
+          "lon": -2.213368348667647
+        },
+        {
+          "lat": 56.89480286045669,
+          "lon": -2.213368348667647
+        },
+        {
+          "lat": 56.89505560499165,
+          "lon": -2.214458155144988
+        }
+      ]
+    },
+    {
+      "name": "Finish",
+      "order": 1,
+      "points": [
+        {
+          "lat": 56.95857116092562,
+          "lon": -2.199759690159367
+        },
+        {
+          "lat": 56.95874287448854,
+          "lon": -2.199169985282807
+        },
+        {
+          "lat": 56.95969653736735,
+          "lon": -2.199796122679958
+        },
+        {
+          "lat": 56.95960615764805,
+          "lon": -2.200461067635255
+        },
+        {
+          "lat": 56.95960615764805,
+          "lon": -2.200461067635255
+        }
+      ]
+    }
+  ]
+}

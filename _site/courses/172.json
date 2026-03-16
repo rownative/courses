@@ -1,0 +1,65 @@
+{
+  "id": "172",
+  "name": "Cambridge Cam courses - Cantabs Winter Head",
+  "country": "United Kingdom",
+  "center_lat": 52.225114,
+  "center_lon": 0.15991,
+  "distance_m": 2170,
+  "notes": "\n\nCantabrigian Rowing Club Winter head course - normally held in November",
+  "status": "established",
+  "submitted_by": "migrated from Rowsandall",
+  "polygons": [
+    {
+      "name": "Start",
+      "order": 0,
+      "points": [
+        {
+          "lat": 52.23222124243645,
+          "lon": 0.1707975824784969
+        },
+        {
+          "lat": 52.23222124243645,
+          "lon": 0.1707975824784969
+        },
+        {
+          "lat": 52.23203655316092,
+          "lon": 0.1714856371437201
+        },
+        {
+          "lat": 52.23227094514358,
+          "lon": 0.1715273821921781
+        },
+        {
+          "lat": 52.23243690625191,
+          "lon": 0.1709261886730706
+        }
+      ]
+    },
+    {
+      "name": "Finish",
+      "order": 1,
+      "points": [
+        {
+          "lat": 52.21779569738229,
+          "lon": 0.148647390005674
+        },
+        {
+          "lat": 52.21779569738229,
+          "lon": 0.148647390005674
+        },
+        {
+          "lat": 52.21787955702021,
+          "lon": 0.149040537439542
+        },
+        {
+          "lat": 52.21827801364947,
+          "lon": 0.1488006268975495
+        },
+        {
+          "lat": 52.21820225217878,
+          "lon": 0.1484346593852148
+        }
+      ]
+    }
+  ]
+}

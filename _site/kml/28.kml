@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="28">
+      <name>Naarden - 1k</name>
+      <open>1</open>
+      <description>rownative.icu
+De finish is bij de eerste boom aan bakboord voor de A1/Kamelen brug
+
+De start is net na het gebouw van &quot;de boer&quot; aanbstuurboordzijde
+
+De richting is van Muiden naar Naarden. &quot;Terug roeien&quot;</description>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>5.12061248482075,52.311791544421,0 5.12076804407497,52.3117079794226,0 5.12092570709025,52.3118222170549,0 5.12074189288362,52.3118819768745,0 5.12074189288362,52.3118819768745,0 5.12061248482075,52.311791544421,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>5.13365250138052,52.3069673098772,0 5.13379632330367,52.3069138268161,0 5.1339248250226,52.3070318751753,0 5.1337560559709,52.307090162645,0 5.1337560559709,52.307090162645,0 5.13365250138052,52.3069673098772,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

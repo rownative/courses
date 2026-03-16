@@ -1,0 +1,161 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="104">
+      <name>Seekonk North Stake Race - Seekonk North Stake Race Rev A</name>
+      <open>1</open>
+      <description>rownative.icu Seekonk North Stake Race - Seekonk North Stake Race Rev A</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37646675435755,41.84883690482901,0 -71.37646675435755,41.84883690482901,0 -71.37477138841678,41.84879056876638,0 -71.37474982827892,41.84906698242257,0 -71.37647709885246,41.84911770545938,0 -71.37646675435755,41.84883690482901,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Gate 1</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.3778106708906,41.83236578842806,0 -71.3778106708906,41.83236578842806,0 -71.37662826139311,41.83228124534629,0 -71.37659070448092,41.83252609947271,0 -71.37776233312674,41.83260406195869,0 -71.3778106708906,41.83236578842806,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>Gate 2</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37917639417684,41.82954560053582,0 -71.37817329632648,41.82948434766691,0 -71.37810937737606,41.82969974506329,0 -71.37913464183676,41.82974790160701,0 -71.37913464183676,41.82974790160701,0 -71.37917639417684,41.82954560053582,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>Gate 3</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37913338895777,41.82832368193528,0 -71.37913338895777,41.82832368193528,0 -71.37897755373433,41.82827066876781,0 -71.37856762933582,41.8289648637882,0 -71.37875056797796,41.82896486523794,0 -71.37913338895777,41.82832368193528,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP4</name>
+        <description>Gate 4</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37825986272348,41.8294900624798,0 -71.37744587693363,41.82944105505223,0 -71.37744587693363,41.82944105505223,0 -71.37724032711972,41.82964935914711,0 -71.37820231243465,41.82970449189099,0 -71.37825986272348,41.8294900624798,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP5</name>
+        <description>Gate 5</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37711514344056,41.8346669759125,0 -71.37610895316824,41.83441430155695,0 -71.3760572773891,41.83462907653784,0 -71.37704278963271,41.83487855707461,0 -71.37704278963271,41.83487855707461,0 -71.37711514344056,41.8346669759125,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP6</name>
+        <description>Gate 6</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37276650702995,41.83975874719034,0 -71.37266687177183,41.83998895852847,0 -71.37266687177183,41.83998895852847,0 -71.37410537615774,41.84031240501393,0 -71.37415421525183,41.84005714986476,0 -71.37276650702995,41.83975874719034,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP7</name>
+        <description>Gate 7</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37269374707351,41.84340565233283,0 -71.37141791204299,41.84346021503522,0 -71.37141791204299,41.84346021503522,0 -71.37142345698896,41.84371982156539,0 -71.372751263204,41.84364486943398,0 -71.37269374707351,41.84340565233283,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37480650158972,41.85001162535485,0 -71.37480650158972,41.85001162535485,0 -71.37340625010097,41.8501185130481,0 -71.3734416353744,41.85037079026153,0 -71.37480960638028,41.85028582127077,0 -71.37480650158972,41.85001162535485,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

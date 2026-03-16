@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="156">
+      <name>Mini-HOTR</name>
+      <open>1</open>
+      <description>rownative.icu
+Marker 18 to finish of Head of the Red</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2105711305717,37.51288252136831,0 -122.2103671632096,37.51317605153139,0 -122.2122441633173,37.51362547718333,0 -122.2123238048862,37.51331741806251,0 -122.2123238048862,37.51331741806251,0 -122.2105711305717,37.51288252136831,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>HOTR Polygon 8</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2119303126955,37.50894987174223,0 -122.2118179005809,37.50914257306776,0 -122.2145326892006,37.50988959873941,0 -122.2145783657795,37.50976630456733,0 -122.2145783657795,37.50976630456733,0 -122.2119303126955,37.50894987174223,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>HOTR Polygon 9</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2158298044878,37.50622606490214,0 -122.2157500985701,37.50633408032625,0 -122.2157500985701,37.50633408032625,0 -122.2168433813573,37.50739602858712,0 -122.2169683425919,37.50730916509611,0 -122.2158298044878,37.50622606490214,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2199024641801,37.50469063931998,0 -122.2199024641801,37.50469063931998,0 -122.2198201753881,37.50468720757757,0 -122.2202156622166,37.50608298960284,0 -122.2202871507351,37.50608950685575,0 -122.2199024641801,37.50469063931998,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

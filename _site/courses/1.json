@@ -1,0 +1,65 @@
+{
+  "id": "1",
+  "name": "Quinsig South to North - Quinsig South to North",
+  "country": "United States",
+  "center_lat": 42.270555,
+  "center_lon": -71.751438,
+  "distance_m": 5306,
+  "notes": "The full lake, from the gazebo on the point in the south cove all the way up to past the Rt 290 bridge.",
+  "status": "established",
+  "submitted_by": "migrated from Rowsandall",
+  "polygons": [
+    {
+      "name": "Start",
+      "order": 0,
+      "points": [
+        {
+          "lat": 42.2469879017582,
+          "lon": -71.7466188971112
+        },
+        {
+          "lat": 42.246535739521,
+          "lon": -71.7465461283205
+        },
+        {
+          "lat": 42.2466879902646,
+          "lon": -71.7451573740874
+        },
+        {
+          "lat": 42.2471893232471,
+          "lon": -71.7452347442315
+        },
+        {
+          "lat": 42.2469879017582,
+          "lon": -71.7466188971112
+        }
+      ]
+    },
+    {
+      "name": "Finish",
+      "order": 1,
+      "points": [
+        {
+          "lat": 42.2941586471372,
+          "lon": -71.7563905103169
+        },
+        {
+          "lat": 42.294520241424,
+          "lon": -71.7564391839138
+        },
+        {
+          "lat": 42.294328315518,
+          "lon": -71.7575274536408
+        },
+        {
+          "lat": 42.2939980420332,
+          "lon": -71.7574603241882
+        },
+        {
+          "lat": 42.2941586471372,
+          "lon": -71.7563905103169
+        }
+      ]
+    }
+  ]
+}

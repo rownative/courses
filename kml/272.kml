@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="272">
+      <name>Thyro 2k - Voorbij Zwaaikom tot Lonnekerspoorbrug - Thyro 2k - Zwaaikom - Lonnekerspoorbrug</name>
+      <open>1</open>
+      <description>rownative.icu Thyro 2k - Voorbij Zwaaikom tot Lonnekerspoorbrug - Thyro 2k - Zwaaikom - Lonnekerspoorbrug</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.818435171799377,52.24365205446803,0 6.819131747216744,52.24343863876006,0 6.819485210002386,52.24391894959522,0 6.81881439863707,52.24412818573658,0 6.81881439863707,52.24412818573658,0 6.818435171799377,52.24365205446803,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Houten Brug</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.827422335672855,52.24000196801407,0 6.827590129706723,52.2399167589223,0 6.82813319753373,52.24028192772108,0 6.827925627913817,52.24036318005872,0 6.827925627913817,52.24036318005872,0 6.827422335672855,52.24000196801407,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>6.840855103602433,52.23167487670104,0 6.84095091174691,52.23162053555574,0 6.841404549595296,52.2318864830934,0 6.841306765134048,52.2319329737925,0 6.841306765134048,52.2319329737925,0 6.840855103602433,52.23167487670104,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

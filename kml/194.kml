@@ -1,0 +1,136 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="194">
+      <name>Tyne LDS/SBH - Tyne LDS/SBH</name>
+      <open>1</open>
+      <description>rownative.icu
+4.5km race in Newcastle-upon-Tyne, England. Waypoints are included marking entrance and exits of major corners and before bridges.</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.696944731944417,54.96909996254466,0 -1.696944731944417,54.96909996254466,0 -1.696204794194959,54.96883193203142,0 -1.694736325051753,54.96992750294062,0 -1.695417823444299,54.97023609795035,0 -1.696944731944417,54.96909996254466,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>WP1</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.708061400282957,54.96949469269667,0 -1.706081251059901,54.9692233162618,0 -1.705993708518275,54.96955080481371,0 -1.705993708518275,54.96955080481371,0 -1.707903160492287,54.96992150333202,0 -1.708061400282957,54.96949469269667,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>WP2</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.713270286831082,54.96621398685927,0 -1.7122040016027,54.96609112127658,0 -1.7122040016027,54.96609112127658,0 -1.711994358965381,54.9676855445023,0 -1.713121597410843,54.96765808062104,0 -1.713270286831082,54.96621398685927,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>WP3</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.726715752866979,54.96945269967138,0 -1.726086967011468,54.969053379794,0 -1.724257319870973,54.9699007210207,0 -1.725010310360823,54.9702976596778,0 -1.725010310360823,54.9702976596778,0 -1.726715752866979,54.96945269967138,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP4</name>
+        <description>WP4</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.72871565803866,54.97478061490623,0 -1.728194887192359,54.97441778560326,0 -1.726090072192258,54.97550193206678,0 -1.726090072192258,54.97550193206678,0 -1.72662118567249,54.97582106105946,0 -1.72871565803866,54.97478061490623,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP5</name>
+        <description>WP5</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.742963117459579,54.9798033878614,0 -1.74265549058979,54.97970212528502,0 -1.74265549058979,54.97970212528502,0 -1.741685042260145,54.98069395880466,0 -1.741947237144173,54.98082746328564,0 -1.742963117459579,54.9798033878614,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-1.75077505181667,54.9817926439643,0 -1.750368564759933,54.98174060408726,0 -1.749857437904301,54.9829021922518,0 -1.750279270768775,54.9829772042288,0 -1.750279270768775,54.9829772042288,0 -1.75077505181667,54.9817926439643,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

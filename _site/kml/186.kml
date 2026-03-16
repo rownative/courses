@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="186">
+      <name>Seekonk R Henderson to Stadium</name>
+      <open>1</open>
+      <description>rownative.icu Seekonk R Henderson to Stadium</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37869298020136,41.83026131520801,0 -71.37869298020136,41.83026131520801,0 -71.37720119473329,41.83000570575177,0 -71.37697068414808,41.8304933977024,0 -71.37857328342135,41.83073698707791,0 -71.37869298020136,41.83026131520801,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Must Row Through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37215159031427,41.84340538821301,0 -71.37215159031427,41.84340538821301,0 -71.37149373609941,41.84335248660249,0 -71.37146696194165,41.84345493154199,0 -71.37214908991902,41.84348641819862,0 -71.37215159031427,41.84340538821301,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>Must Row Through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.3744415430724,41.85012618190331,0 -71.3744415430724,41.85012618190331,0 -71.37400957926383,41.8501233139735,0 -71.37401727862209,41.85022598101543,0 -71.37444847328102,41.85021106864291,0 -71.3744415430724,41.85012618190331,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>Must Row Through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37669779415276,41.85810245488508,0 -71.37669779415276,41.85810245488508,0 -71.37638422341136,41.85810357193694,0 -71.3763992263626,41.85820079022722,0 -71.37667753950518,41.85818067647889,0 -71.37669779415276,41.85810245488508,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.38262702198584,41.87064407111647,0 -71.3824062334408,41.8704579436969,0 -71.38185217092192,41.87081158203975,0 -71.3821104529263,41.87094497467099,0 -71.3821104529263,41.87094497467099,0 -71.38262702198584,41.87064407111647,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

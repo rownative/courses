@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="32">
+      <name>Schuylkill 400m Dash - Schuylkill 400m Dash</name>
+      <open>1</open>
+      <description>rownative.icu Schuylkill 400m Dash - Schuylkill 400m Dash</description>
+      <Placemark>
+        <name>Start Line</name>
+        <description>Start Line</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-75.1995957428777,39.9881929410498,0 -75.1994340934113,39.9883562953308,0 -75.2006885900057,39.9890416811683,0 -75.2008250701918,39.9888818733562,0 -75.2008250701918,39.9888818733562,0 -75.1995957428777,39.9881929410498,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish Line</name>
+        <description>Finish Line</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-75.2031490733632,39.9850618522714,0 -75.2025848327076,39.9855778314047,0 -75.2025848327076,39.9855778314047,0 -75.2044525063547,39.9866958691609,0 -75.204557086588,39.9865469629179,0 -75.2031490733632,39.9850618522714,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

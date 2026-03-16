@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="230">
+      <name> - Seekonk R - TOTS TT</name>
+      <open>1</open>
+      <description>rownative.icu
+Festival South to GateHouse</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.38039880412316,41.86730013112679,0 -71.38039880412316,41.86730013112679,0 -71.37964927604183,41.86746307849787,0 -71.37970392457194,41.86766475178645,0 -71.38049501994786,41.86749411099002,0 -71.38039880412316,41.86730013112679,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Must Row Through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37950489091246,41.86493005915095,0 -71.37950489091246,41.86493005915095,0 -71.378989775033,41.86498419536024,0 -71.3791534834834,41.86535447511562,0 -71.37963225146159,41.86532320988137,0 -71.37950489091246,41.86493005915095,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>Must Row Through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37927031472071,41.86005965431755,0 -71.37927031472071,41.86005965431755,0 -71.37766369375555,41.86014835521341,0 -71.37790171677361,41.86107961478882,0 -71.37921083581469,41.86116830270193,0 -71.37927031472071,41.86005965431755,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>Must Row Through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.3764129935962,41.84821486061801,0 -71.3764129935962,41.84821486061801,0 -71.37409337638421,41.84821708427378,0 -71.3738547358204,41.84945639299055,0 -71.37593693781128,41.84936823359205,0 -71.3764129935962,41.84821486061801,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP4</name>
+        <description>Must Row Through</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.37872943430733,41.82987731548197,0 -71.37872943430733,41.82987731548197,0 -71.37813101684809,41.82978420274812,0 -71.37804100955533,41.83000527372327,0 -71.37859407992002,41.83009954106728,0 -71.37872943430733,41.82987731548197,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-71.38067627846826,41.82705794620868,0 -71.38067627846826,41.82705794620868,0 -71.3801997459719,41.82689873142886,0 -71.3801129438874,41.82703802659461,0 -71.38038318378061,41.82712254565176,0 -71.3805899672855,41.82721207042074,0 -71.38067627846826,41.82705794620868,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

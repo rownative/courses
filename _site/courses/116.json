@@ -1,0 +1,65 @@
+{
+  "id": "116",
+  "name": "2K - Lake Quinsigamond - 2K Classic",
+  "country": "United States of America",
+  "center_lat": 42.284998,
+  "center_lon": -71.757113,
+  "distance_m": 2006,
+  "notes": "Start 5m north of 290 brodge\nFinish at the Regatta point finish tower\n\n",
+  "status": "established",
+  "submitted_by": "migrated from Rowsandall",
+  "polygons": [
+    {
+      "name": "Start",
+      "order": 0,
+      "points": [
+        {
+          "lat": 42.29390649731385,
+          "lon": -71.75832918000648
+        },
+        {
+          "lat": 42.29416414581674,
+          "lon": -71.75677672329074
+        },
+        {
+          "lat": 42.29451437892896,
+          "lon": -71.75681383713182
+        },
+        {
+          "lat": 42.29425581188077,
+          "lon": -71.75839065913384
+        },
+        {
+          "lat": 42.29390649731385,
+          "lon": -71.75832918000648
+        }
+      ]
+    },
+    {
+      "name": "Finish",
+      "order": 1,
+      "points": [
+        {
+          "lat": 42.27571845147447,
+          "lon": -71.75725166177394
+        },
+        {
+          "lat": 42.27578599609101,
+          "lon": -71.75539199695797
+        },
+        {
+          "lat": 42.27604161866756,
+          "lon": -71.75534960808426
+        },
+        {
+          "lat": 42.27596464745222,
+          "lon": -71.75724913935356
+        },
+        {
+          "lat": 42.27571845147447,
+          "lon": -71.75725166177394
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="237">
+      <name>Tiber Upstream - Head of the Lake</name>
+      <open>1</open>
+      <description>rownative.icu
+11 km practice course above the dam on the River Tiber
+
+Largest head race in the west. Held in early November. Starts in Lake Union, near the I-5 bridge and finishes near the UW boathouse.</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.3270031272104,47.64897179673651,0 -122.3261165805553,47.64876360055677,0 -122.3260173882427,47.64891509233739,0 -122.3260173882427,47.64891509233739,0 -122.3277634385375,47.64948999626105,0 -122.3278793520099,47.64933614263378,0 -122.3270031272104,47.64897179673651,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>WP1</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.3239290538964,47.65256031174594,0 -122.3228678384109,47.6525909388767,0 -122.3230954054023,47.65253486380869,0 -122.3230954054023,47.65253486380869,0 -122.323732926613,47.65233391565555,0 -122.3236231102171,47.65230948120538,0 -122.3204375987194,47.65234179816361,0 -122.3199232187261,47.65269869484545,0 -122.3210569100112,47.65269525475824,0 -122.322146187888,47.65269301242073,0 -122.3216076086422,47.652759227248,0 -122.3209450272763,47.65308479332136,0 -122.3216033031976,47.65311290777836,0 -122.322148499799,47.65302125724671,0 -122.3228678182265,47.65292536749751,0 -122.3235700859698,47.65275399468061,0 -122.3239290538964,47.65256031174594,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>WP2</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.3102388623095,47.64721635926211,0 -122.3098072678151,47.64709484670056,0 -122.3097896471957,47.64745464078347,0 -122.3101545198107,47.64748832411748,0 -122.3101545198107,47.64748832411748,0 -122.310229314758,47.64746207426987,0 -122.3102388623095,47.64721635926211,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>WP3</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2810931855884,47.64744047342748,0 -122.2810931855884,47.64744047342748,0 -122.2811331969729,47.64734111998342,0 -122.2809223387811,47.64716050524225,0 -122.2804518514076,47.64773534376167,0 -122.2803663865924,47.64725718093009,0 -122.2800147594335,47.64812308772148,0 -122.2798149729898,47.64749163609032,0 -122.2794956637817,47.64776802831,0 -122.2798141432945,47.64844162519018,0 -122.2792550394985,47.64818964920045,0 -122.2790972918506,47.64865876052999,0 -122.2790431678608,47.64913627220994,0 -122.2797111825322,47.64877403447404,0 -122.2792377435889,47.64965014246317,0 -122.279740118854,47.64914715530751,0 -122.2795443188983,47.6500160326739,0 -122.279832319627,47.64945142058425,0 -122.2800067231651,47.64984512906641,0 -122.2803209886772,47.65048993915874,0 -122.2805117110375,47.65015661710351,0 -122.2810931855884,47.64744047342748,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.288486457214,47.65087217941556,0 -122.2882479608767,47.65085367786476,0 -122.2879376150694,47.65178620585228,0 -122.2880110025563,47.65303459215961,0 -122.2880110025563,47.65303459215961,0 -122.2882582304766,47.65304575691737,0 -122.288486457214,47.65087217941556,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

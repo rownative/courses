@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="51">
+      <name>Uherské Hradiště</name>
+      <open>1</open>
+      <description>rownative.icu Uherské Hradiště</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>17.4893745389,49.109471228,0 17.4893745389,49.109471228,0 17.4893745389,49.109471228,0 17.4911067423,49.1094811918,0 17.4909527884,49.1103411557,0 17.4888918133,49.1102899098,0 17.4893745389,49.109471228,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Turn</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>17.4836181002,49.0979347215,0 17.4836181002,49.0979347215,0 17.4836181002,49.0979347215,0 17.489332427,49.0981702202,0 17.4888058511,49.1024117428,0 17.4836162032,49.1030885423,0 17.4836181002,49.0979347215,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>Turn</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>17.4928830266,49.0866607478,0 17.4928830266,49.0866607478,0 17.4928830266,49.0866607478,0 17.4973472737,49.0861776065,0 17.4994059869,49.0903340046,0 17.4942740099,49.0899098202,0 17.4928830266,49.0866607478,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>17.4630054316,49.071305244,0 17.4643666779,49.0712945663,0 17.4641649495,49.0724875988,0 17.4627698339,49.0723911762,0 17.4627698339,49.0723911762,0 17.4627698339,49.0723911762,0 17.4630054316,49.071305244,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

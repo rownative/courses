@@ -1,0 +1,253 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="84">
+      <name>Foster City Lagoon - Head of the Lagoon</name>
+      <open>1</open>
+      <description>rownative.icu
+5Km race course in Foster City, CA</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2613334512457,37.54329652906056,0 -122.2611078703579,37.54351803551337,0 -122.2620065159538,37.54394808829183,0 -122.2622206052276,37.54391126491664,0 -122.2622206052276,37.54391126491664,0 -122.2613334512457,37.54329652906056,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2652564007669,37.54111327017035,0 -122.2652564007669,37.54111327017035,0 -122.2649399909179,37.54116706281679,0 -122.2651199354331,37.54178626308876,0 -122.265421578219,37.54171532394903,0 -122.2652564007669,37.54111327017035,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.269875098205,37.54211788477424,0 -122.2691789816005,37.54231469803887,0 -122.2691789816005,37.54231469803887,0 -122.2691745201181,37.54254201529337,0 -122.2699989347484,37.54237443096761,0 -122.269875098205,37.54211788477424,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>Beach Park Bridge</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2702421359085,37.5461727137117,0 -122.2692432663864,37.54632759199224,0 -122.2692906924228,37.5467047140814,0 -122.2703093751003,37.54645087795169,0 -122.2703093751003,37.54645087795169,0 -122.2702421359085,37.5461727137117,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP4</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2708407756957,37.54802115584893,0 -122.2697699589267,37.54825361271942,0 -122.2699757982173,37.54849670059647,0 -122.2710289451962,37.54837925153763,0 -122.2710289451962,37.54837925153763,0 -122.2708407756957,37.54802115584893,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP5</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2730434615863,37.55116550681653,0 -122.2730434615863,37.55116550681653,0 -122.2729284110421,37.5510545067734,0 -122.2718943099994,37.55148223914735,0 -122.2720422870818,37.55164951847944,0 -122.2730434615863,37.55116550681653,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP6</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2725043765415,37.55259987763652,0 -122.2725043765415,37.55259987763652,0 -122.2722413536618,37.55275320933548,0 -122.2730810274587,37.55371452633544,0 -122.2734187392068,37.55348997102873,0 -122.2725043765415,37.55259987763652,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP7</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2706082993351,37.55396542194705,0 -122.2706082993351,37.55396542194705,0 -122.2704330605679,37.55404434530575,0 -122.2711252167844,37.55499871487304,0 -122.2714225692214,37.55481883765693,0 -122.2706082993351,37.55396542194705,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP8</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2691134857417,37.55435210967602,0 -122.2691134857417,37.55435210967602,0 -122.2688046756697,37.55432332990311,0 -122.2685583562726,37.55538296890779,0 -122.2690524458537,37.55540467168586,0 -122.2691134857417,37.55435210967602,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP9</name>
+        <description>Shell Blvd. Bridge</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2642471123601,37.5531655626673,0 -122.2642471123601,37.5531655626673,0 -122.2637883735009,37.55326164422784,0 -122.2641381788244,37.55399933126476,0 -122.2646210902296,37.55388995864599,0 -122.2642471123601,37.5531655626673,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP10</name>
+        <description>Foster City Blvd. Bridge</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2584457560035,37.55517448958645,0 -122.2582288891608,37.55547760734957,0 -122.2582288891608,37.55547760734957,0 -122.2589579567187,37.55590288321748,0 -122.25936635956,37.55561501720226,0 -122.2584457560035,37.55517448958645,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP11</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2561771364686,37.55657167656905,0 -122.2561771364686,37.55657167656905,0 -122.2560819968639,37.55665832380274,0 -122.257149715301,37.55687774418722,0 -122.2572338851529,37.55672800778413,0 -122.2561771364686,37.55657167656905,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP12</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2565581341618,37.55924253212555,0 -122.25540879392,37.5593376444462,0 -122.2554016856775,37.5595512873581,0 -122.2565662040986,37.55947818193506,0 -122.2565662040986,37.55947818193506,0 -122.2565581341618,37.55924253212555,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP13</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.2578154649601,37.56264008058918,0 -122.257682668901,37.56244308406665,0 -122.2568755316306,37.56302563800251,0 -122.2569974508515,37.56313042959174,0 -122.2569974508515,37.56313042959174,0 -122.2578154649601,37.56264008058918,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP14</name>
+        <description>Untitled Polygon</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.261664829849,37.56501535800267,0 -122.261664829849,37.56501535800267,0 -122.2614292036247,37.5649532567735,0 -122.2612589148037,37.56583981409239,0 -122.2614575034623,37.56587919911385,0 -122.261664829849,37.56501535800267,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-122.265335415196,37.56546276343049,0 -122.2650742055079,37.56541563278138,0 -122.2646099865374,37.56659696046757,0 -122.2647220420933,37.56671346889772,0 -122.2647220420933,37.56671346889772,0 -122.265335415196,37.56546276343049,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

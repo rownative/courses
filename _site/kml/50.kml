@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="50">
+      <name>Prygl 6k</name>
+      <open>1</open>
+      <description>rownative.icu
+6k na prehrade. Start v Rokli, toci se u sirky. Z Rokle k Sirce musis jet v draze</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>16.4924501194,49.2487487912,0 16.493756183,49.2484415542,0 16.493756183,49.2484415542,0 16.493756183,49.2484415542,0 16.4950276036,49.2494659889,0 16.4935514581,49.2503038204,0 16.4924501194,49.2487487912,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>Point 1</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>16.502701462,49.2422079428,0 16.5053367985,49.2401527868,0 16.5094023592,49.2415898407,0 16.506708949,49.2439847728,0 16.506708949,49.2439847728,0 16.506708949,49.2439847728,0 16.502701462,49.2422079428,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>Turn</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>16.5136670476,49.2286154281,0 16.5163274873,49.2289844757,0 16.5163547561,49.2300084054,0 16.5163547561,49.2300084054,0 16.5163547561,49.2300084054,0 16.5130017315,49.2295990778,0 16.5136670476,49.2286154281,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>16.4924501194,49.2487487912,0 16.493756183,49.2484415542,0 16.493756183,49.2484415542,0 16.493756183,49.2484415542,0 16.4950276036,49.2494659889,0 16.4935514581,49.2503038204,0 16.4924501194,49.2487487912,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

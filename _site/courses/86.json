@@ -1,0 +1,65 @@
+{
+  "id": "86",
+  "name": "Hoover Reservoir 2K - Hoover Reservoir 2K",
+  "country": "United States",
+  "center_lat": 40.121012,
+  "center_lon": -82.882249,
+  "distance_m": 2019,
+  "notes": "Start just south of the Smothers Rd Bridge\r\nFinish by the dock at the south end of the lake.",
+  "status": "established",
+  "submitted_by": "migrated from Rowsandall",
+  "polygons": [
+    {
+      "name": "Start",
+      "order": 0,
+      "points": [
+        {
+          "lat": 40.13017227361309,
+          "lon": -82.88281703969496
+        },
+        {
+          "lat": 40.12999199466161,
+          "lon": -82.87953946824366
+        },
+        {
+          "lat": 40.13025356953625,
+          "lon": -82.8795338181106
+        },
+        {
+          "lat": 40.13044933193122,
+          "lon": -82.8828040965517
+        },
+        {
+          "lat": 40.13017227361309,
+          "lon": -82.88281703969496
+        }
+      ]
+    },
+    {
+      "name": "Finish",
+      "order": 1,
+      "points": [
+        {
+          "lat": 40.11163103518676,
+          "lon": -82.8819100851436
+        },
+        {
+          "lat": 40.11189174517269,
+          "lon": -82.88187309524372
+        },
+        {
+          "lat": 40.11210595631763,
+          "lon": -82.88461154497256
+        },
+        {
+          "lat": 40.11182055015368,
+          "lon": -82.88467395545555
+        },
+        {
+          "lat": 40.11163103518676,
+          "lon": -82.8819100851436
+        }
+      ]
+    }
+  ]
+}

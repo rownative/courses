@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>courses</name>
+    <open>1</open>
+    <Style id="default">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="default0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#default</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#hl</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="hl">
+      <IconStyle>
+        <scale>1.2</scale>
+      </IconStyle>
+      <LineStyle>
+        <color>ff00ffff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff7fffff</color>
+      </PolyStyle>
+    </Style>
+    <Folder id="143">
+      <name>Hudson Champlain Head Race</name>
+      <open>1</open>
+      <description>rownative.icu
+Head race downstream of the Route 29 Bridge across the Hudson-Champlain Canal in Schuylerville, NY.</description>
+      <Placemark>
+        <name>Start</name>
+        <description>Start</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-73.57433491188475,43.09788053553825,0 -73.57332433319998,43.0976055883816,0 -73.57308995573361,43.09816362559998,0 -73.57397067720834,43.09837957645903,0 -73.57397067720834,43.09837957645903,0 -73.57433491188475,43.09788053553825,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP1</name>
+        <description>1000 M Turn</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-73.5786947532469,43.09009426832556,0 -73.57852978345716,43.0891706900181,0 -73.57747305541338,43.08929351352666,0 -73.57763630110716,43.09011948065327,0 -73.57737045782947,43.09103949859114,0 -73.57842670659576,43.09124372284461,0 -73.57842670659576,43.09124372284461,0 -73.5786947532469,43.09009426832556,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP2</name>
+        <description>2000 M Island</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-73.57670279039681,43.08013584471568,0 -73.5753392377259,43.07986608899525,0 -73.574701341868,43.08155434405418,0 -73.57610144884819,43.08183202534501,0 -73.57610144884819,43.08183202534501,0 -73.57670279039681,43.08013584471568,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP3</name>
+        <description>3000 M Airfield Bend</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-73.58242234382075,43.07306948310514,0 -73.58242234382075,43.07306948310514,0 -73.58030288136183,43.07242254557784,0 -73.57952393703569,43.07372304717963,0 -73.58175956197897,43.07445499969187,0 -73.58242234382075,43.07306948310514,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>WP4</name>
+        <description>4000 M Flats</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-73.58106250104203,43.0634245881181,0 -73.5794488719516,43.06385521157765,0 -73.57998706835146,43.06509650570487,0 -73.58154757378611,43.06461071625408,0 -73.58154757378611,43.06461071625408,0 -73.58106250104203,43.0634245881181,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Finish</name>
+        <description>Finish</description>
+        <styleUrl>#default0</styleUrl>
+        <Polygon>
+          <tessellate>1</tessellate>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-73.57904872158774,43.05614233316411,0 -73.57712446860324,43.05578563400954,0 -73.57646030026848,43.05731313337309,0 -73.57865922212528,43.05737641020755,0 -73.57865922212528,43.05737641020755,0 -73.57904872158774,43.05614233316411,0</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

@@ -1,0 +1,79 @@
+name: Validate courses
+
+on:
+  pull_request:
+    paths:
+      - "courses/**"
+      - ".github/workflows/validate.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          if [ -f scripts/requirements.txt ]; then
+            pip install -r scripts/requirements.txt
+          fi
+
+      - name: Get changed course files
+        id: changed
+        run: |
+          FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} 2>/dev/null || git diff --name-only HEAD^ HEAD)
+          COURSE_FILES=$(echo "$FILES" | grep -E '^courses/[^.].*\.json$' || true)
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$COURSE_FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Validate courses
+        id: validate
+        run: |
+          FILES="${{ steps.changed.outputs.files }}"
+          FAILED=0
+          OUTPUT=""
+          if [ -z "$FILES" ]; then
+            echo "No course files changed."
+            echo "result=ok" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          for f in $FILES; do
+            if [ -f "$f" ]; then
+              if python scripts/validate_course.py "$f" 2>&1 | tee -a /tmp/validate.log; then
+                OUTPUT="${OUTPUT}\n- \`$f\`: OK"
+              else
+                OUTPUT="${OUTPUT}\n- \`$f\`: FAILED"
+                FAILED=1
+              fi
+            fi
+          done
+          echo "output<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$OUTPUT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "result=$([ $FAILED -eq 0 ] && echo ok || echo failed)" >> $GITHUB_OUTPUT
+          if [ $FAILED -ne 0 ]; then
+            echo "Validation failed. See log:"
+            cat /tmp/validate.log
+            exit 1
+          fi
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `${{ steps.validate.outputs.output }}` || 'No courses changed';
+            const result = '${{ steps.validate.outputs.result }}' || 'ok';
+            const body = `## Course validation\n\n${output}\n\n**Result:** ${result === 'ok' ? '✅ All passed' : '❌ Failed'}`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

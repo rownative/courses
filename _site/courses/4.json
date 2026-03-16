@@ -1,0 +1,65 @@
+{
+  "id": "4",
+  "name": "Head of the Lake",
+  "country": "United States",
+  "center_lat": 47.651957,
+  "center_lon": -122.308671,
+  "distance_m": 2377,
+  "notes": "Largest head race in the west. Held in early November. Starts in Lake Union, near the I-5 bridge and finishes near the UW boathouse.",
+  "status": "established",
+  "submitted_by": "migrated from Rowsandall",
+  "polygons": [
+    {
+      "name": "Start",
+      "order": 0,
+      "points": [
+        {
+          "lat": 47.6507108194929,
+          "lon": -122.324041500887
+        },
+        {
+          "lat": 47.6516181610005,
+          "lon": -122.326630394688
+        },
+        {
+          "lat": 47.6508470621713,
+          "lon": -122.327256539233
+        },
+        {
+          "lat": 47.6499431861828,
+          "lon": -122.324640567512
+        },
+        {
+          "lat": 47.6507108194929,
+          "lon": -122.324041500887
+        }
+      ]
+    },
+    {
+      "name": "Finish",
+      "order": 1,
+      "points": [
+        {
+          "lat": 47.6546176797471,
+          "lon": -122.292144170209
+        },
+        {
+          "lat": 47.6512893693505,
+          "lon": -122.293643439874
+        },
+        {
+          "lat": 47.6509231253207,
+          "lon": -122.291822789395
+        },
+        {
+          "lat": 47.6542935822887,
+          "lon": -122.290340090085
+        },
+        {
+          "lat": 47.6546176797471,
+          "lon": -122.292144170209
+        }
+      ]
+    }
+  ]
+}
