@@ -29,7 +29,7 @@
   {
     "id": "106",
     "name": "HOTS Stake Race A - HOTS Stake Race",
-    "country": "unknown",
+    "country": "United States",
     "center_lat": 41.833543,
     "center_lon": -71.377001,
     "distance_m": 4804,
@@ -65,7 +65,7 @@
   {
     "id": "114",
     "name": "Head of the Cuyahoga - Head of the Cuyahoga",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 41.488688,
     "center_lon": -81.692422,
     "distance_m": 4731,
@@ -74,7 +74,7 @@
   {
     "id": "115",
     "name": "LOL! - Lake Quinsigamond - Lap of the Lake",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 42.260188,
     "center_lon": -71.751506,
     "distance_m": 8681,
@@ -83,7 +83,7 @@
   {
     "id": "116",
     "name": "2K - Lake Quinsigamond - 2K Classic",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 42.284998,
     "center_lon": -71.757113,
     "distance_m": 2006,
@@ -92,7 +92,7 @@
   {
     "id": "117",
     "name": "500M - Lake Quinsigmond - 500M",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 42.288038,
     "center_lon": -71.756213,
     "distance_m": 491,
@@ -110,7 +110,7 @@
   {
     "id": "123",
     "name": "Hamburg - Fari 4200 Rev A",
-    "country": "Deutschland",
+    "country": "Germany",
     "center_lat": 53.581184,
     "center_lon": 9.998078,
     "distance_m": 4338,
@@ -119,7 +119,7 @@
   {
     "id": "124",
     "name": "Hamburg - Fari 7500 Rev A",
-    "country": "Deutschland",
+    "country": "Germany",
     "center_lat": 53.590895,
     "center_lon": 9.998827,
     "distance_m": 7570,
@@ -128,7 +128,7 @@
   {
     "id": "125",
     "name": "Cambridge - Head of the Q",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 42.364523,
     "center_lon": -71.144238,
     "distance_m": 3162,
@@ -137,7 +137,7 @@
   {
     "id": "126",
     "name": "Head of the Pond - Rev A",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 41.670593,
     "center_lon": -70.486675,
     "distance_m": 7431,
@@ -164,7 +164,7 @@
   {
     "id": "140",
     "name": "Alphen aan den Rijn - Aarkanaal",
-    "country": "Nederland",
+    "country": "Netherlands",
     "center_lat": 52.164733,
     "center_lon": 4.709426,
     "distance_m": 14847,
@@ -173,7 +173,7 @@
   {
     "id": "141",
     "name": "House of Wines",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 39.43141,
     "center_lon": -81.461247,
     "distance_m": 11219,
@@ -182,7 +182,7 @@
   {
     "id": "142",
     "name": "Charles River - DeWolfe to Soldiers Field - Charles River - DeWolfe to Soldiers Field Rev F",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 42.367861,
     "center_lon": -71.123336,
     "distance_m": 4688,
@@ -191,7 +191,7 @@
   {
     "id": "143",
     "name": "Hudson Champlain Head Race",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 43.077196,
     "center_lon": -73.578035,
     "distance_m": 4714,
@@ -200,7 +200,7 @@
   {
     "id": "146",
     "name": "Thyro",
-    "country": "Nederland",
+    "country": "Netherlands",
     "center_lat": 52.24166,
     "center_lon": 6.823994,
     "distance_m": 3780,
@@ -209,7 +209,7 @@
   {
     "id": "147",
     "name": "Thyro Andersom",
-    "country": "Nederland",
+    "country": "Netherlands",
     "center_lat": 52.24166,
     "center_lon": 6.823994,
     "distance_m": 3780,
@@ -218,7 +218,7 @@
   {
     "id": "149",
     "name": "Thyro - Titanenbokaal",
-    "country": "Nederland",
+    "country": "Netherlands",
     "center_lat": 52.225065,
     "center_lon": 6.845976,
     "distance_m": 643,
@@ -236,7 +236,7 @@
   {
     "id": "150",
     "name": "Thyro Oefenbaantje",
-    "country": "Nederland",
+    "country": "Netherlands",
     "center_lat": 52.224511,
     "center_lon": 6.846857,
     "distance_m": 203,
@@ -245,7 +245,7 @@
   {
     "id": "153",
     "name": "CharlesSkiff - Rev 4",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 42.367039,
     "center_lon": -71.132061,
     "distance_m": 9905,
@@ -254,7 +254,7 @@
   {
     "id": "154",
     "name": "Head of the Red - Head of the Red",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 37.521364,
     "center_lon": -122.205624,
     "distance_m": 5531,
@@ -263,7 +263,7 @@
   {
     "id": "156",
     "name": "Mini-HOTR",
-    "country": "United States of America",
+    "country": "United States",
     "center_lat": 37.508111,
     "center_lon": -122.214858,
     "distance_m": 1198,
@@ -272,7 +272,7 @@
   {
     "id": "163",
     "name": "Kief-Race",
-    "country": "Deutschland",
+    "country": "Germany",
     "center_lat": 49.439417,
     "center_lon": 8.462987,
     "distance_m": 994,
@@ -281,7 +281,7 @@
   {
     "id": "164",
     "name": "Kraftwerk 6k",
-    "country": "Deutschland",
+    "country": "Germany",
     "center_lat": 49.456029,
     "center_lon": 8.456872,
     "distance_m": 5907,
@@ -308,7 +308,7 @@
   {
     "id": "17",
     "name": "Piestany",
-    "country": "Slovensko",
+    "country": "Slovakia",
     "center_lat": 48.575169,
     "center_lon": 17.829359,
     "distance_m": 912,
@@ -317,7 +317,7 @@
   {
     "id": "170",
     "name": "Thyro Bocht",
-    "country": "Nederland",
+    "country": "Netherlands",
     "center_lat": 52.226884,
     "center_lon": 6.844914,
     "distance_m": 1043,
@@ -488,7 +488,7 @@
   {
     "id": "193",
     "name": "Tees LSD/SBH Course",
-    "country": "GBR",
+    "country": "United Kingdom",
     "center_lat": 54.543602,
     "center_lon": -1.310646,
     "distance_m": 4967,
@@ -497,7 +497,7 @@
   {
     "id": "194",
     "name": "Tyne LDS/SBH - Tyne LDS/SBH",
-    "country": "GBR",
+    "country": "United Kingdom",
     "center_lat": 54.9698,
     "center_lon": -1.725416,
     "distance_m": 4337,
@@ -506,7 +506,7 @@
   {
     "id": "195",
     "name": "Wansbeck LDS and SBH 2024 - Wansbeck LDS and SBH 2024",
-    "country": "GBR",
+    "country": "United Kingdom",
     "center_lat": 55.169512,
     "center_lon": -1.583749,
     "distance_m": 1543,
@@ -515,7 +515,7 @@
   {
     "id": "196",
     "name": "Wansbeck LDS/SBH 2024 - Wansbeck LDS and SBH 2024",
-    "country": "GBR",
+    "country": "United Kingdom",
     "center_lat": 55.169512,
     "center_lon": -1.583749,
     "distance_m": 1543,
@@ -524,7 +524,7 @@
   {
     "id": "197",
     "name": "Head of the Schuylkill - Head of the Schuylkill",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 39.98579,
     "center_lon": -75.193955,
     "distance_m": 3948,
@@ -533,7 +533,7 @@
   {
     "id": "198",
     "name": "Head of the Schuylkill - Head of the Schuylkill",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 39.987395,
     "center_lon": -75.195096,
     "distance_m": 6150,
@@ -542,7 +542,7 @@
   {
     "id": "199",
     "name": "Head of the Schuylkill - Head of the Schuylkill",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 39.987395,
     "center_lon": -75.195096,
     "distance_m": 3810,
@@ -551,7 +551,7 @@
   {
     "id": "202",
     "name": "DDS Trial 4k",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.039177,
     "center_lon": 4.346336,
     "distance_m": 3928,
@@ -560,7 +560,7 @@
   {
     "id": "204",
     "name": "Twentsche Winter Wedstrijden (4 km) - Courses",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.251522,
     "center_lon": 6.731118,
     "distance_m": 3989,
@@ -569,7 +569,7 @@
   {
     "id": "205",
     "name": "Thyro 4.000m",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.24132,
     "center_lon": 6.825278,
     "distance_m": 5519,
@@ -578,7 +578,7 @@
   {
     "id": "209",
     "name": "Skiffhead",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.326539,
     "center_lon": 4.905659,
     "distance_m": 6993,
@@ -587,7 +587,7 @@
   {
     "id": "21",
     "name": "Naarden - 500m",
-    "country": "The Netherlands",
+    "country": "Netherlands",
     "center_lat": 52.32397,
     "center_lon": 5.087764,
     "distance_m": 498,
@@ -596,7 +596,7 @@
   {
     "id": "210",
     "name": "Avon Head Long - Avon Head - Long",
-    "country": "GBR",
+    "country": "United Kingdom",
     "center_lat": 51.392531,
     "center_lon": -2.425585,
     "distance_m": 2703,
@@ -605,7 +605,7 @@
   {
     "id": "211",
     "name": "Cooper River - Untitled project",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 39.925446,
     "center_lon": -75.07106,
     "distance_m": 1998,
@@ -614,7 +614,7 @@
   {
     "id": "212",
     "name": "Cooper River - Cooper",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 39.925306,
     "center_lon": -75.073988,
     "distance_m": 2011,
@@ -623,7 +623,7 @@
   {
     "id": "213",
     "name": "Cooper River Park - Cooper",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 39.925584,
     "center_lon": -75.073954,
     "distance_m": 2022,
@@ -632,7 +632,7 @@
   {
     "id": "214",
     "name": "Zwolsche Vecht - Zwolsche 3km",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.551207,
     "center_lon": 6.121874,
     "distance_m": 3306,
@@ -641,7 +641,7 @@
   {
     "id": "215",
     "name": "Zwolsche Vecht - Zwolsche 3km rev W",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.55119,
     "center_lon": 6.121826,
     "distance_m": 3315,
@@ -650,7 +650,7 @@
   {
     "id": "216",
     "name": "Zwolsche Vecht - Zwolsche 3km rev M",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.551218,
     "center_lon": 6.121852,
     "distance_m": 3314,
@@ -659,7 +659,7 @@
   {
     "id": "217",
     "name": "Seekonk R TOTS II Cour - Seekonk R - TOTS II Course",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.854848,
     "center_lon": -71.378901,
     "distance_m": 4781,
@@ -668,7 +668,7 @@
   {
     "id": "218",
     "name": " - Seekonk R - TOTS II Course",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.854848,
     "center_lon": -71.378901,
     "distance_m": 4573,
@@ -677,7 +677,7 @@
   {
     "id": "219",
     "name": " - Seekonk R - TOTS II Course",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.854848,
     "center_lon": -71.378901,
     "distance_m": 4573,
@@ -695,7 +695,7 @@
   {
     "id": "227",
     "name": "Seekonk R TOTS TT - TOTS TT",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.856906,
     "center_lon": -71.378545,
     "distance_m": 4230,
@@ -704,7 +704,7 @@
   {
     "id": "228",
     "name": "Seekonk R - Seekonk R - TOTS II Course",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.854599,
     "center_lon": -71.37901,
     "distance_m": 4571,
@@ -713,7 +713,7 @@
   {
     "id": "229",
     "name": "Seekonk R - Seekonk R - TOTS II Course",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.854599,
     "center_lon": -71.37901,
     "distance_m": 4571,
@@ -731,7 +731,7 @@
   {
     "id": "230",
     "name": " - Seekonk R - TOTS TT",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.854599,
     "center_lon": -71.37901,
     "distance_m": 4571,
@@ -740,7 +740,7 @@
   {
     "id": "231",
     "name": "Seekonk R - TOTS TT",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.854599,
     "center_lon": -71.37901,
     "distance_m": 4571,
@@ -749,7 +749,7 @@
   {
     "id": "232",
     "name": "HOTS Red Bridge to 18 to Red Bridge - Untitled project",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.839101,
     "center_lon": -71.375444,
     "distance_m": 5687,
@@ -758,7 +758,7 @@
   {
     "id": "233",
     "name": "HOTS Stake race Aug 9 - Untitled project",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.839101,
     "center_lon": -71.375444,
     "distance_m": 4784,
@@ -767,7 +767,7 @@
   {
     "id": "234",
     "name": "HOTS Stake Race 8  2025 - Untitled project",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.839102,
     "center_lon": -71.375567,
     "distance_m": 4793,
@@ -776,7 +776,7 @@
   {
     "id": "236",
     "name": "Tiber Upstream - Head of the Charles",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 42.35966,
     "center_lon": -71.122207,
     "distance_m": 2778,
@@ -785,7 +785,7 @@
   {
     "id": "237",
     "name": "Tiber Upstream - Head of the Lake",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 47.649065,
     "center_lon": -122.310062,
     "distance_m": 4567,
@@ -794,7 +794,7 @@
   {
     "id": "238",
     "name": "Tiber Upstream - Tail of the Lake",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 47.644784,
     "center_lon": -122.340126,
     "distance_m": 704,
@@ -812,7 +812,7 @@
   {
     "id": "243",
     "name": "River Tiber above the dam - Tiber Upstream Practice",
-    "country": "ITA",
+    "country": "Italy",
     "center_lat": 42.031273,
     "center_lon": 12.518076,
     "distance_m": 10915,
@@ -821,7 +821,7 @@
   {
     "id": "245",
     "name": "Seekonk NBC-RR-Pawtucket-NBC - Seekonk",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.836227,
     "center_lon": -71.378166,
     "distance_m": 10867,
@@ -830,7 +830,7 @@
   {
     "id": "246",
     "name": "Gingerbread HOTS Duplicate",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.836428,
     "center_lon": -71.377231,
     "distance_m": 4727,
@@ -839,7 +839,7 @@
   {
     "id": "247",
     "name": "Gingerbread HOTS Duplicate",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.836428,
     "center_lon": -71.377231,
     "distance_m": 4727,
@@ -848,7 +848,7 @@
   {
     "id": "248",
     "name": "Seekonk R - Gingerbread HOTS",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.836428,
     "center_lon": -71.377231,
     "distance_m": 4727,
@@ -866,7 +866,7 @@
   {
     "id": "252",
     "name": "Muskoka Fall Classic",
-    "country": "CAN",
+    "country": "Canada",
     "center_lat": 44.914233,
     "center_lon": -79.352043,
     "distance_m": 2943,
@@ -875,7 +875,7 @@
   {
     "id": "254",
     "name": "Turin Silver Skiff Modded",
-    "country": "ITA",
+    "country": "Italy",
     "center_lat": 45.041334,
     "center_lon": 7.68137,
     "distance_m": 10192,
@@ -884,7 +884,7 @@
   {
     "id": "256",
     "name": "Seekonk R - TOTS",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 41.853957,
     "center_lon": -71.379438,
     "distance_m": 4771,
@@ -893,7 +893,7 @@
   {
     "id": "257",
     "name": "LaSalle Rowing Club - LaSalle Rowing Club course",
-    "country": "CAN",
+    "country": "Canada",
     "center_lat": 42.224641,
     "center_lon": -83.111962,
     "distance_m": 10955,
@@ -902,7 +902,7 @@
   {
     "id": "258",
     "name": "Rijnland 10km Challenge - Rijnland 10km Challenge",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.116043,
     "center_lon": 4.44947,
     "distance_m": 9748,
@@ -911,7 +911,7 @@
   {
     "id": "259",
     "name": "Oakland Estuary - Head of the Estuary",
-    "country": "USA",
+    "country": "United States",
     "center_lat": 37.785993,
     "center_lon": -122.251332,
     "distance_m": 4765,
@@ -929,7 +929,7 @@
   {
     "id": "260",
     "name": "Nottingham Head",
-    "country": "GBR",
+    "country": "United Kingdom",
     "center_lat": 52.932721,
     "center_lon": -1.143961,
     "distance_m": 4624,
@@ -938,7 +938,7 @@
   {
     "id": "261",
     "name": "Isle of Ely Head",
-    "country": "GBR",
+    "country": "United Kingdom",
     "center_lat": 52.431187,
     "center_lon": 0.309407,
     "distance_m": 5092,
@@ -947,7 +947,7 @@
   {
     "id": "262",
     "name": "Rijnland Vliethead 6km - Rijnland Vliethead 6km",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.103054,
     "center_lon": 4.43058,
     "distance_m": 5869,
@@ -956,7 +956,7 @@
   {
     "id": "263",
     "name": "Nieuwjaarswedstrijd - Rijnland Nieuwjaarswedstrijd 5km",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.099544,
     "center_lon": 4.426045,
     "distance_m": 4873,
@@ -965,7 +965,7 @@
   {
     "id": "264",
     "name": "Kerstwedstrijd - Rijnland Kerstwedstrijd 4km",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.110207,
     "center_lon": 4.43898,
     "distance_m": 3917,
@@ -974,7 +974,7 @@
   {
     "id": "265",
     "name": "Kerstwedstrijd goed - Rijnland Kerstwedstrijd 4km",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.110207,
     "center_lon": 4.43898,
     "distance_m": 3917,
@@ -983,7 +983,7 @@
   {
     "id": "266",
     "name": "Rijnland Nieuwjaarswedstrijd 18.7 - Nieuwjaarswedstrijd 18.7",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.107011,
     "center_lon": 4.434387,
     "distance_m": 4900,
@@ -992,7 +992,7 @@
   {
     "id": "267",
     "name": "Winter01 - Winter",
-    "country": "ITA",
+    "country": "Italy",
     "center_lat": 45.043112,
     "center_lon": 7.681595,
     "distance_m": 9255,
@@ -1001,7 +1001,7 @@
   {
     "id": "268",
     "name": "Winter_02 - Winter",
-    "country": "ITA",
+    "country": "Italy",
     "center_lat": 45.041331,
     "center_lon": 7.678659,
     "distance_m": 9403,
@@ -1010,7 +1010,7 @@
   {
     "id": "269",
     "name": "D'Inverno sul Po - Winter",
-    "country": "ITA",
+    "country": "Italy",
     "center_lat": 45.045112,
     "center_lon": 7.684531,
     "distance_m": 4592,
@@ -1019,7 +1019,7 @@
   {
     "id": "270",
     "name": "D'Inverno sul Po EXT - Winter",
-    "country": "ITA",
+    "country": "Italy",
     "center_lat": 45.045112,
     "center_lon": 7.684531,
     "distance_m": 4675,
@@ -1028,7 +1028,7 @@
   {
     "id": "271",
     "name": "TWW 4K korte start - Twentsche Winter Wedstrijden (4 km) - Courses",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.251466,
     "center_lon": 6.732011,
     "distance_m": 3989,
@@ -1037,7 +1037,7 @@
   {
     "id": "272",
     "name": "Thyro 2k - Voorbij Zwaaikom tot Lonnekerspoorbrug - Thyro 2k - Zwaaikom - Lonnekerspoorbrug",
-    "country": "NLD",
+    "country": "Netherlands",
     "center_lat": 52.240185,
     "center_lon": 6.827799,
     "distance_m": 1996,
@@ -1046,7 +1046,7 @@
   {
     "id": "28",
     "name": "Naarden - 1k",
-    "country": "The Netherlands",
+    "country": "Netherlands",
     "center_lat": 52.309418,
     "center_lon": 5.127268,
     "distance_m": 1020,
@@ -1055,7 +1055,7 @@
   {
     "id": "29",
     "name": "Naarden - Clubkampioenschappen",
-    "country": "The Netherlands",
+    "country": "Netherlands",
     "center_lat": 52.308923,
     "center_lon": 5.128528,
     "distance_m": 4036,
@@ -1217,7 +1217,7 @@
   {
     "id": "53",
     "name": "Kalfje - Hoop",
-    "country": "The Netherlands",
+    "country": "Netherlands",
     "center_lat": 52.338158,
     "center_lon": 4.907334,
     "distance_m": 3864,

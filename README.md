@@ -1,6 +1,6 @@
 # rownative/courses
 
-Community library of GPS-defined rowing courses for use with [CrewNerd](https://www.crewtimer.com/crewnerd) and [rownative.icu](https://rownative.icu).
+Community library of GPS-defined rowing courses for use with [CrewNerd](https://performancephones.com) and [rownative.icu](https://rownative.icu).
 
 Each course is a set of GPS polygons (start, waypoints, finish) that define a measured rowing course. CrewNerd uses these to provide automatic course timing on the water.
 

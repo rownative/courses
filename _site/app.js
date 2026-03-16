@@ -31,7 +31,8 @@
       attribution: "© OpenStreetMap",
     }).addTo(map);
 
-    markersLayer = L.layerGroup().addTo(map);
+    markersLayer = L.featureGroup().addTo(map);
+    markersLayer._clearLayers = markersLayer.clearLayers;
     markersLayer.clearLayers = function () {
       this.eachLayer((l) => this.removeLayer(l));
     };
@@ -128,6 +129,16 @@
       m.bindTooltip(c.name || c.id, { direction: "top" });
       markersLayer.addLayer(m);
     });
+
+    // Re-zoom to fit all visible markers
+    if (filtered.length === 0) return;
+    if (filtered.length === 1) {
+      const c = filtered[0];
+      map.setView([c.center_lat, c.center_lon], 10);
+    } else {
+      const bounds = markersLayer.getBounds();
+      if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+    }
   }
 
   function showDetail(id) {
