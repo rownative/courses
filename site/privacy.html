@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — rownative.icu</title>
+  <style>
+    body { font-family: sans-serif; max-width: 720px; margin: 40px auto; padding: 0 20px; line-height: 1.6; color: #333; }
+    h1 { font-size: 1.6em; }
+    h2 { font-size: 1.1em; margin-top: 2em; }
+    a { color: #1a73e8; }
+  </style>
+</head>
+<body>
+  <h1>Privacy Policy</h1>
+  <p>Last updated: March 2026</p>
+
+  <p>rownative.icu is an open-source, community-maintained platform for GPS-defined rowing courses. This policy describes what data we collect, why, and how it is handled.</p>
+
+  <h2>Who we are</h2>
+  <p>rownative.icu is operated as an open-source project. The source code is publicly available at <a href="https://github.com/rownative">github.com/rownative</a>.</p>
+
+  <h2>Authentication</h2>
+  <p>We do not manage user accounts or store passwords. Authentication is handled entirely via <a href="https://intervals.icu">intervals.icu</a> OAuth. When you sign in, we receive an access token and your intervals.icu athlete ID from intervals.icu. We never see your intervals.icu password.</p>
+
+  <h2>What we store</h2>
+  <ul>
+    <li><strong>Session cookie.</strong> After you sign in, we store an encrypted HTTP-only cookie (<code>rn_session</code>) in your browser containing your athlete ID and OAuth tokens. This cookie is used to keep you logged in and is never sent to third parties.</li>
+    <li><strong>Liked courses.</strong> If you like a course, your athlete ID and the list of liked course IDs are stored in Cloudflare KV (key-value storage). This is used to sync your liked courses to CrewNerd.</li>
+    <li><strong>Submitted courses.</strong> If you submit a course, the course geometry (GPS polygon data) is stored in this repository as a public file. No personal information is included in the course file.</li>
+  </ul>
+
+  <h2>What we do not store</h2>
+  <ul>
+    <li>We do not store your name, email address, or any personal profile information from intervals.icu beyond your athlete ID.</li>
+    <li>We do not store your GPS tracks or workout data.</li>
+    <li>We do not use advertising or tracking cookies.</li>
+    <li>We do not sell or share your data with third parties.</li>
+  </ul>
+
+  <h2>Third-party services</h2>
+  <ul>
+    <li><strong>intervals.icu</strong> — identity provider. Their <a href="https://intervals.icu/privacy">privacy policy</a> applies to your intervals.icu account.</li>
+    <li><strong>Cloudflare</strong> — Worker compute and KV storage. Cloudflare may log request metadata (IP address, timestamp) as part of normal infrastructure operation.</li>
+    <li><strong>GitHub Pages</strong> — static site hosting. GitHub may log request metadata per their <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy policy</a>.</li>
+  </ul>
+
+  <h2>Data retention</h2>
+  <p>Your liked-course list is retained until you remove it (by unliking all courses) or request deletion. Session cookies expire when you sign out or after the OAuth token expires. You can request deletion of your liked-course data by opening an issue at <a href="https://github.com/rownative/courses/issues">github.com/rownative/courses/issues</a>.</p>
+
+  <h2>Your rights (GDPR)</h2>
+  <p>If you are in the European Economic Area, you have the right to access, correct, or delete your personal data. To exercise these rights, open an issue at <a href="https://github.com/rownative/courses/issues">github.com/rownative/courses/issues</a> or contact us via the repository.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>We may update this policy as the platform evolves. Changes will be committed to the <a href="https://github.com/rownative/courses">rownative/courses</a> repository with a date stamp.</p>
+
+  <p><a href="/">← Back to the course map</a></p>
+</body>
+</html>
