@@ -1,0 +1,65 @@
+{
+  "id": "29",
+  "name": "Naarden - Clubkampioenschappen",
+  "country": "The Netherlands",
+  "center_lat": 52.308923,
+  "center_lon": 5.128528,
+  "distance_m": 4036,
+  "notes": "4000m\r\nRichting is van muiden naar naarden\r\nDe start is net na de hakkelaar de kleine stijger aan bakboord zijde.\r\nDe finish is vlak voor de irene brug 10 meter na de laatste boom aan bakboord zijde",
+  "status": "established",
+  "submitted_by": "migrated from Rowsandall",
+  "polygons": [
+    {
+      "name": "Start",
+      "order": 0,
+      "points": [
+        {
+          "lat": 52.3183720591642,
+          "lon": 5.10306632243428
+        },
+        {
+          "lat": 52.3182495606267,
+          "lon": 5.10296721705514
+        },
+        {
+          "lat": 52.3182280432171,
+          "lon": 5.10304414854154
+        },
+        {
+          "lat": 52.3183449457932,
+          "lon": 5.10315965367616
+        },
+        {
+          "lat": 52.3183720591642,
+          "lon": 5.10306632243428
+        }
+      ]
+    },
+    {
+      "name": "Finish",
+      "order": 1,
+      "points": [
+        {
+          "lat": 52.2996120065138,
+          "lon": 5.15398838479386
+        },
+        {
+          "lat": 52.2994694472369,
+          "lon": 5.15386738249929
+        },
+        {
+          "lat": 52.2994064049951,
+          "lon": 5.15399706218082
+        },
+        {
+          "lat": 52.2995611048856,
+          "lon": 5.15413299824005
+        },
+        {
+          "lat": 52.2996120065138,
+          "lon": 5.15398838479386
+        }
+      ]
+    }
+  ]
+}

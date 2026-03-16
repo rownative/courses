@@ -1,0 +1,1478 @@
+[
+  {
+    "id": "1",
+    "name": "Quinsig South to North - Quinsig South to North",
+    "country": "United States",
+    "center_lat": 42.270555,
+    "center_lon": -71.751438,
+    "distance_m": 5306,
+    "status": "established"
+  },
+  {
+    "id": "3",
+    "name": "Tail of the Lake",
+    "country": "United States",
+    "center_lat": 47.644784,
+    "center_lon": -122.340126,
+    "distance_m": 704,
+    "status": "established"
+  },
+  {
+    "id": "4",
+    "name": "Head of the Lake",
+    "country": "United States",
+    "center_lat": 47.651957,
+    "center_lon": -122.308671,
+    "distance_m": 2377,
+    "status": "established"
+  },
+  {
+    "id": "5",
+    "name": "Quinsig S to N with gates - Quinsig South to North",
+    "country": "United States",
+    "center_lat": 42.25576,
+    "center_lon": -71.748578,
+    "distance_m": 5349,
+    "status": "established"
+  },
+  {
+    "id": "6",
+    "name": "Upper Charles Cut to Dam - Upper Charles - Cut to Dam",
+    "country": "United States",
+    "center_lat": 42.363424,
+    "center_lon": -71.246333,
+    "distance_m": 2519,
+    "status": "established"
+  },
+  {
+    "id": "7",
+    "name": "Upper Charles Cut to Dam w gates - Upper Charles - Cut to Dam",
+    "country": "United States",
+    "center_lat": 42.362358,
+    "center_lon": -71.245785,
+    "distance_m": 2726,
+    "status": "established"
+  },
+  {
+    "id": "8",
+    "name": "Brno - Prygl Rokle - Sirka",
+    "country": "Czechia",
+    "center_lat": 49.242384,
+    "center_lon": 16.506172,
+    "distance_m": 2657,
+    "status": "established"
+  },
+  {
+    "id": "9",
+    "name": "Brno - Prygl Sirka - Rokle",
+    "country": "Czechia",
+    "center_lat": 49.244067,
+    "center_lon": 16.500433,
+    "distance_m": 2498,
+    "status": "established"
+  },
+  {
+    "id": "11",
+    "name": "Brno -  Prygl 2k",
+    "country": "Czechia",
+    "center_lat": 49.236208,
+    "center_lon": 16.509234,
+    "distance_m": 1914,
+    "status": "established"
+  },
+  {
+    "id": "12",
+    "name": "Brno - Prygl first 1k",
+    "country": "Czechia",
+    "center_lat": 49.240849,
+    "center_lon": 16.506286,
+    "distance_m": 980,
+    "status": "established"
+  },
+  {
+    "id": "13",
+    "name": "Brno - Prygl second 1k",
+    "country": "Czechia",
+    "center_lat": 49.232571,
+    "center_lon": 16.512325,
+    "distance_m": 826,
+    "status": "established"
+  },
+  {
+    "id": "14",
+    "name": "Prague - Primatorky 1k",
+    "country": "Czechia",
+    "center_lat": 50.066345,
+    "center_lon": 14.413801,
+    "distance_m": 886,
+    "status": "established"
+  },
+  {
+    "id": "15",
+    "name": "Delaware Lambertville 202 to Bridge Street",
+    "country": "United States",
+    "center_lat": 40.371951,
+    "center_lon": -74.952483,
+    "distance_m": 1689,
+    "status": "established"
+  },
+  {
+    "id": "17",
+    "name": "Piestany",
+    "country": "Slovensko",
+    "center_lat": 48.575169,
+    "center_lon": 17.829359,
+    "distance_m": 912,
+    "status": "established"
+  },
+  {
+    "id": "18",
+    "name": "Munich Regatta",
+    "country": "Germany",
+    "center_lat": 48.242233,
+    "center_lon": 11.514727,
+    "distance_m": 2004,
+    "status": "established"
+  },
+  {
+    "id": "19",
+    "name": "Munich 1k",
+    "country": "Germany",
+    "center_lat": 48.245581,
+    "center_lon": 11.519336,
+    "distance_m": 996,
+    "status": "established"
+  },
+  {
+    "id": "21",
+    "name": "Naarden - 500m",
+    "country": "The Netherlands",
+    "center_lat": 52.32397,
+    "center_lon": 5.087764,
+    "distance_m": 498,
+    "status": "established"
+  },
+  {
+    "id": "22",
+    "name": "Vets HORR - Mortlake to Putney",
+    "country": "United Kingdom",
+    "center_lat": 51.473467,
+    "center_lon": -0.238153,
+    "distance_m": 6224,
+    "status": "established"
+  },
+  {
+    "id": "23",
+    "name": "The Boat Race - Championship Course",
+    "country": "United Kingdom",
+    "center_lat": 51.473467,
+    "center_lon": -0.238153,
+    "distance_m": 6224,
+    "status": "established"
+  },
+  {
+    "id": "24",
+    "name": "Textile River Regatta - Textile River Regatta Course",
+    "country": "United States",
+    "center_lat": 42.648236,
+    "center_lon": -71.380185,
+    "distance_m": 5875,
+    "status": "established"
+  },
+  {
+    "id": "25",
+    "name": "Merrimack Chase - Merrimack Chase",
+    "country": "United States",
+    "center_lat": 42.695529,
+    "center_lon": -71.222772,
+    "distance_m": 5001,
+    "status": "established"
+  },
+  {
+    "id": "26",
+    "name": "Quinsigmond Snake Regatta - Quinsigmond Snake Regatta",
+    "country": "United States",
+    "center_lat": 42.268173,
+    "center_lon": -71.754597,
+    "distance_m": 4111,
+    "status": "established"
+  },
+  {
+    "id": "28",
+    "name": "Naarden - 1k",
+    "country": "The Netherlands",
+    "center_lat": 52.309418,
+    "center_lon": 5.127268,
+    "distance_m": 1020,
+    "status": "established"
+  },
+  {
+    "id": "29",
+    "name": "Naarden - Clubkampioenschappen",
+    "country": "The Netherlands",
+    "center_lat": 52.308923,
+    "center_lon": 5.128528,
+    "distance_m": 4036,
+    "status": "established"
+  },
+  {
+    "id": "30",
+    "name": "Trafford RC 1000m Time Trial",
+    "country": "United Kingdom",
+    "center_lat": 53.408129,
+    "center_lon": -2.33508,
+    "distance_m": 992,
+    "status": "established"
+  },
+  {
+    "id": "32",
+    "name": "Schuylkill 400m Dash - Schuylkill 400m Dash",
+    "country": "United States",
+    "center_lat": 39.987282,
+    "center_lon": -75.20187,
+    "distance_m": 384,
+    "status": "established"
+  },
+  {
+    "id": "35",
+    "name": "Nottingham Regatta Lake 1k",
+    "country": "United Kingdom",
+    "center_lat": 52.944948,
+    "center_lon": -1.086717,
+    "distance_m": 986,
+    "status": "established"
+  },
+  {
+    "id": "36",
+    "name": "Turin Silver Skiff",
+    "country": "Italy",
+    "center_lat": 45.041354,
+    "center_lon": 7.681403,
+    "distance_m": 10142,
+    "status": "established"
+  },
+  {
+    "id": "37",
+    "name": "Dorney 2k",
+    "country": "United Kingdom",
+    "center_lat": 51.494247,
+    "center_lon": -0.665049,
+    "distance_m": 1973,
+    "status": "established"
+  },
+  {
+    "id": "41",
+    "name": "Potomac R - Roos Is Southbound",
+    "country": "United States",
+    "center_lat": 38.894687,
+    "center_lon": -77.065023,
+    "distance_m": 932,
+    "status": "established"
+  },
+  {
+    "id": "42",
+    "name": "Potomac R - Roos Is Northbound",
+    "country": "United States",
+    "center_lat": 38.895092,
+    "center_lon": -77.065195,
+    "distance_m": 913,
+    "status": "established"
+  },
+  {
+    "id": "43",
+    "name": "Wien Regattastrecke Neue Donau 1km",
+    "country": "Austria",
+    "center_lat": 48.189032,
+    "center_lon": 16.470661,
+    "distance_m": 969,
+    "status": "established"
+  },
+  {
+    "id": "44",
+    "name": "Carnegie Lake - Carnegie Lake 1k",
+    "country": "United States",
+    "center_lat": 40.363721,
+    "center_lon": -74.624812,
+    "distance_m": 926,
+    "status": "established"
+  },
+  {
+    "id": "47",
+    "name": "Potomac R - Scullers Head",
+    "country": "United States",
+    "center_lat": 38.902986,
+    "center_lon": -77.081883,
+    "distance_m": 4690,
+    "status": "established"
+  },
+  {
+    "id": "48",
+    "name": "Potomac R - Key to 14th St",
+    "country": "United States",
+    "center_lat": 38.887803,
+    "center_lon": -77.056603,
+    "distance_m": 2083,
+    "status": "established"
+  },
+  {
+    "id": "49",
+    "name": "Potomac R - 14th St to Key",
+    "country": "United States",
+    "center_lat": 38.894059,
+    "center_lon": -77.056883,
+    "distance_m": 3483,
+    "status": "established"
+  },
+  {
+    "id": "50",
+    "name": "Prygl 6k",
+    "country": "Czechia",
+    "center_lat": 49.245812,
+    "center_lon": 16.499989,
+    "distance_m": 5343,
+    "status": "established"
+  },
+  {
+    "id": "51",
+    "name": "Uherské Hradiště",
+    "country": "Czechia",
+    "center_lat": 49.093657,
+    "center_lon": 17.48764,
+    "distance_m": 5445,
+    "status": "established"
+  },
+  {
+    "id": "53",
+    "name": "Kalfje - Hoop",
+    "country": "The Netherlands",
+    "center_lat": 52.338158,
+    "center_lon": 4.907334,
+    "distance_m": 3864,
+    "status": "established"
+  },
+  {
+    "id": "56",
+    "name": "WRMR - NBP",
+    "country": "United States",
+    "center_lat": 27.371885,
+    "center_lon": -82.45352,
+    "distance_m": 865,
+    "status": "established"
+  },
+  {
+    "id": "57",
+    "name": "Head of Prague",
+    "country": "Czechia",
+    "center_lat": 50.056673,
+    "center_lon": 14.41279,
+    "distance_m": 6071,
+    "status": "established"
+  },
+  {
+    "id": "58",
+    "name": "Hodonin - Hodonin 1k",
+    "country": "Czechia",
+    "center_lat": 48.844036,
+    "center_lon": 17.151369,
+    "distance_m": 954,
+    "status": "established"
+  },
+  {
+    "id": "61",
+    "name": "HOCR Rev C - HOCR with gates",
+    "country": "United States",
+    "center_lat": 42.3677,
+    "center_lon": -71.123349,
+    "distance_m": 4703,
+    "status": "established"
+  },
+  {
+    "id": "66",
+    "name": "Charles River GPS Speed Order - DeWolfe to Soldiers Field",
+    "country": "United States",
+    "center_lat": 42.3677,
+    "center_lon": -71.123349,
+    "distance_m": 4703,
+    "status": "established"
+  },
+  {
+    "id": "67",
+    "name": "Lake Quinsigamond - South Cove to DRC Docks - Lake Quinsigamond - South Cove to DRC",
+    "country": "United States",
+    "center_lat": 42.255542,
+    "center_lon": -71.748028,
+    "distance_m": 4873,
+    "status": "established"
+  },
+  {
+    "id": "69",
+    "name": "DRC to Regatta Point Sprint - DRC to Regatta Pt Sprint",
+    "country": "United States",
+    "center_lat": 42.282999,
+    "center_lon": -71.757148,
+    "distance_m": 1564,
+    "status": "established"
+  },
+  {
+    "id": "71",
+    "name": "NBP 1K Sprint - Rev B - NBP 1K Sprint",
+    "country": "United States",
+    "center_lat": 27.371516,
+    "center_lon": -82.45381,
+    "distance_m": 1004,
+    "status": "established"
+  },
+  {
+    "id": "72",
+    "name": "NBP 2K Sprint - NBP 2K Sprint",
+    "country": "United States",
+    "center_lat": 27.367162,
+    "center_lon": -82.453782,
+    "distance_m": 1965,
+    "status": "established"
+  },
+  {
+    "id": "73",
+    "name": "Battle of the Bridges - Battle of the Bridges",
+    "country": "United States",
+    "center_lat": 27.090511,
+    "center_lon": -82.436547,
+    "distance_m": 5086,
+    "status": "established"
+  },
+  {
+    "id": "78",
+    "name": "Griggs Reservoir - Bridge to Bridge",
+    "country": "United States",
+    "center_lat": 40.049233,
+    "center_lon": -83.100497,
+    "distance_m": 4379,
+    "status": "established"
+  },
+  {
+    "id": "79",
+    "name": "Griggs Reservoir - Timmy to SBC 7k",
+    "country": "United States",
+    "center_lat": 40.050568,
+    "center_lon": -83.10346,
+    "distance_m": 6827,
+    "status": "established"
+  },
+  {
+    "id": "80",
+    "name": "Griggs Reservoir - Speakmon Regatta",
+    "country": "United States",
+    "center_lat": 40.041098,
+    "center_lon": -83.099196,
+    "distance_m": 4219,
+    "status": "established"
+  },
+  {
+    "id": "84",
+    "name": "Foster City Lagoon - Head of the Lagoon",
+    "country": "United States",
+    "center_lat": 37.553927,
+    "center_lon": -122.265046,
+    "distance_m": 5100,
+    "status": "established"
+  },
+  {
+    "id": "85",
+    "name": "Hoover Reservoir 1K - Hoover Resevoir 1K",
+    "country": "United States",
+    "center_lat": 40.125572,
+    "center_lon": -82.882393,
+    "distance_m": 1011,
+    "status": "established"
+  },
+  {
+    "id": "86",
+    "name": "Hoover Reservoir 2K - Hoover Reservoir 2K",
+    "country": "United States",
+    "center_lat": 40.121012,
+    "center_lon": -82.882249,
+    "distance_m": 2019,
+    "status": "established"
+  },
+  {
+    "id": "88",
+    "name": "Mission Bay GPS Speed Order - Mission Bay GPS Speed Order",
+    "country": "United States",
+    "center_lat": 32.774524,
+    "center_lon": -117.235155,
+    "distance_m": 5455,
+    "status": "established"
+  },
+  {
+    "id": "90",
+    "name": "HOTS - June GPS Speed Order - Rev B - HOTS",
+    "country": "United States",
+    "center_lat": 41.825357,
+    "center_lon": -71.382276,
+    "distance_m": 4840,
+    "status": "established"
+  },
+  {
+    "id": "93",
+    "name": "Fish Creek - Fish Creek 2K",
+    "country": "United States",
+    "center_lat": 43.063188,
+    "center_lon": -73.71111,
+    "distance_m": 2023,
+    "status": "established"
+  },
+  {
+    "id": "94",
+    "name": "Fish Creek - Fish Creek 1K",
+    "country": "United States",
+    "center_lat": 43.059503,
+    "center_lon": -73.715825,
+    "distance_m": 1018,
+    "status": "established"
+  },
+  {
+    "id": "95",
+    "name": "Lake Nockamixon Stake Race - Lake Nockamixon Stake Race",
+    "country": "United States",
+    "center_lat": 40.456238,
+    "center_lon": -75.23344,
+    "distance_m": 12250,
+    "status": "established"
+  },
+  {
+    "id": "96",
+    "name": "Lake Nockamixon 6K Home - Lake Nockamixon 6K home",
+    "country": "United States",
+    "center_lat": 40.457,
+    "center_lon": -75.233979,
+    "distance_m": 5981,
+    "status": "established"
+  },
+  {
+    "id": "97",
+    "name": "Charles River - DeWolfe to Soldiers Field - Rev B - DeWolfe to Soldiers Field Rev B",
+    "country": "United States",
+    "center_lat": 42.367795,
+    "center_lon": -71.123225,
+    "distance_m": 4698,
+    "status": "established"
+  },
+  {
+    "id": "99",
+    "name": "Lake Quinsigamond - Wormtown Chase - Lake Quinsigamond - Wormtown Chase",
+    "country": "United States",
+    "center_lat": 42.258317,
+    "center_lon": -71.751117,
+    "distance_m": 5252,
+    "status": "established"
+  },
+  {
+    "id": "102",
+    "name": "Fish Creek B2B - Fish Creek - Fish Creek B2B Rev D",
+    "country": "United States",
+    "center_lat": 43.070005,
+    "center_lon": -73.702417,
+    "distance_m": 2909,
+    "status": "established"
+  },
+  {
+    "id": "104",
+    "name": "Seekonk North Stake Race - Seekonk North Stake Race Rev A",
+    "country": "United States",
+    "center_lat": 41.834693,
+    "center_lon": -71.376673,
+    "distance_m": 4817,
+    "status": "established"
+  },
+  {
+    "id": "106",
+    "name": "HOTS Stake Race A - HOTS Stake Race",
+    "country": "unknown",
+    "center_lat": 41.833543,
+    "center_lon": -71.377001,
+    "distance_m": 4804,
+    "status": "established"
+  },
+  {
+    "id": "107",
+    "name": "Schuylkill River Sprint - Schuylkill River Sprint",
+    "country": "United States",
+    "center_lat": 39.993007,
+    "center_lon": -75.19572,
+    "distance_m": 2017,
+    "status": "established"
+  },
+  {
+    "id": "109",
+    "name": "HOTS Stake Race Rev B - HOTS Stake Race Rev B",
+    "country": "United States",
+    "center_lat": 41.833475,
+    "center_lon": -71.376842,
+    "distance_m": 4791,
+    "status": "established"
+  },
+  {
+    "id": "114",
+    "name": "Head of the Cuyahoga - Head of the Cuyahoga",
+    "country": "United States of America",
+    "center_lat": 41.488688,
+    "center_lon": -81.692422,
+    "distance_m": 4731,
+    "status": "established"
+  },
+  {
+    "id": "115",
+    "name": "LOL! - Lake Quinsigamond - Lap of the Lake",
+    "country": "United States of America",
+    "center_lat": 42.260188,
+    "center_lon": -71.751506,
+    "distance_m": 8681,
+    "status": "established"
+  },
+  {
+    "id": "116",
+    "name": "2K - Lake Quinsigamond - 2K Classic",
+    "country": "United States of America",
+    "center_lat": 42.284998,
+    "center_lon": -71.757113,
+    "distance_m": 2006,
+    "status": "established"
+  },
+  {
+    "id": "117",
+    "name": "500M - Lake Quinsigmond - 500M",
+    "country": "United States of America",
+    "center_lat": 42.288038,
+    "center_lon": -71.756213,
+    "distance_m": 491,
+    "status": "established"
+  },
+  {
+    "id": "123",
+    "name": "Hamburg - Fari 4200 Rev A",
+    "country": "Deutschland",
+    "center_lat": 53.581184,
+    "center_lon": 9.998078,
+    "distance_m": 4338,
+    "status": "established"
+  },
+  {
+    "id": "124",
+    "name": "Hamburg - Fari 7500 Rev A",
+    "country": "Deutschland",
+    "center_lat": 53.590895,
+    "center_lon": 9.998827,
+    "distance_m": 7570,
+    "status": "established"
+  },
+  {
+    "id": "125",
+    "name": "Cambridge - Head of the Q",
+    "country": "United States of America",
+    "center_lat": 42.364523,
+    "center_lon": -71.144238,
+    "distance_m": 3162,
+    "status": "established"
+  },
+  {
+    "id": "126",
+    "name": "Head of the Pond - Rev A",
+    "country": "United States of America",
+    "center_lat": 41.670593,
+    "center_lon": -70.486675,
+    "distance_m": 7431,
+    "status": "established"
+  },
+  {
+    "id": "140",
+    "name": "Alphen aan den Rijn - Aarkanaal",
+    "country": "Nederland",
+    "center_lat": 52.164733,
+    "center_lon": 4.709426,
+    "distance_m": 14847,
+    "status": "established"
+  },
+  {
+    "id": "141",
+    "name": "House of Wines",
+    "country": "United States of America",
+    "center_lat": 39.43141,
+    "center_lon": -81.461247,
+    "distance_m": 11219,
+    "status": "established"
+  },
+  {
+    "id": "142",
+    "name": "Charles River - DeWolfe to Soldiers Field - Charles River - DeWolfe to Soldiers Field Rev F",
+    "country": "United States of America",
+    "center_lat": 42.367861,
+    "center_lon": -71.123336,
+    "distance_m": 4688,
+    "status": "established"
+  },
+  {
+    "id": "143",
+    "name": "Hudson Champlain Head Race",
+    "country": "United States of America",
+    "center_lat": 43.077196,
+    "center_lon": -73.578035,
+    "distance_m": 4714,
+    "status": "established"
+  },
+  {
+    "id": "146",
+    "name": "Thyro",
+    "country": "Nederland",
+    "center_lat": 52.24166,
+    "center_lon": 6.823994,
+    "distance_m": 3780,
+    "status": "established"
+  },
+  {
+    "id": "147",
+    "name": "Thyro Andersom",
+    "country": "Nederland",
+    "center_lat": 52.24166,
+    "center_lon": 6.823994,
+    "distance_m": 3780,
+    "status": "established"
+  },
+  {
+    "id": "149",
+    "name": "Thyro - Titanenbokaal",
+    "country": "Nederland",
+    "center_lat": 52.225065,
+    "center_lon": 6.845976,
+    "distance_m": 643,
+    "status": "established"
+  },
+  {
+    "id": "150",
+    "name": "Thyro Oefenbaantje",
+    "country": "Nederland",
+    "center_lat": 52.224511,
+    "center_lon": 6.846857,
+    "distance_m": 203,
+    "status": "established"
+  },
+  {
+    "id": "153",
+    "name": "CharlesSkiff - Rev 4",
+    "country": "United States of America",
+    "center_lat": 42.367039,
+    "center_lon": -71.132061,
+    "distance_m": 9905,
+    "status": "established"
+  },
+  {
+    "id": "154",
+    "name": "Head of the Red - Head of the Red",
+    "country": "United States of America",
+    "center_lat": 37.521364,
+    "center_lon": -122.205624,
+    "distance_m": 5531,
+    "status": "established"
+  },
+  {
+    "id": "156",
+    "name": "Mini-HOTR",
+    "country": "United States of America",
+    "center_lat": 37.508111,
+    "center_lon": -122.214858,
+    "distance_m": 1198,
+    "status": "established"
+  },
+  {
+    "id": "163",
+    "name": "Kief-Race",
+    "country": "Deutschland",
+    "center_lat": 49.439417,
+    "center_lon": 8.462987,
+    "distance_m": 994,
+    "status": "established"
+  },
+  {
+    "id": "164",
+    "name": "Kraftwerk 6k",
+    "country": "Deutschland",
+    "center_lat": 49.456029,
+    "center_lon": 8.456872,
+    "distance_m": 5907,
+    "status": "established"
+  },
+  {
+    "id": "166",
+    "name": "HOCR Rev C - HOCR start finish",
+    "country": "United States",
+    "center_lat": 42.359656,
+    "center_lon": -71.121997,
+    "distance_m": 2807,
+    "status": "established"
+  },
+  {
+    "id": "168",
+    "name": "Fish Creek - Head of the Fish",
+    "country": "United States",
+    "center_lat": 43.072719,
+    "center_lon": -73.701375,
+    "distance_m": 3230,
+    "status": "established"
+  },
+  {
+    "id": "170",
+    "name": "Thyro Bocht",
+    "country": "Nederland",
+    "center_lat": 52.226884,
+    "center_lon": 6.844914,
+    "distance_m": 1043,
+    "status": "established"
+  },
+  {
+    "id": "171",
+    "name": "Cambridge Cam courses - Head of the Cam",
+    "country": "United Kingdom",
+    "center_lat": 52.224947,
+    "center_lon": 0.158938,
+    "distance_m": 2286,
+    "status": "established"
+  },
+  {
+    "id": "172",
+    "name": "Cambridge Cam courses - Cantabs Winter Head",
+    "country": "United Kingdom",
+    "center_lat": 52.225114,
+    "center_lon": 0.15991,
+    "distance_m": 2170,
+    "status": "established"
+  },
+  {
+    "id": "173",
+    "name": "Cambridge Cam courses - H2H 1",
+    "country": "United Kingdom",
+    "center_lat": 52.226212,
+    "center_lon": 0.163613,
+    "distance_m": 1674,
+    "status": "established"
+  },
+  {
+    "id": "174",
+    "name": "Cambridge Cam courses - H2H 2",
+    "country": "United Kingdom",
+    "center_lat": 52.226212,
+    "center_lon": 0.163613,
+    "distance_m": 1674,
+    "status": "established"
+  },
+  {
+    "id": "175",
+    "name": "Stonehaven Return - Stonehaven Return",
+    "country": "United Kingdom",
+    "center_lat": 56.959194,
+    "center_lon": -2.199599,
+    "distance_m": 0,
+    "status": "established"
+  },
+  {
+    "id": "176",
+    "name": " - Catterline Return",
+    "country": "United Kingdom",
+    "center_lat": 56.895039,
+    "center_lon": -2.214855,
+    "distance_m": 22,
+    "status": "established"
+  },
+  {
+    "id": "177",
+    "name": "CCRC - Catterline to Stonehaven",
+    "country": "United Kingdom",
+    "center_lat": 56.92669,
+    "center_lon": -2.20713,
+    "distance_m": 7259,
+    "status": "established"
+  },
+  {
+    "id": "178",
+    "name": "CCRC - Stonehaven to Catterline",
+    "country": "United Kingdom",
+    "center_lat": 56.926922,
+    "center_lon": -2.207468,
+    "distance_m": 7165,
+    "status": "established"
+  },
+  {
+    "id": "179",
+    "name": "CCRC - Castle to Crane",
+    "country": "United Kingdom",
+    "center_lat": 55.898148,
+    "center_lon": -4.425161,
+    "distance_m": 19599,
+    "status": "established"
+  },
+  {
+    "id": "180",
+    "name": "CCRC - Loch Ness - Ft Augustus",
+    "country": "United Kingdom",
+    "center_lat": 57.262285,
+    "center_lon": -4.502088,
+    "distance_m": 33446,
+    "status": "established"
+  },
+  {
+    "id": "181",
+    "name": "CCRC - Stonehaven Return",
+    "country": "United Kingdom",
+    "center_lat": 56.959194,
+    "center_lon": -2.199599,
+    "distance_m": 0,
+    "status": "established"
+  },
+  {
+    "id": "182",
+    "name": "CCRC - Catterline Return",
+    "country": "United Kingdom",
+    "center_lat": 56.895039,
+    "center_lon": -2.214855,
+    "distance_m": 22,
+    "status": "established"
+  },
+  {
+    "id": "183",
+    "name": "Bush R. 2K - Bush R 2K",
+    "country": "United States",
+    "center_lat": 39.449251,
+    "center_lon": -76.250308,
+    "distance_m": 1883,
+    "status": "established"
+  },
+  {
+    "id": "184",
+    "name": "Seekonk R HOTS Course",
+    "country": "United States",
+    "center_lat": 41.825308,
+    "center_lon": -71.382216,
+    "distance_m": 4839,
+    "status": "established"
+  },
+  {
+    "id": "186",
+    "name": "Seekonk R Henderson to Stadium",
+    "country": "United States",
+    "center_lat": 41.850163,
+    "center_lon": -71.376571,
+    "distance_m": 4686,
+    "status": "established"
+  },
+  {
+    "id": "188",
+    "name": "Seekonk R Narrows Southbound",
+    "country": "United States",
+    "center_lat": 41.861067,
+    "center_lon": -71.377815,
+    "distance_m": 1754,
+    "status": "established"
+  },
+  {
+    "id": "193",
+    "name": "Tees LSD/SBH Course",
+    "country": "GBR",
+    "center_lat": 54.543602,
+    "center_lon": -1.310646,
+    "distance_m": 4967,
+    "status": "established"
+  },
+  {
+    "id": "194",
+    "name": "Tyne LDS/SBH - Tyne LDS/SBH",
+    "country": "GBR",
+    "center_lat": 54.9698,
+    "center_lon": -1.725416,
+    "distance_m": 4337,
+    "status": "established"
+  },
+  {
+    "id": "195",
+    "name": "Wansbeck LDS and SBH 2024 - Wansbeck LDS and SBH 2024",
+    "country": "GBR",
+    "center_lat": 55.169512,
+    "center_lon": -1.583749,
+    "distance_m": 1543,
+    "status": "established"
+  },
+  {
+    "id": "196",
+    "name": "Wansbeck LDS/SBH 2024 - Wansbeck LDS and SBH 2024",
+    "country": "GBR",
+    "center_lat": 55.169512,
+    "center_lon": -1.583749,
+    "distance_m": 1543,
+    "status": "established"
+  },
+  {
+    "id": "197",
+    "name": "Head of the Schuylkill - Head of the Schuylkill",
+    "country": "USA",
+    "center_lat": 39.98579,
+    "center_lon": -75.193955,
+    "distance_m": 3948,
+    "status": "established"
+  },
+  {
+    "id": "198",
+    "name": "Head of the Schuylkill - Head of the Schuylkill",
+    "country": "USA",
+    "center_lat": 39.987395,
+    "center_lon": -75.195096,
+    "distance_m": 6150,
+    "status": "established"
+  },
+  {
+    "id": "199",
+    "name": "Head of the Schuylkill - Head of the Schuylkill",
+    "country": "USA",
+    "center_lat": 39.987395,
+    "center_lon": -75.195096,
+    "distance_m": 3810,
+    "status": "established"
+  },
+  {
+    "id": "202",
+    "name": "DDS Trial 4k",
+    "country": "NLD",
+    "center_lat": 52.039177,
+    "center_lon": 4.346336,
+    "distance_m": 3928,
+    "status": "established"
+  },
+  {
+    "id": "204",
+    "name": "Twentsche Winter Wedstrijden (4 km) - Courses",
+    "country": "NLD",
+    "center_lat": 52.251522,
+    "center_lon": 6.731118,
+    "distance_m": 3989,
+    "status": "established"
+  },
+  {
+    "id": "205",
+    "name": "Thyro 4.000m",
+    "country": "NLD",
+    "center_lat": 52.24132,
+    "center_lon": 6.825278,
+    "distance_m": 5519,
+    "status": "established"
+  },
+  {
+    "id": "209",
+    "name": "Skiffhead",
+    "country": "NLD",
+    "center_lat": 52.326539,
+    "center_lon": 4.905659,
+    "distance_m": 6993,
+    "status": "established"
+  },
+  {
+    "id": "210",
+    "name": "Avon Head Long - Avon Head - Long",
+    "country": "GBR",
+    "center_lat": 51.392531,
+    "center_lon": -2.425585,
+    "distance_m": 2703,
+    "status": "established"
+  },
+  {
+    "id": "211",
+    "name": "Cooper River - Untitled project",
+    "country": "USA",
+    "center_lat": 39.925446,
+    "center_lon": -75.07106,
+    "distance_m": 1998,
+    "status": "established"
+  },
+  {
+    "id": "212",
+    "name": "Cooper River - Cooper",
+    "country": "USA",
+    "center_lat": 39.925306,
+    "center_lon": -75.073988,
+    "distance_m": 2011,
+    "status": "established"
+  },
+  {
+    "id": "213",
+    "name": "Cooper River Park - Cooper",
+    "country": "USA",
+    "center_lat": 39.925584,
+    "center_lon": -75.073954,
+    "distance_m": 2022,
+    "status": "established"
+  },
+  {
+    "id": "214",
+    "name": "Zwolsche Vecht - Zwolsche 3km",
+    "country": "NLD",
+    "center_lat": 52.551207,
+    "center_lon": 6.121874,
+    "distance_m": 3306,
+    "status": "established"
+  },
+  {
+    "id": "215",
+    "name": "Zwolsche Vecht - Zwolsche 3km rev W",
+    "country": "NLD",
+    "center_lat": 52.55119,
+    "center_lon": 6.121826,
+    "distance_m": 3315,
+    "status": "established"
+  },
+  {
+    "id": "216",
+    "name": "Zwolsche Vecht - Zwolsche 3km rev M",
+    "country": "NLD",
+    "center_lat": 52.551218,
+    "center_lon": 6.121852,
+    "distance_m": 3314,
+    "status": "established"
+  },
+  {
+    "id": "217",
+    "name": "Seekonk R TOTS II Cour - Seekonk R - TOTS II Course",
+    "country": "USA",
+    "center_lat": 41.854848,
+    "center_lon": -71.378901,
+    "distance_m": 4781,
+    "status": "established"
+  },
+  {
+    "id": "218",
+    "name": " - Seekonk R - TOTS II Course",
+    "country": "USA",
+    "center_lat": 41.854848,
+    "center_lon": -71.378901,
+    "distance_m": 4573,
+    "status": "established"
+  },
+  {
+    "id": "219",
+    "name": " - Seekonk R - TOTS II Course",
+    "country": "USA",
+    "center_lat": 41.854848,
+    "center_lon": -71.378901,
+    "distance_m": 4573,
+    "status": "established"
+  },
+  {
+    "id": "227",
+    "name": "Seekonk R TOTS TT - TOTS TT",
+    "country": "USA",
+    "center_lat": 41.856906,
+    "center_lon": -71.378545,
+    "distance_m": 4230,
+    "status": "established"
+  },
+  {
+    "id": "228",
+    "name": "Seekonk R - Seekonk R - TOTS II Course",
+    "country": "USA",
+    "center_lat": 41.854599,
+    "center_lon": -71.37901,
+    "distance_m": 4571,
+    "status": "established"
+  },
+  {
+    "id": "229",
+    "name": "Seekonk R - Seekonk R - TOTS II Course",
+    "country": "USA",
+    "center_lat": 41.854599,
+    "center_lon": -71.37901,
+    "distance_m": 4571,
+    "status": "established"
+  },
+  {
+    "id": "230",
+    "name": " - Seekonk R - TOTS TT",
+    "country": "USA",
+    "center_lat": 41.854599,
+    "center_lon": -71.37901,
+    "distance_m": 4571,
+    "status": "established"
+  },
+  {
+    "id": "231",
+    "name": "Seekonk R - TOTS TT",
+    "country": "USA",
+    "center_lat": 41.854599,
+    "center_lon": -71.37901,
+    "distance_m": 4571,
+    "status": "established"
+  },
+  {
+    "id": "232",
+    "name": "HOTS Red Bridge to 18 to Red Bridge - Untitled project",
+    "country": "USA",
+    "center_lat": 41.839101,
+    "center_lon": -71.375444,
+    "distance_m": 5687,
+    "status": "established"
+  },
+  {
+    "id": "233",
+    "name": "HOTS Stake race Aug 9 - Untitled project",
+    "country": "USA",
+    "center_lat": 41.839101,
+    "center_lon": -71.375444,
+    "distance_m": 4784,
+    "status": "established"
+  },
+  {
+    "id": "234",
+    "name": "HOTS Stake Race 8  2025 - Untitled project",
+    "country": "USA",
+    "center_lat": 41.839102,
+    "center_lon": -71.375567,
+    "distance_m": 4793,
+    "status": "established"
+  },
+  {
+    "id": "236",
+    "name": "Tiber Upstream - Head of the Charles",
+    "country": "USA",
+    "center_lat": 42.35966,
+    "center_lon": -71.122207,
+    "distance_m": 2778,
+    "status": "established"
+  },
+  {
+    "id": "237",
+    "name": "Tiber Upstream - Head of the Lake",
+    "country": "USA",
+    "center_lat": 47.649065,
+    "center_lon": -122.310062,
+    "distance_m": 4567,
+    "status": "established"
+  },
+  {
+    "id": "238",
+    "name": "Tiber Upstream - Tail of the Lake",
+    "country": "USA",
+    "center_lat": 47.644784,
+    "center_lon": -122.340126,
+    "distance_m": 704,
+    "status": "established"
+  },
+  {
+    "id": "243",
+    "name": "River Tiber above the dam - Tiber Upstream Practice",
+    "country": "ITA",
+    "center_lat": 42.031273,
+    "center_lon": 12.518076,
+    "distance_m": 10915,
+    "status": "established"
+  },
+  {
+    "id": "245",
+    "name": "Seekonk NBC-RR-Pawtucket-NBC - Seekonk",
+    "country": "USA",
+    "center_lat": 41.836227,
+    "center_lon": -71.378166,
+    "distance_m": 10867,
+    "status": "established"
+  },
+  {
+    "id": "246",
+    "name": "Gingerbread HOTS Duplicate",
+    "country": "USA",
+    "center_lat": 41.836428,
+    "center_lon": -71.377231,
+    "distance_m": 4727,
+    "status": "established"
+  },
+  {
+    "id": "247",
+    "name": "Gingerbread HOTS Duplicate",
+    "country": "USA",
+    "center_lat": 41.836428,
+    "center_lon": -71.377231,
+    "distance_m": 4727,
+    "status": "established"
+  },
+  {
+    "id": "248",
+    "name": "Seekonk R - Gingerbread HOTS",
+    "country": "USA",
+    "center_lat": 41.836428,
+    "center_lon": -71.377231,
+    "distance_m": 4727,
+    "status": "established"
+  },
+  {
+    "id": "252",
+    "name": "Muskoka Fall Classic",
+    "country": "CAN",
+    "center_lat": 44.914233,
+    "center_lon": -79.352043,
+    "distance_m": 2943,
+    "status": "established"
+  },
+  {
+    "id": "254",
+    "name": "Turin Silver Skiff Modded",
+    "country": "ITA",
+    "center_lat": 45.041334,
+    "center_lon": 7.68137,
+    "distance_m": 10192,
+    "status": "established"
+  },
+  {
+    "id": "256",
+    "name": "Seekonk R - TOTS",
+    "country": "USA",
+    "center_lat": 41.853957,
+    "center_lon": -71.379438,
+    "distance_m": 4771,
+    "status": "established"
+  },
+  {
+    "id": "257",
+    "name": "LaSalle Rowing Club - LaSalle Rowing Club course",
+    "country": "CAN",
+    "center_lat": 42.224641,
+    "center_lon": -83.111962,
+    "distance_m": 10955,
+    "status": "established"
+  },
+  {
+    "id": "258",
+    "name": "Rijnland 10km Challenge - Rijnland 10km Challenge",
+    "country": "NLD",
+    "center_lat": 52.116043,
+    "center_lon": 4.44947,
+    "distance_m": 9748,
+    "status": "established"
+  },
+  {
+    "id": "259",
+    "name": "Oakland Estuary - Head of the Estuary",
+    "country": "USA",
+    "center_lat": 37.785993,
+    "center_lon": -122.251332,
+    "distance_m": 4765,
+    "status": "established"
+  },
+  {
+    "id": "260",
+    "name": "Nottingham Head",
+    "country": "GBR",
+    "center_lat": 52.932721,
+    "center_lon": -1.143961,
+    "distance_m": 4624,
+    "status": "established"
+  },
+  {
+    "id": "261",
+    "name": "Isle of Ely Head",
+    "country": "GBR",
+    "center_lat": 52.431187,
+    "center_lon": 0.309407,
+    "distance_m": 5092,
+    "status": "established"
+  },
+  {
+    "id": "262",
+    "name": "Rijnland Vliethead 6km - Rijnland Vliethead 6km",
+    "country": "NLD",
+    "center_lat": 52.103054,
+    "center_lon": 4.43058,
+    "distance_m": 5869,
+    "status": "established"
+  },
+  {
+    "id": "263",
+    "name": "Nieuwjaarswedstrijd - Rijnland Nieuwjaarswedstrijd 5km",
+    "country": "NLD",
+    "center_lat": 52.099544,
+    "center_lon": 4.426045,
+    "distance_m": 4873,
+    "status": "established"
+  },
+  {
+    "id": "264",
+    "name": "Kerstwedstrijd - Rijnland Kerstwedstrijd 4km",
+    "country": "NLD",
+    "center_lat": 52.110207,
+    "center_lon": 4.43898,
+    "distance_m": 3917,
+    "status": "established"
+  },
+  {
+    "id": "265",
+    "name": "Kerstwedstrijd goed - Rijnland Kerstwedstrijd 4km",
+    "country": "NLD",
+    "center_lat": 52.110207,
+    "center_lon": 4.43898,
+    "distance_m": 3917,
+    "status": "established"
+  },
+  {
+    "id": "266",
+    "name": "Rijnland Nieuwjaarswedstrijd 18.7 - Nieuwjaarswedstrijd 18.7",
+    "country": "NLD",
+    "center_lat": 52.107011,
+    "center_lon": 4.434387,
+    "distance_m": 4900,
+    "status": "established"
+  },
+  {
+    "id": "267",
+    "name": "Winter01 - Winter",
+    "country": "ITA",
+    "center_lat": 45.043112,
+    "center_lon": 7.681595,
+    "distance_m": 9255,
+    "status": "established"
+  },
+  {
+    "id": "268",
+    "name": "Winter_02 - Winter",
+    "country": "ITA",
+    "center_lat": 45.041331,
+    "center_lon": 7.678659,
+    "distance_m": 9403,
+    "status": "established"
+  },
+  {
+    "id": "269",
+    "name": "D'Inverno sul Po - Winter",
+    "country": "ITA",
+    "center_lat": 45.045112,
+    "center_lon": 7.684531,
+    "distance_m": 4592,
+    "status": "established"
+  },
+  {
+    "id": "270",
+    "name": "D'Inverno sul Po EXT - Winter",
+    "country": "ITA",
+    "center_lat": 45.045112,
+    "center_lon": 7.684531,
+    "distance_m": 4675,
+    "status": "established"
+  },
+  {
+    "id": "271",
+    "name": "TWW 4K korte start - Twentsche Winter Wedstrijden (4 km) - Courses",
+    "country": "NLD",
+    "center_lat": 52.251466,
+    "center_lon": 6.732011,
+    "distance_m": 3989,
+    "status": "established"
+  },
+  {
+    "id": "272",
+    "name": "Thyro 2k - Voorbij Zwaaikom tot Lonnekerspoorbrug - Thyro 2k - Zwaaikom - Lonnekerspoorbrug",
+    "country": "NLD",
+    "center_lat": 52.240185,
+    "center_lon": 6.827799,
+    "distance_m": 1996,
+    "status": "established"
+  }
+]
