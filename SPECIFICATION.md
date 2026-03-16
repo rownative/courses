@@ -77,8 +77,6 @@ Each course is stored as `courses/{id}.json`:
 | `validate.yml` | PRs modifying `courses/**` | Runs `validate_course.py` on changed files; posts result as PR comment |
 | `deploy.yml` | Push to `main` | Regenerates `index.json` and `kml/*.kml`; deploys `site/` to GitHub Pages |
 
-**User action required:** Settings → Pages → Source = **GitHub Actions**
-
 ### 1.4 Scripts — Implemented
 
 | Script | Purpose |
