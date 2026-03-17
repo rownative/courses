@@ -191,6 +191,12 @@ aside#sidebar {
   text-decoration: underline;
 }
 
+.liked-courses-empty {
+  font-size: 0.8rem;
+  color: #666;
+  font-style: italic;
+}
+
 main {
   grid-area: map;
   position: relative;
