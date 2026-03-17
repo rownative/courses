@@ -8,6 +8,10 @@ Each course is a set of GPS polygons (start, waypoints, finish) that define a me
 
 Browse and search courses at [rownative.icu](https://rownative.icu). Log in with your intervals.icu account to like courses and have them synced to CrewNerd.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add courses, update existing ones, migrate from Rowsandall, and contribute code.
+
 ## Submitting a course
 
 You can submit a course via the web form at [rownative.icu/submit](https://rownative.icu/submit), or by opening a pull request directly:
