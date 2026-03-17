@@ -79,6 +79,39 @@
       });
   }
 
+  function renderLikedCourses() {
+    const section = document.getElementById("liked-courses-section");
+    const list = document.getElementById("liked-courses-list");
+    if (!section || !list) return;
+    if (!isSignedIn || userLiked.size === 0) {
+      section.classList.add("hidden");
+      list.innerHTML = "";
+      return;
+    }
+    const likedCourses = [...userLiked]
+      .map((id) => courses.find((c) => c.id === id))
+      .filter(Boolean)
+      .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+    if (likedCourses.length === 0) {
+      section.classList.add("hidden");
+      list.innerHTML = "";
+      return;
+    }
+    section.classList.remove("hidden");
+    list.innerHTML = likedCourses
+      .map((c) => {
+        const name = (c.name || c.id).length > 35 ? (c.name || c.id).slice(0, 32) + "…" : (c.name || c.id);
+        return `<li><a href="#" data-id="${c.id}" class="liked-course-link">${escapeHtml(name)}</a></li>`;
+      })
+      .join("");
+    list.querySelectorAll(".liked-course-link").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        showDetail(a.dataset.id);
+      });
+    });
+  }
+
   function fillCountryFilter() {
     const countries = [...new Set(courses.map((c) => c.country).filter(Boolean))].sort();
     countryFilter.innerHTML = '<option value="">All countries</option>';
@@ -136,7 +169,10 @@
     });
 
     // Re-zoom to fit all visible markers
-    if (filtered.length === 0) return;
+    if (filtered.length === 0) {
+      renderLikedCourses();
+      return;
+    }
     if (filtered.length === 1) {
       const c = filtered[0];
       map.setView([c.center_lat, c.center_lon], 10);
@@ -144,6 +180,7 @@
       const bounds = markersLayer.getBounds();
       if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
     }
+    renderLikedCourses();
   }
 
   function showDetail(id) {
@@ -240,17 +277,30 @@
         } else {
           userLiked.add(id);
         }
+        renderLikedCourses();
         fetchCourseDetail(id).then((full) => renderDetail(full, c));
       }
     }
     const url = `${API_BASE}/rowers/courses/${id}/follow/`;
     if (userLiked.has(id)) {
       fetch(`${API_BASE}/rowers/courses/${id}/unfollow/`, { method: "POST", credentials: "include" })
-        .then((r) => { if (r.ok) { userLiked.delete(id); if (selectedId !== id) renderMarkers(); } })
+        .then((r) => {
+          if (r.ok) {
+            userLiked.delete(id);
+            if (selectedId !== id) renderMarkers();
+            else renderLikedCourses();
+          }
+        })
         .catch(() => {});
     } else {
       fetch(url, { method: "POST", credentials: "include" })
-        .then((r) => { if (r.ok) { userLiked.add(id); if (selectedId !== id) renderMarkers(); } })
+        .then((r) => {
+          if (r.ok) {
+            userLiked.add(id);
+            if (selectedId !== id) renderMarkers();
+            else renderLikedCourses();
+          }
+        })
         .catch(() => {});
     }
   }
@@ -291,6 +341,8 @@
         isSignedIn = false;
         const legendLiked = document.getElementById("legend-liked");
         if (legendLiked) legendLiked.classList.add("hidden");
+        const likedSection = document.getElementById("liked-courses-section");
+        if (likedSection) likedSection.classList.add("hidden");
         const importLink = document.getElementById("import-link");
         const submitLink = document.getElementById("submit-link");
         const updateLink = document.getElementById("update-link");
@@ -310,8 +362,7 @@
   function bindUI() {
     searchEl = document.getElementById("search");
     countryFilter = document.getElementById("country-filter");
-    distanceMin = document.getElementById("distance-min");
-    distanceMax = document.getElementById("distance-max");
+    distanceRange = document.getElementById("distance-range");
     filterProvisional = document.getElementById("filter-provisional");
     filterEstablished = document.getElementById("filter-established");
     detailPanel = document.getElementById("detail-panel");

@@ -152,6 +152,45 @@ aside#sidebar {
   background: #fa0;
 }
 
+.liked-courses {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eee;
+}
+
+.liked-courses.hidden {
+  display: none;
+}
+
+.liked-courses-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.liked-courses ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.liked-courses li {
+  margin: 0.25rem 0;
+}
+
+.liked-course-link {
+  font-size: 0.875rem;
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.liked-course-link:hover {
+  text-decoration: underline;
+}
+
 main {
   grid-area: map;
   position: relative;
