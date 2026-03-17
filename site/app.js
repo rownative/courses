@@ -19,18 +19,24 @@
   let selectedId = null;
   let userLiked = new Set();
   let isSignedIn = false;
+  let highContrastMode = false;
 
   // Elements
   let searchEl, countryFilter, distanceRange;
   let filterProvisional, filterEstablished;
   let detailPanel, detailContent, detailClose;
   let loginBtn;
+  let highContrastCheckbox;
 
   function initMap() {
     map = L.map("map").setView([30, 0], 2);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap",
     }).addTo(map);
+
+    highContrastMode = localStorage.getItem("rownative-high-contrast") === "1";
+    const mapEl = document.getElementById("map");
+    if (mapEl) mapEl.classList.toggle("high-contrast", highContrastMode);
 
     markersLayer = L.featureGroup().addTo(map);
     markersLayer._clearLayers = markersLayer.clearLayers;
@@ -204,6 +210,12 @@
     });
   }
 
+  function getPolygonOptions() {
+    return highContrastMode
+      ? { color: "#e65c00", fillColor: "#e65c00", fillOpacity: 0.45, weight: 4 }
+      : { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
+  }
+
   function renderDetail(full, meta) {
     const liked = userLiked.has(String(meta.id));
     const kmlUrl = API_BASE
@@ -240,12 +252,7 @@
             if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
               pts.push(pts[0]);
             }
-            const layer = L.polygon(pts, {
-              color: "#0af",
-              fillColor: "#0af",
-              fillOpacity: 0.2,
-              weight: 2,
-            });
+            const layer = L.polygon(pts, getPolygonOptions());
             layer.bindTooltip(poly.name || `Gate ${idx}`);
             markersLayer.addLayer(layer);
           }
@@ -380,6 +387,21 @@
     if (distanceRange) distanceRange.addEventListener("change", runFilters);
     if (filterProvisional) filterProvisional.addEventListener("change", runFilters);
     if (filterEstablished) filterEstablished.addEventListener("change", runFilters);
+
+    highContrastCheckbox = document.getElementById("high-contrast");
+    if (highContrastCheckbox) {
+      highContrastCheckbox.checked = highContrastMode;
+      highContrastCheckbox.addEventListener("change", () => {
+        highContrastMode = highContrastCheckbox.checked;
+        localStorage.setItem("rownative-high-contrast", highContrastMode ? "1" : "0");
+        const mapEl = document.getElementById("map");
+        if (mapEl) mapEl.classList.toggle("high-contrast", highContrastMode);
+        if (selectedId) {
+          const c = courses.find((x) => x.id === selectedId);
+          if (c) fetchCourseDetail(selectedId).then((full) => renderDetail(full, c)).catch(() => renderDetail(c, c));
+        }
+      });
+    }
 
     if (detailClose) detailClose.addEventListener("click", () => {
       detailPanel.classList.add("hidden");

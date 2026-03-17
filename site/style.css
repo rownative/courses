@@ -152,6 +152,23 @@ aside#sidebar {
   background: #fa0;
 }
 
+.high-contrast-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.high-contrast-toggle input {
+  cursor: pointer;
+}
+
+/* Mute base map when high contrast is on */
+#map.high-contrast .leaflet-tile-pane {
+  filter: grayscale(0.6) contrast(0.9);
+}
+
 .liked-courses {
   margin-top: 1rem;
   padding-top: 0.75rem;
