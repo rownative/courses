@@ -152,7 +152,7 @@
       const lat = c.center_lat;
       const lon = c.center_lon;
       if (lat == null || lon == null) return;
-      const liked = isSignedIn && userLiked.has(c.id);
+      const liked = isSignedIn && userLiked.has(String(c.id));
       const fillColor = liked ? "#c66" : (c.status === "established" ? "#0a7" : "#fa0");
       const m = L.circleMarker([lat, lon], {
         radius: 8,
@@ -205,7 +205,7 @@
   }
 
   function renderDetail(full, meta) {
-    const liked = userLiked.has(meta.id);
+    const liked = userLiked.has(String(meta.id));
     const kmlUrl = API_BASE
       ? `${API_BASE}/courses/${meta.id}`
       : `${kmlBase}${meta.id}.kml`;
@@ -269,37 +269,38 @@
 
   function toggleLike(id) {
     // Optimistic UI update when viewing this course
-    if (selectedId === id) {
+    if (String(selectedId) === String(id)) {
       const c = courses.find((x) => x.id === id);
       if (c) {
-        if (userLiked.has(id)) {
-          userLiked.delete(id);
+        const sid = String(id);
+        if (userLiked.has(sid)) {
+          userLiked.delete(sid);
         } else {
-          userLiked.add(id);
+          userLiked.add(sid);
         }
         renderLikedCourses();
         fetchCourseDetail(id).then((full) => renderDetail(full, c));
       }
     }
     const url = `${API_BASE}/rowers/courses/${id}/follow/`;
-    if (userLiked.has(id)) {
+    if (userLiked.has(String(id))) {
       fetch(`${API_BASE}/rowers/courses/${id}/unfollow/`, { method: "POST", credentials: "include" })
-        .then((r) => {
-          if (r.ok) {
-            userLiked.delete(id);
-            if (selectedId !== id) renderMarkers();
-            else renderLikedCourses();
-          }
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((data) => {
+          const ids = (data.liked || []).map((x) => (typeof x === "object" && x != null && "id" in x ? x.id : String(x)));
+          userLiked = new Set(ids);
+          if (selectedId !== id) renderMarkers();
+          else renderLikedCourses();
         })
         .catch(() => {});
     } else {
       fetch(url, { method: "POST", credentials: "include" })
-        .then((r) => {
-          if (r.ok) {
-            userLiked.add(id);
-            if (selectedId !== id) renderMarkers();
-            else renderLikedCourses();
-          }
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((data) => {
+          const ids = (data.liked || []).map((x) => (typeof x === "object" && x != null && "id" in x ? x.id : String(x)));
+          userLiked = new Set(ids);
+          if (selectedId !== id) renderMarkers();
+          else renderLikedCourses();
         })
         .catch(() => {});
     }
@@ -310,7 +311,11 @@
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
         isSignedIn = !!data.athleteId;
-        userLiked = new Set(data.liked || []);
+        const raw = data.liked || [];
+        const ids = Array.isArray(raw)
+          ? raw.map((x) => (typeof x === "object" && x != null && "id" in x ? x.id : String(x)))
+          : [];
+        userLiked = new Set(ids);
         if (loginBtn) {
           if (data.athleteId) {
             loginBtn.textContent = "Sign out";
