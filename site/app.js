@@ -18,6 +18,7 @@
   let courses = [];
   let selectedId = null;
   let userLiked = new Set();
+  let isSignedIn = false;
 
   // Elements
   let searchEl, countryFilter, distanceMin, distanceMax;
@@ -149,8 +150,8 @@
       detailPanel.classList.remove("hidden");
       fetchCourseDetail(id)
         .then((full) => renderDetail(full, c))
-        .catch((e) => {
-          detailContent.innerHTML = `<p class="error">Could not load course: ${e.message}</p>`;
+        .catch(() => {
+          renderDetail(c, c);
         });
     }
   }
@@ -164,7 +165,12 @@
 
   function renderDetail(full, meta) {
     const liked = userLiked.has(meta.id);
-    const kmlUrl = `${kmlBase}${meta.id}.kml`;
+    const kmlUrl = API_BASE
+      ? `${API_BASE}/courses/${meta.id}`
+      : `${kmlBase}${meta.id}.kml`;
+    const likeButtonHtml = isSignedIn
+      ? `<button type="button" class="btn like-btn ${liked ? "liked" : ""}" data-id="${meta.id}">${liked ? "♥ Liked" : "♡ Like"}</button>`
+      : "";
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
       <p><strong>Distance:</strong> ${meta.distance_m || "—"} m</p>
@@ -173,11 +179,7 @@
       ${meta.notes ? `<p class="notes">${escapeHtml(meta.notes)}</p>` : ""}
       <p>
         <a href="${kmlUrl}" download="${meta.id}.kml" class="btn">Download KML</a>
-        ${typeof fetch !== "undefined" ? `
-        <button type="button" class="btn like-btn ${liked ? "liked" : ""}" data-id="${meta.id}">
-          ${liked ? "♥ Liked" : "♡ Like"}
-        </button>
-        ` : ""}
+        ${likeButtonHtml}
       </p>
     `;
 
@@ -246,16 +248,28 @@
     fetch(`${API_BASE}/me`, { credentials: "include" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
+        isSignedIn = !!data.athleteId;
         userLiked = new Set(data.liked || []);
         if (loginBtn) {
-          loginBtn.textContent = "Signed in";
-          loginBtn.href = "#";
+          if (data.athleteId) {
+            loginBtn.textContent = "Sign out";
+            loginBtn.href = "/oauth/logout";
+          } else {
+            loginBtn.textContent = "Sign in with intervals.icu";
+            loginBtn.href = "/oauth/authorize";
+          }
           loginBtn.classList.remove("hidden");
         }
         renderMarkers();
+        if (selectedId) {
+          const c = courses.find((x) => x.id === selectedId);
+          if (c) fetchCourseDetail(selectedId).then((full) => renderDetail(full, c)).catch(() => renderDetail(c, c));
+        }
       })
       .catch(() => {
+        isSignedIn = false;
         if (loginBtn) {
+          loginBtn.textContent = "Sign in with intervals.icu";
           loginBtn.href = "/oauth/authorize";
           loginBtn.classList.remove("hidden");
         }
