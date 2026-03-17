@@ -59,6 +59,12 @@ header .logo {
   display: none;
 }
 
+.auth-teaser {
+  font-size: 0.8rem;
+  color: #888;
+  margin: 0.35rem 0 0;
+}
+
 aside#sidebar {
   grid-area: sidebar;
   padding: 1rem;

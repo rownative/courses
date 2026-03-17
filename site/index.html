@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rowing Courses | rownative.icu</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='50%25' y='75%25' font-size='24' text-anchor='middle' fill='%231a3a4a' font-family='sans-serif'%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -15,10 +15,11 @@
       <p class="tagline">GPS-defined courses for CrewNerd and rownative.icu</p>
       <div id="auth-status">
         <a href="privacy.html">Privacy</a>
-        <a href="import.html">Import</a>
-        <a href="submit.html">Submit</a>
+        <a href="import.html" id="import-link">Import</a>
+        <a href="submit.html" id="submit-link">Submit</a>
         <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
         <span id="user-info" class="hidden"></span>
+        <p id="auth-teaser" class="auth-teaser hidden">Sign in to import your Rowsandall courses, submit new ones, or like courses for CrewNerd.</p>
       </div>
     </header>
 

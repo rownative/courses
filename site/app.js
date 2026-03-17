@@ -270,6 +270,12 @@
         }
         const legendLiked = document.getElementById("legend-liked");
         if (legendLiked) legendLiked.classList.toggle("hidden", !data.athleteId);
+        const importLink = document.getElementById("import-link");
+        const submitLink = document.getElementById("submit-link");
+        const authTeaser = document.getElementById("auth-teaser");
+        if (importLink) importLink.classList.toggle("hidden", !data.athleteId);
+        if (submitLink) submitLink.classList.toggle("hidden", !data.athleteId);
+        if (authTeaser) authTeaser.classList.toggle("hidden", !!data.athleteId);
         renderMarkers();
         if (selectedId) {
           const c = courses.find((x) => x.id === selectedId);
@@ -280,6 +286,12 @@
         isSignedIn = false;
         const legendLiked = document.getElementById("legend-liked");
         if (legendLiked) legendLiked.classList.add("hidden");
+        const importLink = document.getElementById("import-link");
+        const submitLink = document.getElementById("submit-link");
+        const authTeaser = document.getElementById("auth-teaser");
+        if (importLink) importLink.classList.add("hidden");
+        if (submitLink) submitLink.classList.add("hidden");
+        if (authTeaser) authTeaser.classList.remove("hidden");
         if (loginBtn) {
           loginBtn.textContent = "Sign in with intervals.icu";
           loginBtn.href = "/oauth/authorize";
