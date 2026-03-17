@@ -31,6 +31,7 @@
       <a href="index.html">Map</a>
       <a href="import.html" id="import-link">Import</a>
       <a href="submit.html" id="submit-link">Submit</a>
+      <a href="update.html" id="update-link">Update</a>
       <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
       <span id="user-info" class="hidden"></span>
       <a href="/oauth/logout" id="sign-out-link" class="hidden">Sign out</a>
@@ -79,6 +80,7 @@
       const signOutLink = document.getElementById("sign-out-link");
       const importLink = document.getElementById("import-link");
       const submitLink = document.getElementById("submit-link");
+      const updateLink = document.getElementById("update-link");
       const authTeaser = document.getElementById("auth-teaser");
 
       function showResult(html, isError) {
@@ -98,6 +100,7 @@
               signOutLink.classList.remove("hidden");
               importLink.classList.remove("hidden");
               submitLink.classList.remove("hidden");
+              if (updateLink) updateLink.classList.remove("hidden");
               authTeaser.classList.add("hidden");
             } else {
               signInLink.classList.remove("hidden");
@@ -105,12 +108,14 @@
               signOutLink.classList.add("hidden");
               importLink.classList.add("hidden");
               submitLink.classList.add("hidden");
+              if (updateLink) updateLink.classList.add("hidden");
               authTeaser.classList.remove("hidden");
             }
           })
           .catch(() => {
             importLink.classList.add("hidden");
             submitLink.classList.add("hidden");
+            if (updateLink) updateLink.classList.add("hidden");
             authTeaser.classList.remove("hidden");
           });
       }

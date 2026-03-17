@@ -3,27 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Import courses | rownative.icu</title>
+  <title>Update a course | rownative.icu</title>
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .import-page { max-width: 36rem; margin: 2rem auto; padding: 0 1rem; }
-    .import-page h2 { margin-top: 0; }
-    .import-page ol { padding-left: 1.25rem; line-height: 1.6; }
-    .import-page .form-row { margin: 1.5rem 0; }
-    .import-page input[type="file"] { display: block; margin-top: 0.5rem; }
-    .import-page button { padding: 0.5rem 1rem; background: #1a3a4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-    .import-page button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .import-page .result { margin-top: 1.5rem; padding: 1rem; background: #e8f4e8; border-radius: 4px; }
-    .import-page .result.error { background: #fce8e8; }
-    .import-page .result ul { margin: 0.5rem 0 0; padding-left: 1.25rem; }
-    .import-page .result a { color: #1a3a4a; }
+    .update-page { max-width: 36rem; margin: 2rem auto; padding: 0 1rem; }
+    .update-page h2 { margin-top: 0; }
+    .update-page ol { padding-left: 1.25rem; line-height: 1.6; }
+    .update-page .form-row { margin: 1.5rem 0; }
+    .update-page input[type="file"] { display: block; margin-top: 0.5rem; }
+    .update-page input[type="text"] { width: 100%; max-width: 20rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .update-page button { padding: 0.5rem 1rem; background: #1a3a4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    .update-page button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .update-page .result { margin-top: 1.5rem; padding: 1rem; background: #e8f4e8; border-radius: 4px; }
+    .update-page .result-note { margin-top: 1rem; font-size: 0.9rem; color: #333; line-height: 1.5; }
+    .update-page .result.error { background: #fce8e8; }
+    .update-page .result a { color: #1a3a4a; }
+    .update-page .result-note { margin: 0.75rem 0 0; font-size: 0.9em; opacity: 0.9; line-height: 1.5; }
   </style>
 </head>
 <body>
   <header>
     <h1><a href="index.html"><img src="logo.png" alt="" class="logo" /> Rowing Courses</a></h1>
-    <p class="tagline">Import your courses from Rowsandall</p>
+    <p class="tagline">Update a provisional course with revised KML</p>
     <div id="auth-status">
       <a href="privacy.html">Privacy</a>
       <a href="index.html">Map</a>
@@ -37,21 +39,28 @@
     </div>
   </header>
 
-  <main class="import-page">
-    <h2>Import from Rowsandall</h2>
-    <p>If you have courses on Rowsandall, you can migrate them here.</p>
+  <main class="update-page">
+    <h2>Update a course</h2>
+    <p>Submit a revised KML to update an existing <strong>provisional</strong> course. Only provisional courses can be updated via this form.</p>
     <ol>
-      <li>On Rowsandall, go to your courses and use <strong>Download my courses</strong> to get a ZIP file.</li>
-      <li>Upload that ZIP file below.</li>
+      <li>In Google Earth, edit your course (or create a new version) and export the Folder as KML.</li>
+      <li>Enter the course ID (from the course detail panel on the map) and upload the KML file below.</li>
     </ol>
-    <p>We will restore your liked courses and open pull requests for owned courses that are not yet in the library.</p>
 
-    <form id="import-form">
+    <form id="update-form">
       <div class="form-row">
-        <label for="file">ZIP file</label>
-        <input type="file" id="file" name="file" accept=".zip" required />
+        <label for="id">Course ID</label>
+        <input type="text" id="id" name="id" placeholder="e.g. 237" required />
       </div>
-      <button type="submit" id="submit-btn">Import</button>
+      <div class="form-row">
+        <label for="file">KML file</label>
+        <input type="file" id="file" name="file" accept=".kml" required />
+      </div>
+      <div class="form-row">
+        <label for="name">Course name (optional)</label>
+        <input type="text" id="name" name="name" placeholder="Override name from KML" />
+      </div>
+      <button type="submit" id="submit-btn">Update</button>
     </form>
 
     <div id="result" class="hidden"></div>
@@ -63,8 +72,10 @@
         ? window.ROWNATIVE_API
         : "/api";
 
-      const form = document.getElementById("import-form");
+      const form = document.getElementById("update-form");
+      const idInput = document.getElementById("id");
       const fileInput = document.getElementById("file");
+      const nameInput = document.getElementById("name");
       const submitBtn = document.getElementById("submit-btn");
       const resultEl = document.getElementById("result");
       const signInLink = document.getElementById("sign-in-link");
@@ -74,6 +85,12 @@
       const submitLink = document.getElementById("submit-link");
       const updateLink = document.getElementById("update-link");
       const authTeaser = document.getElementById("auth-teaser");
+
+      const params = new URLSearchParams(window.location.search);
+      const idFromUrl = params.get("id");
+      if (idFromUrl) {
+        idInput.value = idFromUrl;
+      }
 
       function showResult(html, isError) {
         resultEl.innerHTML = html;
@@ -92,7 +109,7 @@
               signOutLink.classList.remove("hidden");
               importLink.classList.remove("hidden");
               submitLink.classList.remove("hidden");
-              if (updateLink) updateLink.classList.remove("hidden");
+              updateLink.classList.remove("hidden");
               authTeaser.classList.add("hidden");
             } else {
               signInLink.classList.remove("hidden");
@@ -100,14 +117,14 @@
               signOutLink.classList.add("hidden");
               importLink.classList.add("hidden");
               submitLink.classList.add("hidden");
-              if (updateLink) updateLink.classList.add("hidden");
+              updateLink.classList.add("hidden");
               authTeaser.classList.remove("hidden");
             }
           })
           .catch(() => {
             importLink.classList.add("hidden");
             submitLink.classList.add("hidden");
-            if (updateLink) updateLink.classList.add("hidden");
+            updateLink.classList.add("hidden");
             authTeaser.classList.remove("hidden");
           });
       }
@@ -116,16 +133,20 @@
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const file = fileInput.files?.[0];
-        if (!file) return;
+        const id = idInput?.value?.trim();
+        if (!file || !id) return;
 
         submitBtn.disabled = true;
         resultEl.classList.add("hidden");
 
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("id", id);
+        const name = nameInput?.value?.trim();
+        if (name) formData.append("name", name);
 
         try {
-          const res = await fetch(API_BASE + "/courses/import-zip", {
+          const res = await fetch(API_BASE + "/courses/update", {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -135,7 +156,7 @@
 
           if (res.status === 401) {
             showResult(
-              "<p>Please <a href=\"/oauth/authorize\">sign in</a> to import courses.</p>",
+              "<p>Please <a href=\"/oauth/authorize\">sign in</a> to update courses.</p>",
               true
             );
             return;
@@ -143,23 +164,16 @@
 
           if (!res.ok) {
             showResult(
-              "<p>Error: " + (data.error || res.statusText || "Import failed") + "</p>",
+              "<p>Error: " + (data.error || res.statusText || "Update failed") + "</p>",
               true
             );
             return;
           }
 
-          let html = "<p><strong>Import complete.</strong></p><ul>";
-          html += "<li>" + data.alreadyInLibrary + " already in library</li>";
-          html += "<li>" + data.prsOpened + " pull request(s) opened</li>";
-          html += "<li>" + data.likedRestored + " liked courses restored</li>";
-          html += "</ul>";
-          if (data.prUrls && data.prUrls.length > 0) {
-            html += "<p>PRs:</p><ul>";
-            data.prUrls.forEach((url) => {
-              html += '<li><a href="' + url + '" target="_blank" rel="noopener">' + url + "</a></li>";
-            });
-            html += "</ul>";
+          let html = "<p><strong>Update submitted.</strong></p>";
+          if (data.prUrl) {
+            html += '<p><a href="' + data.prUrl + '" target="_blank" rel="noopener">View pull request</a></p>';
+            html += '<p class="result-note">A pull request is a proposal to update the course. Once a maintainer reviews and merges the PR, the updated course will appear on the map within a few minutes.</p>';
           }
           showResult(html, false);
         } catch (err) {
