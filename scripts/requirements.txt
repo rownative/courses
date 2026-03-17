@@ -3,3 +3,6 @@
 #
 # For fix_countries.py (geocoding missing countries):
 #   pip install geopy
+#
+# For tests:
+pytest>=7.0

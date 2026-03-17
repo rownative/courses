@@ -128,11 +128,18 @@
         if (name) formData.append("name", name);
 
         try {
-          const res = await fetch(API_BASE + "/courses/submit", {
+          // #region agent log
+          const submitUrl = API_BASE + "/courses/submit";
+          fetch('http://127.0.0.1:7691/ingest/770bd333-f0c6-4569-b816-3db8bb63447a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'52b113'},body:JSON.stringify({sessionId:'52b113',location:'submit.html:131',message:'Submit request',data:{submitUrl,origin:location.origin,apiBase:API_BASE},timestamp:Date.now(),hypothesisId:'A'})}).catch(()=>{});
+          // #endregion
+          const res = await fetch(submitUrl, {
             method: "POST",
             body: formData,
             credentials: "include",
           });
+          // #region agent log
+          fetch('http://127.0.0.1:7691/ingest/770bd333-f0c6-4569-b816-3db8bb63447a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'52b113'},body:JSON.stringify({sessionId:'52b113',location:'submit.html:140',message:'Submit response',data:{status:res.status,statusText:res.statusText,url:res.url},timestamp:Date.now(),hypothesisId:'B'})}).catch(()=>{});
+          // #endregion
 
           const data = await res.json().catch(() => ({}));
 
