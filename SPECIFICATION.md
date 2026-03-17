@@ -108,21 +108,24 @@ Each course is stored as `courses/{id}.json`:
 
 ### 1.6 Part 1 Remaining — Cloudflare Worker
 
-The Worker is **not yet implemented**. The `rownative/worker` repo exists as a skeleton. Required for full Part 1:
+The Worker is implemented in `worker/`. Required endpoints for full Part 1:
 
-**Authentication:**
+**Authentication (implemented):**
 - OAuth flow: `GET /oauth/authorize`, `GET /oauth/callback`
+- State is HMAC-signed (cookie-free) for iOS Safari / ITP compatibility — see `worker/src/index.ts`
 - Encrypted `rn_session` cookie (AES-GCM)
-- HMAC-derived CrewNerd API key
 - Token refresh on expiry
 
-**Endpoints:**
+**Implemented endpoints:**
 - `GET /api/me` — `{athleteId, liked}` or 401
+- `POST /rowers/courses/{id}/follow/` and `/unfollow/`
+
+**Remaining endpoints:**
 - `GET /api/courses/` — index with `?lat=&lon=&radius=`
 - `GET /api/courses/{id}/` — KML, `?cn=true` for CrewNerd naming
 - `GET /api/courses/kml/liked/` — liked courses KML
 - `GET /api/courses/kml/?ids=1,2,3` — multi-course KML
-- `POST /rowers/courses/{id}/follow/` and `/unfollow/`
+- HMAC-derived CrewNerd API key
 - `POST /api/auth/crewnerd` — bearer token → API key
 - `POST /api/courses/submit` — KML → GitHub PR
 - `POST /api/courses/import-zip` — ZIP import for Rowsandall migrants
@@ -165,8 +168,7 @@ The Worker is **not yet implemented**. The `rownative/worker` repo exists as a s
 
 | Repo | Purpose | Status |
 |------|---------|--------|
-| `rownative/courses` | Course data, site, scripts, workflows | Part 1 (library) complete |
-| `rownative/worker` | Cloudflare Worker | Skeleton only; Part 1 Worker not implemented |
+| `rownative/courses` | Course data, site, scripts, workflows, Worker | Part 1 (library + auth) complete |
 
 ---
 
@@ -174,8 +176,8 @@ The Worker is **not yet implemented**. The `rownative/worker` repo exists as a s
 
 **Part 1 — Course library:** Complete. Schema, validation, scripts, GitHub Actions, Leaflet map browser, KML cache, country fixer, dev server. 164 courses migrated.
 
-**Part 1 — Worker:** Not implemented. OAuth, CrewNerd API, KML generation, submit/import endpoints, KV integration.
+**Part 1 — Worker:** Auth endpoints implemented (`/oauth/authorize`, `/oauth/callback`, `/oauth/logout`, `/api/me`, follow/unfollow). iOS "invalid state" bug fixed via HMAC-signed stateless OAuth state. Remaining: KML serving, submit/import, CrewNerd API key.
 
 **Part 2:** Not started.
 
-**Next steps:** Implement Cloudflare Worker per spec §1.6; configure intervals.icu OAuth; provision KV and secrets; set up DNS for rownative.icu.
+**Next steps:** Deploy Cloudflare Worker (`worker/`); configure intervals.icu OAuth; provision KV and secrets; set up DNS for rownative.icu.

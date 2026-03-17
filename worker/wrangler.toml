@@ -1,0 +1,19 @@
+name = "rownative-worker"
+main = "src/index.ts"
+compatibility_date = "2024-04-05"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "placeholder"
+
+[vars]
+INTERVALS_AUTHORIZE_URL = "https://intervals.icu/oauth/authorize"
+INTERVALS_TOKEN_URL = "https://intervals.icu/oauth/token"
+INTERVALS_API_BASE = "https://intervals.icu/api/v1"
+REDIRECT_URI = "https://rownative.icu/oauth/callback"
+SITE_BASE = "https://rownative.icu"
+
+# Secrets (set via `wrangler secret put`):
+# INTERVALS_CLIENT_ID
+# INTERVALS_CLIENT_SECRET
+# TOKEN_ENCRYPTION_KEY   — 32 random bytes, hex-encoded; used for AES-GCM session encryption and HMAC state signing
