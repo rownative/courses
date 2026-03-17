@@ -209,6 +209,17 @@ main {
   font-size: 0.9rem;
 }
 
+#detail-content .course-id {
+  padding: 0.35rem 0.5rem;
+  background: #f0f4f8;
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+}
+
+#detail-content .course-id code {
+  font-weight: 600;
+}
+
 .badge {
   display: inline-block;
   padding: 0.15rem 0.5rem;

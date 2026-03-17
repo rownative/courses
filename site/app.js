@@ -177,7 +177,7 @@
       : "";
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
-      <p><strong>ID:</strong> <code>${meta.id}</code> — <code>courses/${meta.id}.json</code></p>
+      <p class="course-id"><strong>ID:</strong> <code>${meta.id}</code> — <code>courses/${meta.id}.json</code></p>
       <p><strong>Distance:</strong> ${meta.distance_m || "—"} m</p>
       <p><strong>Country:</strong> ${escapeHtml(meta.country || "—")}</p>
       <p><strong>Status:</strong> <span class="badge ${meta.status}">${meta.status}</span></p>
