@@ -110,9 +110,8 @@ aside#sidebar {
   margin-bottom: 0.25rem;
 }
 
-.distance-filter input[type="range"] {
+.distance-filter select {
   width: 100%;
-  margin: 0.25rem 0;
 }
 
 .map-legend {

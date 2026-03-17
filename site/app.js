@@ -21,7 +21,7 @@
   let isSignedIn = false;
 
   // Elements
-  let searchEl, countryFilter, distanceMin, distanceMax;
+  let searchEl, countryFilter, distanceRange;
   let filterProvisional, filterEstablished;
   let detailPanel, detailContent, detailClose;
   let loginBtn;
@@ -93,10 +93,10 @@
   function applyFilters() {
     const search = (searchEl?.value || "").toLowerCase();
     const country = countryFilter?.value || "";
-    const dMinKm = parseFloat(distanceMin?.value) || 0;
-    const dMaxKm = parseFloat(distanceMax?.value) || 25;
-    const dMin = dMinKm * 1000;
-    const dMax = dMaxKm * 1000;
+    const rangeVal = distanceRange?.value || "0-25";
+    const [minKm, maxKm] = rangeVal.split("-").map((s) => parseFloat(s) || 0);
+    const dMin = minKm * 1000;
+    const dMax = maxKm * 1000;
     const showProvisional = filterProvisional?.checked !== false;
     const showEstablished = filterEstablished?.checked !== false;
 
@@ -322,8 +322,7 @@
     const runFilters = () => renderMarkers();
     if (searchEl) searchEl.addEventListener("input", runFilters);
     if (countryFilter) countryFilter.addEventListener("change", runFilters);
-    if (distanceMin) distanceMin.addEventListener("input", runFilters);
-    if (distanceMax) distanceMax.addEventListener("input", runFilters);
+    if (distanceRange) distanceRange.addEventListener("change", runFilters);
     if (filterProvisional) filterProvisional.addEventListener("change", runFilters);
     if (filterEstablished) filterEstablished.addEventListener("change", runFilters);
 
