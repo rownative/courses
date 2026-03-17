@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Import courses | rownative.icu</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='50%25' y='75%25' font-size='24' text-anchor='middle' fill='%231a3a4a' font-family='sans-serif'%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .import-page { max-width: 36rem; margin: 2rem auto; padding: 0 1rem; }
+    .import-page h2 { margin-top: 0; }
+    .import-page ol { padding-left: 1.25rem; line-height: 1.6; }
+    .import-page .form-row { margin: 1.5rem 0; }
+    .import-page input[type="file"] { display: block; margin-top: 0.5rem; }
+    .import-page button { padding: 0.5rem 1rem; background: #1a3a4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    .import-page button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .import-page .result { margin-top: 1.5rem; padding: 1rem; background: #e8f4e8; border-radius: 4px; }
+    .import-page .result.error { background: #fce8e8; }
+    .import-page .result ul { margin: 0.5rem 0 0; padding-left: 1.25rem; }
+    .import-page .result a { color: #1a3a4a; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="index.html"><img src="logo.png" alt="" class="logo" /> Rowing Courses</a></h1>
+    <p class="tagline">Import your courses from Rowsandall</p>
+    <div id="auth-status">
+      <a href="privacy.html">Privacy</a>
+      <a href="index.html">Map</a>
+      <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
+      <span id="user-info" class="hidden"></span>
+      <a href="/oauth/logout" id="sign-out-link" class="hidden">Sign out</a>
+    </div>
+  </header>
+
+  <main class="import-page">
+    <h2>Import from Rowsandall</h2>
+    <p>If you have courses on Rowsandall, you can migrate them here.</p>
+    <ol>
+      <li>On Rowsandall, go to your courses and use <strong>Download my courses</strong> to get a ZIP file.</li>
+      <li>Upload that ZIP file below.</li>
+    </ol>
+    <p>We will restore your liked courses and open pull requests for owned courses that are not yet in the library.</p>
+
+    <form id="import-form">
+      <div class="form-row">
+        <label for="file">ZIP file</label>
+        <input type="file" id="file" name="file" accept=".zip" required />
+      </div>
+      <button type="submit" id="submit-btn">Import</button>
+    </form>
+
+    <div id="result" class="hidden"></div>
+  </main>
+
+  <script>
+    (function () {
+      const API_BASE = (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API)
+        ? window.ROWNATIVE_API
+        : "/api";
+
+      const form = document.getElementById("import-form");
+      const fileInput = document.getElementById("file");
+      const submitBtn = document.getElementById("submit-btn");
+      const resultEl = document.getElementById("result");
+      const signInLink = document.getElementById("sign-in-link");
+      const userInfo = document.getElementById("user-info");
+      const signOutLink = document.getElementById("sign-out-link");
+
+      function showResult(html, isError) {
+        resultEl.innerHTML = html;
+        resultEl.className = "result" + (isError ? " error" : "");
+        resultEl.classList.remove("hidden");
+      }
+
+      function checkAuth() {
+        fetch(API_BASE + "/me", { credentials: "include" })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.athleteId) {
+              signInLink.classList.add("hidden");
+              userInfo.classList.remove("hidden");
+              userInfo.textContent = "Signed in";
+              signOutLink.classList.remove("hidden");
+            } else {
+              signInLink.classList.remove("hidden");
+              userInfo.classList.add("hidden");
+              signOutLink.classList.add("hidden");
+            }
+          })
+          .catch(() => {});
+      }
+      checkAuth();
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const file = fileInput.files?.[0];
+        if (!file) return;
+
+        submitBtn.disabled = true;
+        resultEl.classList.add("hidden");
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          const res = await fetch(API_BASE + "/courses/import-zip", {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+          });
+
+          const data = await res.json().catch(() => ({}));
+
+          if (res.status === 401) {
+            showResult(
+              "<p>Please <a href=\"/oauth/authorize\">sign in</a> to import courses.</p>",
+              true
+            );
+            return;
+          }
+
+          if (!res.ok) {
+            showResult(
+              "<p>Error: " + (data.error || res.statusText || "Import failed") + "</p>",
+              true
+            );
+            return;
+          }
+
+          let html = "<p><strong>Import complete.</strong></p><ul>";
+          html += "<li>" + data.alreadyInLibrary + " already in library</li>";
+          html += "<li>" + data.prsOpened + " pull request(s) opened</li>";
+          html += "<li>" + data.likedRestored + " liked courses restored</li>";
+          html += "</ul>";
+          if (data.prUrls && data.prUrls.length > 0) {
+            html += "<p>PRs:</p><ul>";
+            data.prUrls.forEach((url) => {
+              html += '<li><a href="' + url + '" target="_blank" rel="noopener">' + url + "</a></li>";
+            });
+            html += "</ul>";
+          }
+          showResult(html, false);
+        } catch (err) {
+          showResult("<p>Error: " + (err.message || "Network error") + "</p>", true);
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
