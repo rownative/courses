@@ -3,12 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - "courses/**"
-      - "scripts/**"
-      - "site/**"
-      - "kml/**"
-      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 permissions:
@@ -26,6 +20,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: Fix country data
+        run: |
+          pip install -q geopy
+          python scripts/fix_countries.py 2>/dev/null || true
 
       - name: Regenerate index and KML
         run: |
