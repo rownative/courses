@@ -248,8 +248,8 @@
       .then((data) => {
         userLiked = new Set(data.liked || []);
         if (loginBtn) {
-          loginBtn.textContent = "Signed in";
-          loginBtn.href = "#";
+          loginBtn.textContent = "Sign out";
+          loginBtn.href = "/oauth/logout";
           loginBtn.classList.remove("hidden");
         }
         renderMarkers();
