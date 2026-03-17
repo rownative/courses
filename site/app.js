@@ -83,21 +83,21 @@
     const section = document.getElementById("liked-courses-section");
     const list = document.getElementById("liked-courses-list");
     if (!section || !list) return;
-    if (!isSignedIn || userLiked.size === 0) {
-      section.classList.add("hidden");
-      list.innerHTML = "";
+    section.classList.remove("hidden");
+    if (!isSignedIn) {
+      list.innerHTML = '<li class="liked-courses-empty">Sign in to see your liked courses.</li>';
       return;
     }
     const likedCourses = [...userLiked]
-      .map((id) => courses.find((c) => c.id === id))
-      .filter(Boolean)
+      .map((id) => {
+        const c = courses.find((x) => String(x.id) === String(id));
+        return c ? { ...c } : { id: String(id), name: `Course ${id}` };
+      })
       .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
     if (likedCourses.length === 0) {
-      section.classList.add("hidden");
-      list.innerHTML = "";
+      list.innerHTML = '<li class="liked-courses-empty">No liked courses yet. Like a course from the map to add it here.</li>';
       return;
     }
-    section.classList.remove("hidden");
     list.innerHTML = likedCourses
       .map((c) => {
         const name = (c.name || c.id).length > 35 ? (c.name || c.id).slice(0, 32) + "…" : (c.name || c.id);
@@ -341,8 +341,7 @@
         isSignedIn = false;
         const legendLiked = document.getElementById("legend-liked");
         if (legendLiked) legendLiked.classList.add("hidden");
-        const likedSection = document.getElementById("liked-courses-section");
-        if (likedSection) likedSection.classList.add("hidden");
+        renderLikedCourses();
         const importLink = document.getElementById("import-link");
         const submitLink = document.getElementById("submit-link");
         const updateLink = document.getElementById("update-link");
@@ -383,6 +382,7 @@
       renderMarkers();
     });
 
+    renderLikedCourses();
     checkAuth();
   }
 
