@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Import courses | rownative.icu</title>
+  <title>Submit a course | rownative.icu</title>
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .import-page { max-width: 36rem; margin: 2rem auto; padding: 0 1rem; }
-    .import-page h2 { margin-top: 0; }
-    .import-page ol { padding-left: 1.25rem; line-height: 1.6; }
-    .import-page .form-row { margin: 1.5rem 0; }
-    .import-page input[type="file"] { display: block; margin-top: 0.5rem; }
-    .import-page button { padding: 0.5rem 1rem; background: #1a3a4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-    .import-page button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .import-page .result { margin-top: 1.5rem; padding: 1rem; background: #e8f4e8; border-radius: 4px; }
-    .import-page .result.error { background: #fce8e8; }
-    .import-page .result ul { margin: 0.5rem 0 0; padding-left: 1.25rem; }
-    .import-page .result a { color: #1a3a4a; }
+    .submit-page { max-width: 36rem; margin: 2rem auto; padding: 0 1rem; }
+    .submit-page h2 { margin-top: 0; }
+    .submit-page ol { padding-left: 1.25rem; line-height: 1.6; }
+    .submit-page .form-row { margin: 1.5rem 0; }
+    .submit-page input[type="file"] { display: block; margin-top: 0.5rem; }
+    .submit-page input[type="text"] { width: 100%; max-width: 20rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .submit-page button { padding: 0.5rem 1rem; background: #1a3a4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    .submit-page button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .submit-page .result { margin-top: 1.5rem; padding: 1rem; background: #e8f4e8; border-radius: 4px; }
+    .submit-page .result.error { background: #fce8e8; }
+    .submit-page .result a { color: #1a3a4a; }
   </style>
 </head>
 <body>
   <header>
     <h1><a href="index.html"><img src="logo.png" alt="" class="logo" /> Rowing Courses</a></h1>
-    <p class="tagline">Import your courses from Rowsandall</p>
+    <p class="tagline">Submit a course from Google Earth</p>
     <div id="auth-status">
       <a href="privacy.html">Privacy</a>
       <a href="index.html">Map</a>
@@ -36,21 +36,26 @@
     </div>
   </header>
 
-  <main class="import-page">
-    <h2>Import from Rowsandall</h2>
-    <p>If you have courses on Rowsandall, you can migrate them here.</p>
+  <main class="submit-page">
+    <h2>Submit a course</h2>
+    <p>Create your course in Google Earth and submit it here.</p>
     <ol>
-      <li>On Rowsandall, go to your courses and use <strong>Download my courses</strong> to get a ZIP file.</li>
-      <li>Upload that ZIP file below.</li>
+      <li>In Google Earth, create a <strong>Folder</strong> with your course name.</li>
+      <li>Add <strong>Placemarks</strong> for start, waypoints, and finish. Draw a polygon for each (right-click Placemark → Add → Polygon).</li>
+      <li>Export the Folder as KML (right-click → Save Place As).</li>
+      <li>Upload the KML file below.</li>
     </ol>
-    <p>We will restore your liked courses and open pull requests for owned courses that are not yet in the library.</p>
 
-    <form id="import-form">
+    <form id="submit-form">
       <div class="form-row">
-        <label for="file">ZIP file</label>
-        <input type="file" id="file" name="file" accept=".zip" required />
+        <label for="file">KML file</label>
+        <input type="file" id="file" name="file" accept=".kml" required />
       </div>
-      <button type="submit" id="submit-btn">Import</button>
+      <div class="form-row">
+        <label for="name">Course name (optional)</label>
+        <input type="text" id="name" name="name" placeholder="Override name from KML" />
+      </div>
+      <button type="submit" id="submit-btn">Submit</button>
     </form>
 
     <div id="result" class="hidden"></div>
@@ -62,8 +67,9 @@
         ? window.ROWNATIVE_API
         : "/api";
 
-      const form = document.getElementById("import-form");
+      const form = document.getElementById("submit-form");
       const fileInput = document.getElementById("file");
+      const nameInput = document.getElementById("name");
       const submitBtn = document.getElementById("submit-btn");
       const resultEl = document.getElementById("result");
       const signInLink = document.getElementById("sign-in-link");
@@ -118,9 +124,11 @@
 
         const formData = new FormData();
         formData.append("file", file);
+        const name = nameInput?.value?.trim();
+        if (name) formData.append("name", name);
 
         try {
-          const res = await fetch(API_BASE + "/courses/import-zip", {
+          const res = await fetch(API_BASE + "/courses/submit", {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -130,7 +138,7 @@
 
           if (res.status === 401) {
             showResult(
-              "<p>Please <a href=\"/oauth/authorize\">sign in</a> to import courses.</p>",
+              "<p>Please <a href=\"/oauth/authorize\">sign in</a> to submit courses.</p>",
               true
             );
             return;
@@ -138,23 +146,15 @@
 
           if (!res.ok) {
             showResult(
-              "<p>Error: " + (data.error || res.statusText || "Import failed") + "</p>",
+              "<p>Error: " + (data.error || res.statusText || "Submit failed") + "</p>",
               true
             );
             return;
           }
 
-          let html = "<p><strong>Import complete.</strong></p><ul>";
-          html += "<li>" + data.alreadyInLibrary + " already in library</li>";
-          html += "<li>" + data.prsOpened + " pull request(s) opened</li>";
-          html += "<li>" + data.likedRestored + " liked courses restored</li>";
-          html += "</ul>";
-          if (data.prUrls && data.prUrls.length > 0) {
-            html += "<p>PRs:</p><ul>";
-            data.prUrls.forEach((url) => {
-              html += '<li><a href="' + url + '" target="_blank" rel="noopener">' + url + "</a></li>";
-            });
-            html += "</ul>";
+          let html = "<p><strong>Course submitted.</strong></p>";
+          if (data.prUrl) {
+            html += '<p><a href="' + data.prUrl + '" target="_blank" rel="noopener">View pull request</a></p>';
           }
           showResult(html, false);
         } catch (err) {

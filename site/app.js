@@ -111,16 +111,19 @@
     });
   }
 
-  function renderMarkers() {
+  function renderMarkers(preserveView) {
+    const prevBounds = preserveView && selectedId ? map.getBounds() : null;
     markersLayer.clearLayers();
     const filtered = applyFilters();
     filtered.forEach((c) => {
       const lat = c.center_lat;
       const lon = c.center_lon;
       if (lat == null || lon == null) return;
+      const liked = isSignedIn && userLiked.has(c.id);
+      const fillColor = liked ? "#c66" : (c.status === "established" ? "#0a7" : "#fa0");
       const m = L.circleMarker([lat, lon], {
         radius: 8,
-        fillColor: c.status === "established" ? "#0a7" : "#fa0",
+        fillColor,
         color: "#333",
         weight: 1,
         fillOpacity: 0.8,
@@ -225,22 +228,27 @@
   }
 
   function toggleLike(id) {
-    const url = `${API_BASE}/rowers/courses/${id}/follow/`;
-    if (userLiked.has(id)) {
-      fetch(`${API_BASE}/rowers/courses/${id}/unfollow/`, { method: "POST", credentials: "include" })
-        .then((r) => r.ok && userLiked.delete(id) && renderMarkers())
-        .catch(() => {});
-    } else {
-      fetch(url, { method: "POST", credentials: "include" })
-        .then((r) => r.ok && userLiked.add(id) && renderMarkers())
-        .catch(() => {});
-    }
+    // Optimistic UI update when viewing this course
     if (selectedId === id) {
       const c = courses.find((x) => x.id === id);
       if (c) {
-        userLiked.has(id) ? userLiked.add(id) : userLiked.delete(id);
+        if (userLiked.has(id)) {
+          userLiked.delete(id);
+        } else {
+          userLiked.add(id);
+        }
         fetchCourseDetail(id).then((full) => renderDetail(full, c));
       }
+    }
+    const url = `${API_BASE}/rowers/courses/${id}/follow/`;
+    if (userLiked.has(id)) {
+      fetch(`${API_BASE}/rowers/courses/${id}/unfollow/`, { method: "POST", credentials: "include" })
+        .then((r) => { if (r.ok) { userLiked.delete(id); if (selectedId !== id) renderMarkers(); } })
+        .catch(() => {});
+    } else {
+      fetch(url, { method: "POST", credentials: "include" })
+        .then((r) => { if (r.ok) { userLiked.add(id); if (selectedId !== id) renderMarkers(); } })
+        .catch(() => {});
     }
   }
 
@@ -260,6 +268,14 @@
           }
           loginBtn.classList.remove("hidden");
         }
+        const legendLiked = document.getElementById("legend-liked");
+        if (legendLiked) legendLiked.classList.toggle("hidden", !data.athleteId);
+        const importLink = document.getElementById("import-link");
+        const submitLink = document.getElementById("submit-link");
+        const authTeaser = document.getElementById("auth-teaser");
+        if (importLink) importLink.classList.toggle("hidden", !data.athleteId);
+        if (submitLink) submitLink.classList.toggle("hidden", !data.athleteId);
+        if (authTeaser) authTeaser.classList.toggle("hidden", !!data.athleteId);
         renderMarkers();
         if (selectedId) {
           const c = courses.find((x) => x.id === selectedId);
@@ -268,6 +284,14 @@
       })
       .catch(() => {
         isSignedIn = false;
+        const legendLiked = document.getElementById("legend-liked");
+        if (legendLiked) legendLiked.classList.add("hidden");
+        const importLink = document.getElementById("import-link");
+        const submitLink = document.getElementById("submit-link");
+        const authTeaser = document.getElementById("auth-teaser");
+        if (importLink) importLink.classList.add("hidden");
+        if (submitLink) submitLink.classList.add("hidden");
+        if (authTeaser) authTeaser.classList.remove("hidden");
         if (loginBtn) {
           loginBtn.textContent = "Sign in with intervals.icu";
           loginBtn.href = "/oauth/authorize";
