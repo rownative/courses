@@ -1,8 +1,8 @@
 # Minimal dependencies for course validation and generation.
 # validate_course.py, generate_index.py, generate_kml.py use only stdlib.
 #
-# For fix_countries.py (geocoding missing countries):
-#   pip install geopy
+# For fix_countries.py (geocoding missing countries during deploy):
+geopy>=2.4.0
 #
 # For tests:
 pytest>=7.0
