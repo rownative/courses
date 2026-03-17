@@ -70,8 +70,8 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const output = `${{ steps.validate.outputs.output }}` || 'No courses changed';
-            const result = '${{ steps.validate.outputs.result }}' || 'ok';
+            const output = ${{ toJSON(steps.validate.outputs.output) }} || 'No courses changed';
+            const result = ${{ toJSON(steps.validate.outputs.result) }} || 'ok';
             const body = `## Course validation\n\n${output}\n\n**Result:** ${result === 'ok' ? '✅ All passed' : '❌ Failed'}`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
