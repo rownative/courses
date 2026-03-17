@@ -6,6 +6,10 @@ on:
       - "courses/**"
       - ".github/workflows/validate.yml"
 
+permissions:
+  contents: read
+  pull-requests: write  # required to post validation comment on PR
+
 jobs:
   validate:
     runs-on: ubuntu-latest
