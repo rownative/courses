@@ -109,6 +109,44 @@ aside#sidebar {
   margin: 0.25rem 0;
 }
 
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.map-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.map-legend .legend-item.hidden {
+  display: none;
+}
+
+.map-legend .legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #333;
+  flex-shrink: 0;
+}
+
+.map-legend .legend-dot.liked {
+  background: #c66;
+}
+
+.map-legend .legend-dot.established {
+  background: #0a7;
+}
+
+.map-legend .legend-dot.provisional {
+  background: #fa0;
+}
+
 main {
   grid-area: map;
   position: relative;
