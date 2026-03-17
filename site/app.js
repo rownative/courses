@@ -130,7 +130,8 @@
       });
       m.courseId = c.id;
       m.on("click", () => showDetail(c.id));
-      m.bindTooltip(c.name || c.id, { direction: "top" });
+      const tooltipText = c.name ? `${c.name} (ID: ${c.id})` : c.id;
+      m.bindTooltip(tooltipText, { direction: "top" });
       markersLayer.addLayer(m);
     });
 
@@ -176,6 +177,7 @@
       : "";
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
+      <p><strong>ID:</strong> <code>${meta.id}</code> — <code>courses/${meta.id}.json</code></p>
       <p><strong>Distance:</strong> ${meta.distance_m || "—"} m</p>
       <p><strong>Country:</strong> ${escapeHtml(meta.country || "—")}</p>
       <p><strong>Status:</strong> <span class="badge ${meta.status}">${meta.status}</span></p>
@@ -183,6 +185,7 @@
       <p>
         <a href="${kmlUrl}" download="${meta.id}.kml" class="btn">Download KML</a>
         ${likeButtonHtml}
+        ${isSignedIn && meta.status === 'provisional' ? `<a href="update.html?id=${meta.id}" class="btn">Update with new KML</a>` : ''}
       </p>
     `;
 
@@ -272,9 +275,11 @@
         if (legendLiked) legendLiked.classList.toggle("hidden", !data.athleteId);
         const importLink = document.getElementById("import-link");
         const submitLink = document.getElementById("submit-link");
+        const updateLink = document.getElementById("update-link");
         const authTeaser = document.getElementById("auth-teaser");
         if (importLink) importLink.classList.toggle("hidden", !data.athleteId);
         if (submitLink) submitLink.classList.toggle("hidden", !data.athleteId);
+        if (updateLink) updateLink.classList.toggle("hidden", !data.athleteId);
         if (authTeaser) authTeaser.classList.toggle("hidden", !!data.athleteId);
         renderMarkers();
         if (selectedId) {
@@ -288,9 +293,11 @@
         if (legendLiked) legendLiked.classList.add("hidden");
         const importLink = document.getElementById("import-link");
         const submitLink = document.getElementById("submit-link");
+        const updateLink = document.getElementById("update-link");
         const authTeaser = document.getElementById("auth-teaser");
         if (importLink) importLink.classList.add("hidden");
         if (submitLink) submitLink.classList.add("hidden");
+        if (updateLink) updateLink.classList.add("hidden");
         if (authTeaser) authTeaser.classList.remove("hidden");
         if (loginBtn) {
           loginBtn.textContent = "Sign in with intervals.icu";
