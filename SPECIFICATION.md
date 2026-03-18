@@ -104,36 +104,37 @@ Each course is stored as `courses/{id}.json`:
 - Like/unlike buttons (POST to Worker)
 - Submit form, ZIP import form
 
-**Note:** Dynamic features show placeholder UI until the Worker is deployed.
+**Note:** Dynamic features require the Worker to be deployed and configured.
 
-### 1.6 Part 1 Remaining — Cloudflare Worker
+### 1.6 Cloudflare Worker — Implemented
 
-The Worker is **not yet implemented**. The `rownative/worker` repo exists as a skeleton. Required for full Part 1:
+The Worker is **implemented** in `rownative/worker`.
 
 **Authentication:**
 - OAuth flow: `GET /oauth/authorize`, `GET /oauth/callback`
 - Encrypted `rn_session` cookie (AES-GCM)
 - HMAC-derived CrewNerd API key
-- Token refresh on expiry
+- Token refresh: N/A (intervals.icu uses long-lived tokens)
 
 **Endpoints:**
-- `GET /api/me` — `{athleteId, liked}` or 401
-- `GET /api/courses/` — index with `?lat=&lon=&radius=`
-- `GET /api/courses/{id}/` — KML, `?cn=true` for CrewNerd naming
-- `GET /api/courses/kml/liked/` — liked courses KML
+- `GET /api/me` — `{athleteId, liked}` or `{athleteId: null, liked: []}` when unauthenticated
+- `GET /api/courses/` — course index. Optional geo filter: `?lat=&lon=&radius=` (all in meters; filters by haversine distance from center)
+- `GET /api/courses/{id}/` — KML, `?cn=true` for Chinese KML variant
+- `GET /api/courses/kml/liked/` — liked courses KML (auth required)
 - `GET /api/courses/kml/?ids=1,2,3` — multi-course KML
-- `POST /rowers/courses/{id}/follow/` and `/unfollow/`
+- `POST /api/rowers/courses/{id}/follow/` and `/unfollow/` (auth required)
 - `POST /api/auth/crewnerd` — bearer token → API key
 - `POST /api/courses/submit` — KML → GitHub PR
 - `POST /api/courses/import-zip` — ZIP import for Rowsandall migrants
+- `POST /api/courses/update` — KML revision for provisional courses (auth required)
 
-**Infrastructure:** KV namespace; Worker secrets (`INTERVALS_CLIENT_ID`, `INTERVALS_CLIENT_SECRET`, `TOKEN_ENCRYPTION_KEY`); intervals.icu OAuth app; DNS (`rownative.icu` → Pages + Worker for `/api/*`).
+**Infrastructure:** KV namespace; Worker secrets (`INTERVALS_CLIENT_ID`, `INTERVALS_CLIENT_SECRET`, `TOKEN_ENCRYPTION_KEY`, `GITHUB_TOKEN`); intervals.icu OAuth app; DNS (`rownative.icu` → Pages + Worker for `/api/*`).
 
-### 1.7 Part 1 Remaining — Rowsandall Prerequisites
+### 1.7 Rowsandall Prerequisites — Implemented
 
 - `scripts/export_from_rowsandall.py` — bulk course geometry export (Rowsandall repo)
 - "Download my courses" ZIP export — **implemented** in Rowsandall
-- Import endpoint — Worker deliverable
+- Import endpoint — **implemented** in Worker (`POST /api/courses/import-zip`)
 
 ---
 
@@ -166,7 +167,7 @@ The Worker is **not yet implemented**. The `rownative/worker` repo exists as a s
 | Repo | Purpose | Status |
 |------|---------|--------|
 | `rownative/courses` | Course data, site, scripts, workflows | Part 1 (library) complete |
-| `rownative/worker` | Cloudflare Worker | Skeleton only; Part 1 Worker not implemented |
+| `rownative/worker` | Cloudflare Worker | Part 1 implemented |
 
 ---
 
@@ -174,8 +175,8 @@ The Worker is **not yet implemented**. The `rownative/worker` repo exists as a s
 
 **Part 1 — Course library:** Complete. Schema, validation, scripts, GitHub Actions, Leaflet map browser, KML cache, country fixer, dev server. 164 courses migrated.
 
-**Part 1 — Worker:** Not implemented. OAuth, CrewNerd API, KML generation, submit/import endpoints, KV integration.
+**Part 1 — Worker:** Implemented. OAuth, CrewNerd API, geo filtering, KML generation, submit/import/update endpoints, KV integration.
 
 **Part 2:** Not started.
 
-**Next steps:** Implement Cloudflare Worker per spec §1.6; configure intervals.icu OAuth; provision KV and secrets; set up DNS for rownative.icu.
+**Next steps:** Configure intervals.icu OAuth; provision KV and secrets; set up DNS for rownative.icu; or proceed to Part 2.
