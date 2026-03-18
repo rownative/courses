@@ -95,6 +95,7 @@ Each course is stored as `courses/{id}.json`:
 - Map centred on geolocation or world view
 - Loads `index.json`; marker per course (green=established, orange=provisional)
 - Filter by country, distance (km), status; search by name
+- High-contrast map toggle (desaturates tiles, stronger polygon styling; persisted in localStorage)
 - Map zooms to fit filtered markers (e.g. select USA → zoom to all US courses)
 - Click marker → detail panel with polygon chain, KML download
 - Fallback paths for local dev (`../courses/index.json` when `./index.json` not found)
