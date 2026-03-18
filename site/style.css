@@ -333,6 +333,73 @@ main {
   color: #c00;
 }
 
+.success {
+  color: #262;
+}
+
+.btn-secondary {
+  background: #888;
+}
+
+.btn-secondary:hover {
+  background: #777;
+}
+
+.validation-note {
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  max-height: 10em;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.modal-content {
+  position: relative;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  max-width: 420px;
+  width: 90%;
+}
+
+.modal-content h3 {
+  margin: 0 0 1rem;
+}
+
+.modal-content select {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 600px) {
   #app {
     grid-template-areas:

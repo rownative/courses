@@ -143,6 +143,16 @@ The Worker is **implemented** in `rownative/worker`.
 
 **Goal:** Replace Rowsandall challenge / virtual race / speed order functionality.
 
+### 2.0 Phase 2a — Time on course (implemented)
+
+- **Course time calculation**: Port of Rowsandall algorithm (`course-time.ts`): point-in-polygon, `timeInPath`, `coursetimePaths`, `interpolateTrack`, `calculateCourseTime`.
+- **D1 table**: `course_times` (athlete_id, activity_id, course_id, time_s, distance_m, validation_note, created_at).
+- **Endpoints**: `GET /api/me/activities` (OTW rowing, last month), `POST /api/courses/{id}/calculate-time`, `POST /api/courses/{id}/course-times`, `GET /api/me/course-times`.
+- **GUI**: "Calculate my time" button and modal in course detail; "My times" page at `/my-times.html`.
+- **intervals.icu**: Fetches activities (`oldest`/`newest`) and streams (`latlng`, `time`); filters to `type === 'Rowing'`.
+
+### 2.1 Part 2 — Full scope (not started)
+
 **Scope:** D1 tables (challenges, challenge_results, standard_collections, course_standards); GPS validation via intervals.icu; handicap scoring; organiser panel; leaderboard pages.
 
 **Status:** Not started. Full specification in [rowing-courses-spec §2](https://git.wereldraadsel.tech/sander/rowsandall/src/branch/develop/rowing-courses-spec.md).
@@ -178,6 +188,8 @@ The Worker is **implemented** in `rownative/worker`.
 
 **Part 1 — Worker:** Implemented. OAuth, CrewNerd API, geo filtering, KML generation, submit/import/update endpoints, KV integration.
 
-**Part 2:** Not started.
+**Part 2a — Time on course:** Implemented. D1 `course_times`, intervals.icu fetch, calculate-time/course-times endpoints, map UI and My times page.
+
+**Part 2 (full):** Not started.
 
 **Next steps:** Configure intervals.icu OAuth; provision KV and secrets; set up DNS for rownative.icu; or proceed to Part 2.

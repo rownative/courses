@@ -224,6 +224,9 @@
     const likeButtonHtml = isSignedIn
       ? `<button type="button" class="btn like-btn ${liked ? "liked" : ""}" data-id="${meta.id}">${liked ? "♥ Liked" : "♡ Like"}</button>`
       : "";
+    const calculateBtnHtml = isSignedIn
+      ? `<button type="button" class="btn calculate-time-btn" data-id="${meta.id}" data-name="${escapeHtml(meta.name)}">Calculate my time</button>`
+      : "";
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
       <p class="course-id"><strong>ID:</strong> <code>${meta.id}</code> — <code>courses/${meta.id}.json</code></p>
@@ -234,6 +237,7 @@
       <p>
         <a href="${kmlUrl}" download="${meta.id}.kml" class="btn">Download KML</a>
         ${likeButtonHtml}
+        ${calculateBtnHtml}
         ${isSignedIn && meta.status === 'provisional' ? `<a href="update.html?id=${meta.id}" class="btn">Update with new KML</a>` : ''}
       </p>
     `;
@@ -265,6 +269,10 @@
     const likeBtn = detailContent.querySelector(".like-btn");
     if (likeBtn) {
       likeBtn.addEventListener("click", () => toggleLike(meta.id));
+    }
+    const calcBtn = detailContent.querySelector(".calculate-time-btn");
+    if (calcBtn) {
+      calcBtn.addEventListener("click", () => openCalculateTimeModal(meta.id, meta.name));
     }
   }
 
@@ -310,6 +318,153 @@
           else renderLikedCourses();
         })
         .catch(() => {});
+    }
+  }
+
+  let calculateModalCourseId = null;
+  let calculateModalCourseName = null;
+  let lastCalculateResult = null;
+
+  function openCalculateTimeModal(courseId, courseName) {
+    calculateModalCourseId = courseId;
+    calculateModalCourseName = courseName || "Course";
+    lastCalculateResult = null;
+    const modal = document.getElementById("calculate-time-modal");
+    const title = document.getElementById("calculate-modal-title");
+    const select = document.getElementById("calculate-activity-select");
+    const result = document.getElementById("calculate-result");
+    const calcBtn = document.getElementById("calculate-btn");
+    const saveBtn = document.getElementById("save-course-time-btn");
+    if (title) title.textContent = "Calculate time on " + courseName;
+    if (select) {
+      select.innerHTML = "<option value=\"\">Loading…</option>";
+      select.classList.remove("hidden");
+    }
+    if (result) {
+      result.classList.add("hidden");
+      result.innerHTML = "";
+    }
+    if (calcBtn) {
+      calcBtn.classList.remove("hidden");
+      calcBtn.disabled = true;
+    }
+    if (saveBtn) saveBtn.classList.add("hidden");
+    if (modal) modal.classList.remove("hidden");
+
+    fetch(`${API_BASE}/me/activities`, { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data) => {
+        const acts = data.activities || [];
+        if (!select) return;
+        select.innerHTML = "<option value=\"\">Select a workout…</option>";
+        acts.forEach((a) => {
+          const label = a.start_date_local
+            ? a.start_date_local.slice(0, 10) + " — " + (a.name || "Untitled")
+            : a.name || "Untitled";
+          select.innerHTML += `<option value="${escapeHtml(a.id)}">${escapeHtml(label)}</option>`;
+        });
+        if (acts.length === 0) {
+          select.innerHTML = "<option value=\"\">No OTW rowing workouts in last month</option>";
+        }
+        calcBtn.disabled = false;
+      })
+      .catch(() => {
+        if (select) select.innerHTML = "<option value=\"\">Failed to load activities</option>";
+      });
+  }
+
+  function closeCalculateTimeModal() {
+    const modal = document.getElementById("calculate-time-modal");
+    if (modal) modal.classList.add("hidden");
+    calculateModalCourseId = null;
+    calculateModalCourseName = null;
+  }
+
+  function initCalculateTimeModal() {
+    const modal = document.getElementById("calculate-time-modal");
+    const calcBtn = document.getElementById("calculate-btn");
+    const saveBtn = document.getElementById("save-course-time-btn");
+    const closeBtn = document.getElementById("modal-close-btn");
+    const backdrop = document.querySelector("[data-dismiss=\"modal\"]");
+
+    if (backdrop) backdrop.addEventListener("click", closeCalculateTimeModal);
+    if (closeBtn) closeBtn.addEventListener("click", closeCalculateTimeModal);
+
+    if (calcBtn) {
+      calcBtn.addEventListener("click", () => {
+        const select = document.getElementById("calculate-activity-select");
+        const activityId = select?.value;
+        if (!activityId || !calculateModalCourseId) return;
+        calcBtn.disabled = true;
+        calcBtn.textContent = "Calculating…";
+        fetch(`${API_BASE}/courses/${calculateModalCourseId}/calculate-time`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ activityId }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            lastCalculateResult = data;
+            const resultEl = document.getElementById("calculate-result");
+            if (data.valid) {
+              const mins = Math.floor(data.timeS / 60);
+              const secs = Math.round(data.timeS % 60);
+              resultEl.innerHTML = `<p class="success">Time: ${mins}:${String(secs).padStart(2, "0")}</p>`;
+              saveBtn.classList.remove("hidden");
+            } else {
+              resultEl.innerHTML =
+                '<p class="error">Could not validate — track didn\'t pass all gates.</p>' +
+                (data.validationNote ? `<pre class="validation-note">${escapeHtml(data.validationNote)}</pre>` : "");
+              saveBtn.classList.add("hidden");
+            }
+            resultEl.classList.remove("hidden");
+          })
+          .catch(() => {
+            const resultEl = document.getElementById("calculate-result");
+            resultEl.innerHTML = "<p class="error">Calculation failed. Try again.</p>";
+            resultEl.classList.remove("hidden");
+            saveBtn.classList.add("hidden");
+          })
+          .finally(() => {
+            calcBtn.disabled = false;
+            calcBtn.textContent = "Calculate";
+          });
+      });
+    }
+
+    if (saveBtn) {
+      saveBtn.addEventListener("click", () => {
+        if (!lastCalculateResult || !calculateModalCourseId) return;
+        const select = document.getElementById("calculate-activity-select");
+        const activityId = select?.value;
+        if (!activityId) return;
+        saveBtn.disabled = true;
+        fetch(`${API_BASE}/courses/${calculateModalCourseId}/course-times`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            activityId,
+            timeS: lastCalculateResult.timeS,
+            distanceM: lastCalculateResult.distanceM,
+            validationNote: lastCalculateResult.validationNote || "",
+          }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.saved) {
+              saveBtn.textContent = "Saved ✓";
+              setTimeout(() => closeCalculateTimeModal(), 800);
+            }
+          })
+          .catch(() => {
+            saveBtn.disabled = false;
+          })
+          .finally(() => {
+            saveBtn.disabled = false;
+          });
+      });
     }
   }
 
@@ -361,6 +516,8 @@
         if (importLink) importLink.classList.add("hidden");
         if (submitLink) submitLink.classList.add("hidden");
         if (updateLink) updateLink.classList.add("hidden");
+        const myTimesLink = document.getElementById("my-times-link");
+        if (myTimesLink) myTimesLink.classList.add("hidden");
         if (authTeaser) authTeaser.classList.remove("hidden");
         if (loginBtn) {
           loginBtn.textContent = "Sign in with intervals.icu";
@@ -409,6 +566,7 @@
       renderMarkers();
     });
 
+    initCalculateTimeModal();
     renderLikedCourses();
     checkAuth();
   }
