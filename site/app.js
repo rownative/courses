@@ -353,6 +353,7 @@
     calculateModalCourseId = courseId;
     calculateModalCourseName = courseName || "Course";
     lastCalculateResult = null;
+    clearTrackOnMap();
     const modal = document.getElementById("calculate-time-modal");
     const title = document.getElementById("calculate-modal-title");
     const select = document.getElementById("calculate-activity-select");
@@ -400,6 +401,20 @@
           select.innerHTML = "<option value=\"\">No OTW rowing workouts in last month</option>";
         }
         calcBtn.disabled = false;
+        // When user selects a workout, fetch and show its track on the map
+        select.onchange = () => {
+          const activityId = select.value;
+          if (!activityId) {
+            clearTrackOnMap();
+            return;
+          }
+          fetch(`${API_BASE}/me/activities/${activityId}/track`, { credentials: "include" })
+            .then((r) => (r.ok ? r.json() : Promise.reject()))
+            .then((data) => {
+              if (data.latlng && data.latlng.length >= 2) showTrackOnMap(data.latlng);
+            })
+            .catch(() => clearTrackOnMap());
+        };
       })
       .catch((e) => {
         const msg = e?.serverError || e?.message || "Failed to load activities";
