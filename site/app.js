@@ -354,6 +354,8 @@
     calculateModalCourseName = courseName || "Course";
     lastCalculateResult = null;
     clearTrackOnMap();
+    const trackStatusEl = document.getElementById("calculate-track-status");
+    if (trackStatusEl) trackStatusEl.textContent = "";
     const modal = document.getElementById("calculate-time-modal");
     const title = document.getElementById("calculate-modal-title");
     const select = document.getElementById("calculate-activity-select");
@@ -402,12 +404,21 @@
         }
         calcBtn.disabled = false;
         // When user selects a workout, fetch and show its track on the map
+        const trackStatus = document.getElementById("calculate-track-status");
+        const setTrackStatus = (msg, isError) => {
+          if (!trackStatus) return;
+          trackStatus.textContent = msg || "";
+          trackStatus.classList.toggle("hidden", !msg);
+          trackStatus.classList.toggle("error", !!isError);
+        };
         select.onchange = () => {
           const activityId = select.value;
           if (!activityId) {
             clearTrackOnMap();
+            setTrackStatus("");
             return;
           }
+          setTrackStatus("Loading track…", false);
           const trackUrl = `${API_BASE}/me/activities/${encodeURIComponent(activityId)}/track`;
           fetch(trackUrl, { credentials: "include" })
             .then(async (r) => {
@@ -419,14 +430,19 @@
               const latlng = data.latlng;
               if (Array.isArray(latlng) && latlng.length >= 2) {
                 showTrackOnMap(latlng);
+                setTrackStatus("Track shown on map.", false);
               } else {
                 clearTrackOnMap();
-                showLoadError("Track: no GPS data in response");
+                const msg = "This workout has no GPS track.";
+                setTrackStatus(msg, true);
+                showLoadError("Track: " + msg);
               }
             })
             .catch((e) => {
               clearTrackOnMap();
-              showLoadError("Track: " + (e.message || "failed to load"));
+              const msg = e.message || "Failed to load track";
+              setTrackStatus(msg, true);
+              showLoadError("Track: " + msg);
             });
         };
       })
