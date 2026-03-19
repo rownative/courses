@@ -20,6 +20,7 @@
   let selectedId = null;
   let userLiked = new Set();
   let isSignedIn = false;
+  let athleteId = null;
   let highContrastMode = false;
 
   // Elements
@@ -255,12 +256,7 @@
         if (forCourse.length === 0) {
           listEl.innerHTML = '<li class="empty">No saved times yet</li>';
         } else {
-          listEl.innerHTML = forCourse
-            .map((t) => {
-              const date = t.created_at ? t.created_at.slice(0, 10) : "—";
-              return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${fmtTime(t.time_s)}</span></li>`;
-            })
-            .join("");
+          listEl.innerHTML = forCourse.map((t) => renderCourseTimeItem(t)).join("");
         }
       })
       .catch(() => {
@@ -343,10 +339,7 @@
               listEl.innerHTML = '<li class="empty">No saved times yet</li>';
             } else {
               listEl.innerHTML = forCourse
-                .map((t) => {
-                  const date = t.created_at ? t.created_at.slice(0, 10) : "—";
-                  return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${fmtTime(t.time_s)}</span></li>`;
-                })
+                .map((t) => renderCourseTimeItem(t))
                 .join("");
             }
           })
@@ -355,6 +348,19 @@
           });
       }
     }
+  }
+
+  function renderCourseTimeItem(t) {
+    const date = (t.workout_date || t.created_at) ? (t.workout_date || t.created_at).slice(0, 10) : "—";
+    const timeStr = fmtTime(t.time_s);
+    const activityId = t.activity_id;
+    const intervalsUrl = athleteId && activityId
+      ? `https://intervals.icu/d/i/${encodeURIComponent(athleteId)}/activities/${encodeURIComponent(activityId)}`
+      : null;
+    if (intervalsUrl) {
+      return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${escapeHtml(timeStr)}</span> <a href="${escapeHtml(intervalsUrl)}" target="_blank" rel="noopener" class="detail-time-link">Workout ↗</a></li>`;
+    }
+    return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${escapeHtml(timeStr)}</span></li>`;
   }
 
   function escapeHtml(s) {
@@ -463,10 +469,9 @@
         if (!select) return;
         select.innerHTML = "<option value=\"\">Select a workout…</option>";
         acts.forEach((a) => {
-          const label = a.start_date_local
-            ? a.start_date_local.slice(0, 10) + " — " + (a.name || "Untitled")
-            : a.name || "Untitled";
-          select.innerHTML += `<option value="${escapeHtml(a.id)}">${escapeHtml(label)}</option>`;
+          const date = a.start_date_local ? a.start_date_local.slice(0, 10) : "";
+          const label = date ? date + " — " + (a.name || "Untitled") : (a.name || "Untitled");
+          select.innerHTML += `<option value="${escapeHtml(a.id)}" data-date="${escapeHtml(date)}">${escapeHtml(label)}</option>`;
         });
         if (acts.length === 0) {
           select.innerHTML = "<option value=\"\">No OTW rowing workouts in last month</option>";
@@ -616,6 +621,8 @@
         const select = document.getElementById("calculate-activity-select");
         const activityId = select?.value;
         if (!activityId) return;
+        const opt = select?.options[select.selectedIndex];
+        const workoutDate = opt?.dataset?.date || "";
         saveBtn.disabled = true;
         fetch(`${API_BASE}/courses/${calculateModalCourseId}/course-times`, {
           method: "POST",
@@ -626,6 +633,7 @@
             timeS: lastCalculateResult.timeS,
             distanceM: lastCalculateResult.distanceM,
             validationNote: lastCalculateResult.validationNote || "",
+            workoutDate: workoutDate || undefined,
           }),
         })
           .then((r) => r.json())
@@ -655,6 +663,7 @@
       })
       .then((data) => {
         isSignedIn = !!data.athleteId;
+        athleteId = data.athleteId || null;
         const raw = data.liked || [];
         const ids = Array.isArray(raw)
           ? raw.map((x) => (typeof x === "object" && x != null && "id" in x ? x.id : String(x)))
@@ -690,6 +699,7 @@
       })
       .catch((e) => {
         isSignedIn = false;
+        athleteId = null;
         showAuthError(e.message || "fetch failed");
         const legendLiked = document.getElementById("legend-liked");
         if (legendLiked) legendLiked.classList.add("hidden");

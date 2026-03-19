@@ -70,32 +70,32 @@
 
     <main>
       <div id="map"></div>
-      <div id="right-panels">
-        <div id="detail-panel" class="hidden">
-          <button id="close-detail" aria-label="Close">×</button>
-          <div id="detail-content"></div>
-        </div>
-      </div>
-      <div id="calculate-time-modal" class="calculate-panel hidden">
-          <div class="modal-backdrop" data-dismiss="modal"></div>
-          <div id="calculate-modal-content" class="modal-content">
-          <h3 id="calculate-modal-title">Calculate time on course</h3>
-          <div id="calculate-modal-body">
-            <p class="modal-step">Select an OTW rowing workout (last month):</p>
-            <select id="calculate-activity-select">
-              <option value="">Loading…</option>
-            </select>
-            <p id="calculate-track-status" class="modal-track-status hidden"></p>
-            <div id="calculate-result" class="hidden"></div>
-          </div>
-          <div class="modal-actions">
-            <button type="button" id="calculate-btn" class="btn">Calculate</button>
-            <button type="button" id="save-course-time-btn" class="btn hidden">Save to my times</button>
-            <button type="button" id="modal-close-btn" class="btn btn-secondary">Close</button>
-          </div>
-        </div>
-      </div>
     </main>
+  </div>
+  <div id="right-panels">
+    <div id="detail-panel" class="hidden">
+      <button id="close-detail" aria-label="Close">×</button>
+      <div id="detail-content"></div>
+    </div>
+  </div>
+  <div id="calculate-time-modal" class="calculate-panel hidden">
+    <div class="modal-backdrop" data-dismiss="modal"></div>
+    <div id="calculate-modal-content" class="modal-content">
+      <h3 id="calculate-modal-title">Calculate time on course</h3>
+      <div id="calculate-modal-body">
+        <p class="modal-step">Select an OTW rowing workout (last month):</p>
+        <select id="calculate-activity-select">
+          <option value="">Loading…</option>
+        </select>
+        <p id="calculate-track-status" class="modal-track-status hidden"></p>
+        <div id="calculate-result" class="hidden"></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="calculate-btn" class="btn">Calculate</button>
+        <button type="button" id="save-course-time-btn" class="btn hidden">Save to my times</button>
+        <button type="button" id="modal-close-btn" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
