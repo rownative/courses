@@ -444,7 +444,7 @@
           })
           .catch(() => {
             const resultEl = document.getElementById("calculate-result");
-            resultEl.innerHTML = "<p class="error">Calculation failed. Try again.</p>";
+            resultEl.innerHTML = '<p class="error">Calculation failed. Try again.</p>';
             resultEl.classList.remove("hidden");
             saveBtn.classList.add("hidden");
           })
