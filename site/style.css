@@ -59,6 +59,15 @@ header .logo {
   display: none;
 }
 
+.load-error-banner {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #b52;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
 .auth-teaser {
   font-size: 0.8rem;
   color: #888;
