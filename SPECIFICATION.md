@@ -188,7 +188,7 @@ The Worker is **implemented** in `rownative/worker`.
 
 **Part 1 — Worker:** Implemented. OAuth, CrewNerd API, geo filtering, KML generation, submit/import/update endpoints, KV integration.
 
-**Part 2a — Time on course:** Implemented. D1 `course_times`, intervals.icu fetch, calculate-time/course-times endpoints, map UI and My times page.
+**Part 2a — Time on course:** Implemented. D1 `course_times`, intervals.icu fetch, calculate-time/course-times endpoints (GET, POST, DELETE), map UI and My times page. Times store `workout_date` (activity date) and link to intervals.icu activities.
 
 **Part 2 (full):** Not started.
 
