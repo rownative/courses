@@ -15,6 +15,7 @@
 
   let map;
   let markersLayer;
+  let trackLayer;
   let courses = [];
   let selectedId = null;
   let userLiked = new Set();
@@ -43,6 +44,7 @@
     markersLayer.clearLayers = function () {
       this.eachLayer((l) => this.removeLayer(l));
     };
+    trackLayer = L.featureGroup().addTo(map);
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -406,11 +408,35 @@
       });
   }
 
+  function clearTrackOnMap() {
+    if (trackLayer) trackLayer.clearLayers();
+  }
+
+  function showTrackOnMap(latlng) {
+    if (!trackLayer || !map || !Array.isArray(latlng) || latlng.length < 2) return;
+    clearTrackOnMap();
+    const pts = latlng.map((p) => [p[0], p[1]]);
+    const polyline = L.polyline(pts, {
+      color: "#e65c00",
+      weight: 4,
+      opacity: 0.9,
+    });
+    polyline.bindTooltip("Workout track", { permanent: false });
+    trackLayer.addLayer(polyline);
+    const trackBounds = polyline.getBounds();
+    const existingBounds = markersLayer.getBounds();
+    const combined = existingBounds.isValid()
+      ? trackBounds.extend(existingBounds)
+      : trackBounds;
+    if (combined.isValid()) map.fitBounds(combined, { padding: [30, 30], maxZoom: 16 });
+  }
+
   function closeCalculateTimeModal() {
     const modal = document.getElementById("calculate-time-modal");
     if (modal) modal.classList.add("hidden");
     calculateModalCourseId = null;
     calculateModalCourseName = null;
+    clearTrackOnMap();
   }
 
   function initCalculateTimeModal() {
@@ -448,7 +474,8 @@
             } else {
               resultEl.innerHTML =
                 '<p class="error">Could not validate — track didn\'t pass all gates.</p>' +
-                (data.validationNote ? `<pre class="validation-note">${escapeHtml(data.validationNote)}</pre>` : "");
+                (data.validationNote ? `<pre class="validation-note">${escapeHtml(data.validationNote)}</pre>` : "") +
+                (data.latlng && data.latlng.length >= 2 ? '<p class="track-hint">Your workout track is shown on the map.</p>' : '');
               saveBtn.classList.add("hidden");
             }
             resultEl.classList.remove("hidden");
