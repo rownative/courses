@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My course times | rownative.icu</title>
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .my-times-page { max-width: 48rem; margin: 2rem auto; padding: 0 1rem; }
+    .my-times-page h2 { margin-top: 0; }
+    .my-times-page table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .my-times-page th, .my-times-page td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #ddd; }
+    .my-times-page th { background: #f0f0f0; }
+    .my-times-page .time { font-variant-numeric: tabular-nums; }
+    .my-times-page .empty { color: #666; font-style: italic; }
+    .my-times-page a { color: #1a3a4a; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="index.html"><img src="logo.png" alt="" class="logo" /> Rowing Courses</a></h1>
+    <p class="tagline">Your saved course times</p>
+    <div id="auth-status">
+      <a href="privacy.html">Privacy</a>
+      <a href="about.html">About</a>
+      <a href="index.html">Map</a>
+      <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
+      <a href="import.html" id="import-link">Import</a>
+      <a href="submit.html" id="submit-link">Submit</a>
+      <a href="update.html" id="update-link">Update</a>
+      <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
+      <span id="user-info" class="hidden"></span>
+      <a href="/oauth/logout" id="sign-out-link" class="hidden">Sign out</a>
+      <p id="auth-teaser" class="auth-teaser hidden">Sign in to see your saved course times.</p>
+    </div>
+  </header>
+
+  <main class="my-times-page">
+    <h2>My course times</h2>
+    <p id="signed-out-msg" class="hidden">Please <a href="/oauth/authorize">sign in</a> to view your saved course times.</p>
+    <div id="course-times-content" class="hidden">
+      <p>Times you've calculated and saved from the map.</p>
+      <table id="course-times-table">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Time</th>
+            <th>Distance</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="course-times-body">
+        </tbody>
+      </table>
+      <p id="no-times-msg" class="empty hidden">No saved times yet. Open a course on the <a href="index.html">map</a>, click "Calculate my time", and save a result.</p>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const API_BASE = (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API)
+        ? window.ROWNATIVE_API
+        : "/api";
+
+      const signedOutMsg = document.getElementById("signed-out-msg");
+      const content = document.getElementById("course-times-content");
+      const tbody = document.getElementById("course-times-body");
+      const noTimesMsg = document.getElementById("no-times-msg");
+      const signInLink = document.getElementById("sign-in-link");
+      const signOutLink = document.getElementById("sign-out-link");
+      const myTimesLink = document.getElementById("my-times-link");
+      const importLink = document.getElementById("import-link");
+      const submitLink = document.getElementById("submit-link");
+      const updateLink = document.getElementById("update-link");
+      const authTeaser = document.getElementById("auth-teaser");
+
+      function fmtTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.round(seconds % 60);
+        return mins + ":" + String(secs).padStart(2, "0");
+      }
+
+      function fmtDistance(m) {
+        if (m >= 1000) return (m / 1000).toFixed(1) + " km";
+        return Math.round(m) + " m";
+      }
+
+      function checkAuth() {
+        fetch(API_BASE + "/me", { credentials: "include" })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.athleteId) {
+              signInLink.classList.add("hidden");
+              signOutLink.classList.remove("hidden");
+              myTimesLink?.classList.remove("hidden");
+              importLink?.classList.remove("hidden");
+              submitLink?.classList.remove("hidden");
+              updateLink?.classList.remove("hidden");
+              authTeaser?.classList.add("hidden");
+              signedOutMsg.classList.add("hidden");
+              content.classList.remove("hidden");
+              loadCourseTimes();
+            } else {
+              signInLink.classList.remove("hidden");
+              signOutLink.classList.add("hidden");
+              myTimesLink?.classList.add("hidden");
+              importLink?.classList.add("hidden");
+              submitLink?.classList.add("hidden");
+              updateLink?.classList.add("hidden");
+              authTeaser?.classList.remove("hidden");
+              signedOutMsg.classList.remove("hidden");
+              content.classList.add("hidden");
+            }
+          })
+          .catch(() => {
+            signedOutMsg.classList.remove("hidden");
+            content.classList.add("hidden");
+          });
+      }
+
+      function loadCourseTimes() {
+        fetch(API_BASE + "/me/course-times", { credentials: "include" })
+          .then((r) => r.ok ? r.json() : Promise.reject())
+          .then((data) => {
+            const times = data.courseTimes || [];
+            if (times.length === 0) {
+              noTimesMsg.classList.remove("hidden");
+              tbody.innerHTML = "";
+              return;
+            }
+            noTimesMsg.classList.add("hidden");
+            tbody.innerHTML = times
+              .map((t) => {
+                const date = t.created_at ? t.created_at.slice(0, 10) : "—";
+                return (
+                  "<tr>" +
+                  "<td><a href=\"index.html\" data-id=\"" + t.course_id + "\">Course " + t.course_id + "</a></td>" +
+                  "<td class=\"time\">" + fmtTime(t.time_s) + "</td>" +
+                  "<td>" + fmtDistance(t.distance_m || 0) + "</td>" +
+                  "<td>" + date + "</td>" +
+                  "</tr>"
+                );
+              })
+              .join("");
+            tbody.querySelectorAll("a[data-id]").forEach((a) => {
+              a.addEventListener("click", (e) => {
+                e.preventDefault();
+                window.location.href = "index.html#course-" + a.dataset.id;
+              });
+            });
+          })
+          .catch(() => {
+            noTimesMsg.textContent = "Failed to load course times.";
+            noTimesMsg.classList.remove("hidden");
+            tbody.innerHTML = "";
+          });
+      }
+
+      checkAuth();
+    })();
+  </script>
+</body>
+</html>

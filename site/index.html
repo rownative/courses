@@ -16,6 +16,7 @@
       <div id="auth-status">
         <a href="privacy.html">Privacy</a>
         <a href="about.html">About</a>
+        <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
         <a href="import.html" id="import-link">Import</a>
         <a href="submit.html" id="submit-link">Submit</a>
         <a href="update.html" id="update-link">Update</a>
@@ -71,6 +72,25 @@
       <div id="detail-panel" class="hidden">
         <button id="close-detail" aria-label="Close">×</button>
         <div id="detail-content"></div>
+      </div>
+
+      <div id="calculate-time-modal" class="modal hidden">
+        <div class="modal-backdrop" data-dismiss="modal"></div>
+        <div class="modal-content">
+          <h3 id="calculate-modal-title">Calculate time on course</h3>
+          <div id="calculate-modal-body">
+            <p class="modal-step">Select an OTW rowing workout (last month):</p>
+            <select id="calculate-activity-select">
+              <option value="">Loading…</option>
+            </select>
+            <div id="calculate-result" class="hidden"></div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" id="calculate-btn" class="btn">Calculate</button>
+            <button type="button" id="save-course-time-btn" class="btn hidden">Save to my times</button>
+            <button type="button" id="modal-close-btn" class="btn btn-secondary">Close</button>
+          </div>
+        </div>
       </div>
     </main>
   </div>
