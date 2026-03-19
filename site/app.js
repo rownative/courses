@@ -53,13 +53,32 @@
     }
   }
 
+  function showLoadError(msg) {
+    const el = document.getElementById("load-error-banner");
+    if (el) {
+      el.textContent = msg;
+      el.classList.remove("hidden");
+    }
+  }
+
+  function showAuthError(msg) {
+    const el = document.getElementById("load-error-banner");
+    if (el) {
+      const current = el.textContent;
+      el.textContent = current ? current + " | Auth: " + msg : "Auth: " + msg;
+      el.classList.remove("hidden");
+    }
+  }
+
   function loadCourses() {
+    const base = location.origin + (location.pathname.endsWith("/") ? location.pathname : location.pathname.replace(/[^/]+$/, ""));
     function tryLoad(url) {
+      const fullUrl = url.startsWith(".") ? base + url.slice(2) : url;
       return fetch(url)
         .then((r) => {
-          if (!r.ok) throw new Error(r.status);
+          if (!r.ok) throw new Error(`index.json: HTTP ${r.status} from ${fullUrl}`);
           const ct = r.headers.get("content-type") || "";
-          if (!ct.includes("application/json")) throw new Error("Not JSON");
+          if (!ct.includes("application/json")) throw new Error(`index.json: not JSON (Content-Type: ${ct}) from ${fullUrl}`);
           return r.json();
         })
         .then((data) => {
@@ -78,6 +97,7 @@
       .catch((e) => {
         coursesBase = "./courses/";
         kmlBase = "./kml/";
+        showLoadError("Courses: " + (e.message || String(e)));
         if (detailContent) {
           detailContent.innerHTML = `<p class="error">Could not load courses: ${e.message}</p>`;
           detailPanel?.classList.remove("hidden");
@@ -471,8 +491,12 @@
   }
 
   function checkAuth() {
+    const authUrl = `${location.origin}${API_BASE}/me`;
     fetch(`${API_BASE}/me`, { credentials: "include" })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((r) => {
+        if (!r.ok) throw new Error(`/api/me HTTP ${r.status} from ${authUrl}`);
+        return r.json();
+      })
       .then((data) => {
         isSignedIn = !!data.athleteId;
         const raw = data.liked || [];
@@ -506,8 +530,9 @@
           if (c) fetchCourseDetail(selectedId).then((full) => renderDetail(full, c)).catch(() => renderDetail(c, c));
         }
       })
-      .catch(() => {
+      .catch((e) => {
         isSignedIn = false;
+        showAuthError(e.message || "fetch failed");
         const legendLiked = document.getElementById("legend-liked");
         if (legendLiked) legendLiked.classList.add("hidden");
         renderLikedCourses();
