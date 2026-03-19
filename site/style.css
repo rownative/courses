@@ -234,7 +234,7 @@ main {
   min-height: 400px;
 }
 
-.right-panels {
+#right-panels {
   position: fixed;
   top: 1rem;
   right: 1rem;
