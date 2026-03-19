@@ -6,7 +6,7 @@ Each course is a set of GPS polygons (start, waypoints, finish) that define a me
 
 ## Using the courses
 
-Browse and search courses at [rownative.icu](https://rownative.icu). Log in with your intervals.icu account to like courses and have them synced to CrewNerd.
+Browse and search courses at [rownative.icu](https://rownative.icu). Log in with your intervals.icu account to like courses and have them synced to CrewNerd. You can also calculate and save your times on courses using your OTW rowing workouts from intervals.icu.
 
 ## Contributing
 
