@@ -15,6 +15,8 @@
     .my-times-page .time { font-variant-numeric: tabular-nums; }
     .my-times-page .empty { color: #666; font-style: italic; }
     .my-times-page a { color: #1a3a4a; }
+    .my-times-page .remove-btn { background: none; border: none; cursor: pointer; padding: 0.25rem; color: #666; }
+    .my-times-page .remove-btn:hover { color: #c00; }
   </style>
 </head>
 <body>
@@ -49,6 +51,7 @@
             <th>Distance</th>
             <th>Date</th>
             <th>Workout</th>
+            <th></th>
           </tr>
         </thead>
         <tbody id="course-times-body">
@@ -87,14 +90,11 @@
         return Math.round(m) + " m";
       }
 
-      let athleteId = null;
-
       function checkAuth() {
         fetch(API_BASE + "/me", { credentials: "include" })
           .then((r) => r.json())
           .then((data) => {
             if (data.athleteId) {
-              athleteId = data.athleteId;
               signInLink.classList.add("hidden");
               signOutLink.classList.remove("hidden");
               myTimesLink?.classList.remove("hidden");
@@ -137,9 +137,10 @@
             tbody.innerHTML = times
               .map((t) => {
                 const date = (t.workout_date || t.created_at) ? (t.workout_date || t.created_at).slice(0, 10) : "—";
-                const workoutLink = athleteId && t.activity_id
-                  ? "<a href=\"https://intervals.icu/d/i/" + encodeURIComponent(athleteId) + "/activities/" + encodeURIComponent(t.activity_id) + "\" target=\"_blank\" rel=\"noopener\">View ↗</a>"
+                const workoutLink = t.activity_id
+                  ? "<a href=\"https://intervals.icu/activities/i" + encodeURIComponent(t.activity_id) + "\" target=\"_blank\" rel=\"noopener\">View ↗</a>"
                   : "—";
+                const trashSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M3 6h18M4 6v14a2 2 0 002 2h12a2 2 0 002-2V6M7 6V4a2 2 0 012-2h6a2 2 0 012 2v2\"/><line x1=\"10\" y1=\"11\" x2=\"10\" y2=\"17\"/><line x1=\"14\" y1=\"11\" x2=\"14\" y2=\"17\"/></svg>";
                 return (
                   "<tr>" +
                   "<td><a href=\"index.html\" data-id=\"" + t.course_id + "\">Course " + t.course_id + "</a></td>" +
@@ -147,6 +148,7 @@
                   "<td>" + fmtDistance(t.distance_m || 0) + "</td>" +
                   "<td>" + date + "</td>" +
                   "<td>" + workoutLink + "</td>" +
+                  "<td><button type=\"button\" class=\"remove-btn\" data-time-id=\"" + (t.id || "") + "\" aria-label=\"Remove\">" + trashSvg + "</button></td>" +
                   "</tr>"
                 );
               })
@@ -155,6 +157,24 @@
               a.addEventListener("click", (e) => {
                 e.preventDefault();
                 window.location.href = "index.html#course-" + a.dataset.id;
+              });
+            });
+            tbody.querySelectorAll(".remove-btn").forEach((btn) => {
+              btn.addEventListener("click", (e) => {
+                const timeId = e.currentTarget.dataset.timeId;
+                if (!timeId) return;
+                if (!confirm("Remove this saved time?")) return;
+                btn.disabled = true;
+                fetch(API_BASE + "/me/course-times/" + encodeURIComponent(timeId), {
+                  method: "DELETE",
+                  credentials: "include",
+                })
+                  .then((r) => r.ok ? r.json() : Promise.reject())
+                  .then(() => loadCourseTimes())
+                  .catch(() => {
+                    btn.disabled = false;
+                    alert("Failed to remove.");
+                  });
               });
             });
           })

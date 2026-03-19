@@ -354,8 +354,8 @@
     const date = (t.workout_date || t.created_at) ? (t.workout_date || t.created_at).slice(0, 10) : "—";
     const timeStr = fmtTime(t.time_s);
     const activityId = t.activity_id;
-    const intervalsUrl = athleteId && activityId
-      ? `https://intervals.icu/d/i/${encodeURIComponent(athleteId)}/activities/${encodeURIComponent(activityId)}`
+    const intervalsUrl = activityId
+      ? `https://intervals.icu/activities/i${encodeURIComponent(activityId)}`
       : null;
     if (intervalsUrl) {
       return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${escapeHtml(timeStr)}</span> <a href="${escapeHtml(intervalsUrl)}" target="_blank" rel="noopener" class="detail-time-link">Workout ↗</a></li>`;
