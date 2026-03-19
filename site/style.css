@@ -297,6 +297,19 @@ main {
   font-weight: 600;
 }
 
+.detail-course-times {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.detail-course-times ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.25rem;
+}
+
 .badge {
   display: inline-block;
   padding: 0.15rem 0.5rem;
@@ -389,10 +402,14 @@ main {
   cursor: pointer;
 }
 
-/* Calculate panel: sits below course detail, backdrop dims map only */
+/* Calculate panel: fixed overlay on map, positioned below course detail */
 .calculate-panel {
-  position: relative;
-  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  right: 1rem;
+  width: 320px;
+  max-width: 90vw;
+  z-index: 1000;
 }
 
 .calculate-panel.hidden {
