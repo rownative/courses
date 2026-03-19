@@ -280,7 +280,7 @@
       ? `<button type="button" class="btn calculate-time-btn" data-id="${meta.id}" data-name="${escapeHtml(meta.name)}">Calculate my time</button>`
       : "";
     const courseTimesSection = isSignedIn
-      ? `<div class="detail-course-times"><strong>Your times</strong><ul id="detail-course-times-list">Loading…</ul></div>`
+      ? `<div class="detail-course-times"><strong>My times</strong><ul id="detail-course-times-list">Loading…</ul></div>`
       : "";
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
@@ -435,7 +435,10 @@
       calcBtn.disabled = true;
     }
     if (saveBtn) saveBtn.classList.add("hidden");
-    if (modal) modal.classList.remove("hidden");
+    if (modal) {
+      modal.classList.remove("hidden");
+      modal.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
 
     fetch(`${API_BASE}/me/activities`, { credentials: "include" })
       .then(async (r) => {
@@ -667,6 +670,8 @@
         if (submitLink) submitLink.classList.toggle("hidden", !data.athleteId);
         if (updateLink) updateLink.classList.toggle("hidden", !data.athleteId);
         if (authTeaser) authTeaser.classList.toggle("hidden", !!data.athleteId);
+        const myTimesLink = document.getElementById("my-times-link");
+        if (myTimesLink) myTimesLink.classList.toggle("hidden", !data.athleteId);
         renderMarkers();
         if (selectedId) {
           const c = courses.find((x) => x.id === selectedId);
