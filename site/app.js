@@ -283,9 +283,7 @@
   }
 
   function toggleLike(id) {
-    // #region agent log
     const wasLikedBeforeOptimistic = userLiked.has(String(id));
-    // #endregion
     // Optimistic UI update when viewing this course
     if (String(selectedId) === String(id)) {
       const c = courses.find((x) => x.id === id);
@@ -301,11 +299,8 @@
       }
     }
     const url = `${API_BASE}/rowers/courses/${id}/follow/`;
-    const userLikedNow = userLiked.has(String(id));
-    // #region agent log
-    fetch('http://127.0.0.1:7691/ingest/770bd333-f0c6-4569-b816-3db8bb63447a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'6b7100'},body:JSON.stringify({sessionId:'6b7100',location:'app.js:toggleLike',message:'toggleLike branch',data:{id:String(id),wasLikedBeforeOptimistic,userLikedNow,apiChoice:userLikedNow?'unfollow':'follow'},timestamp:Date.now(),hypothesisId:'A'})}).catch(()=>{});
-    // #endregion
-    if (userLikedNow) {
+    // Use pre-optimistic state so we call follow/unfollow correctly
+    if (wasLikedBeforeOptimistic) {
       fetch(`${API_BASE}/rowers/courses/${id}/unfollow/`, { method: "POST", credentials: "include" })
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .then((data) => {
