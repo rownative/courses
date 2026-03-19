@@ -350,17 +350,23 @@
     }
   }
 
+  function intervalsActivityUrl(activityId) {
+    if (!activityId) return null;
+    const id = String(activityId).replace(/^i/, "");
+    return id ? `https://intervals.icu/activities/i${encodeURIComponent(id)}` : null;
+  }
+
   function renderCourseTimeItem(t) {
     const date = (t.workout_date || t.created_at) ? (t.workout_date || t.created_at).slice(0, 10) : "—";
     const timeStr = fmtTime(t.time_s);
-    const activityId = t.activity_id;
-    const intervalsUrl = activityId
-      ? `https://intervals.icu/activities/i${encodeURIComponent(activityId)}`
-      : null;
+    const intervalsUrl = intervalsActivityUrl(t.activity_id);
+    const trashSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2\"/><line x1=\"10\" y1=\"11\" x2=\"10\" y2=\"17\"/><line x1=\"14\" y1=\"11\" x2=\"14\" y2=\"17\"/></svg>";
+    const removeBtn = t.id ? `<button type="button" class="detail-time-remove" data-time-id="${escapeHtml(t.id)}" aria-label="Remove">${trashSvg}</button>` : "";
+    let linkPart = "";
     if (intervalsUrl) {
-      return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${escapeHtml(timeStr)}</span> <a href="${escapeHtml(intervalsUrl)}" target="_blank" rel="noopener" class="detail-time-link">Workout ↗</a></li>`;
+      linkPart = ` <a href="${escapeHtml(intervalsUrl)}" target="_blank" rel="noopener" class="detail-time-link">Workout ↗</a>`;
     }
-    return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${escapeHtml(timeStr)}</span></li>`;
+    return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${escapeHtml(timeStr)}</span>${linkPart} ${removeBtn}</li>`;
   }
 
   function escapeHtml(s) {
@@ -760,6 +766,26 @@
       selectedId = null;
       renderMarkers();
     });
+
+    if (detailContent) {
+      detailContent.addEventListener("click", (e) => {
+        const btn = e.target.closest(".detail-time-remove");
+        if (!btn) return;
+        const timeId = btn.dataset.timeId;
+        if (!timeId) return;
+        if (!confirm("Remove this saved time?")) return;
+        btn.disabled = true;
+        fetch(`${API_BASE}/me/course-times/${encodeURIComponent(timeId)}`, { method: "DELETE", credentials: "include" })
+          .then((r) => r.ok ? r.json() : Promise.reject())
+          .then(() => {
+            if (selectedId) loadDetailCourseTimes(selectedId);
+          })
+          .catch(() => {
+            btn.disabled = false;
+            alert("Failed to remove.");
+          });
+      });
+    }
 
     initCalculateTimeModal();
     renderLikedCourses();

@@ -315,6 +315,20 @@ main {
   margin-left: 0.5rem;
 }
 
+.detail-course-times .detail-time-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  margin-left: 0.5rem;
+  color: #666;
+  vertical-align: middle;
+}
+
+.detail-course-times .detail-time-remove:hover {
+  color: #c00;
+}
+
 .badge {
   display: inline-block;
   padding: 0.15rem 0.5rem;
