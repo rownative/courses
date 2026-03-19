@@ -310,6 +310,11 @@ main {
   padding-left: 1.25rem;
 }
 
+.detail-course-times .detail-time-link {
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
 .badge {
   display: inline-block;
   padding: 0.15rem 0.5rem;
