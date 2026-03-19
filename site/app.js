@@ -585,12 +585,14 @@
               const secs = Math.round(data.timeS % 60);
               resultEl.innerHTML = `<p class="success">Time: ${mins}:${String(secs).padStart(2, "0")}</p>`;
               saveBtn.classList.remove("hidden");
+              saveBtn.disabled = false;
             } else {
               resultEl.innerHTML =
                 '<p class="error">Could not validate — track didn\'t pass all gates.</p>' +
                 (data.validationNote ? `<pre class="validation-note">${escapeHtml(data.validationNote)}</pre>` : "") +
                 (data.latlng && data.latlng.length >= 2 ? '<p class="track-hint">Your workout track is shown on the map.</p>' : '');
               saveBtn.classList.add("hidden");
+              saveBtn.disabled = true;
             }
             resultEl.classList.remove("hidden");
           })
@@ -599,6 +601,7 @@
             resultEl.innerHTML = '<p class="error">Calculation failed. Try again.</p>';
             resultEl.classList.remove("hidden");
             saveBtn.classList.add("hidden");
+            saveBtn.disabled = true;
           })
           .finally(() => {
             calcBtn.disabled = false;
@@ -609,7 +612,7 @@
 
     if (saveBtn) {
       saveBtn.addEventListener("click", () => {
-        if (!lastCalculateResult || !calculateModalCourseId) return;
+        if (!lastCalculateResult || !lastCalculateResult.valid || !calculateModalCourseId) return;
         const select = document.getElementById("calculate-activity-select");
         const activityId = select?.value;
         if (!activityId) return;
