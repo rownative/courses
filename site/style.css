@@ -234,19 +234,26 @@ main {
   min-height: 400px;
 }
 
-#detail-panel {
+.right-panels {
   position: absolute;
   top: 1rem;
   right: 1rem;
   width: 320px;
   max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 1000;
+}
+
+#detail-panel {
   padding: 1rem;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-  max-height: 80vh;
-  overflow-y: auto;
-  z-index: 1000;
+  flex-shrink: 0;
 }
 
 #detail-panel.hidden {
@@ -380,6 +387,27 @@ main {
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
   cursor: pointer;
+}
+
+/* Calculate panel: sits below course detail, backdrop dims map only */
+.calculate-panel {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.calculate-panel.hidden {
+  display: none;
+}
+
+.calculate-panel .modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.calculate-panel .modal-content {
+  position: relative;
+  z-index: 1001;
 }
 
 .modal-content {

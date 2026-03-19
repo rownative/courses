@@ -70,14 +70,15 @@
 
     <main>
       <div id="map"></div>
-      <div id="detail-panel" class="hidden">
-        <button id="close-detail" aria-label="Close">×</button>
-        <div id="detail-content"></div>
-      </div>
+      <div id="right-panels">
+        <div id="detail-panel" class="hidden">
+          <button id="close-detail" aria-label="Close">×</button>
+          <div id="detail-content"></div>
+        </div>
 
-      <div id="calculate-time-modal" class="modal hidden">
-        <div class="modal-backdrop" data-dismiss="modal"></div>
-        <div class="modal-content">
+        <div id="calculate-time-modal" class="calculate-panel hidden">
+          <div class="modal-backdrop" data-dismiss="modal"></div>
+          <div id="calculate-modal-content" class="modal-content">
           <h3 id="calculate-modal-title">Calculate time on course</h3>
           <div id="calculate-modal-body">
             <p class="modal-step">Select an OTW rowing workout (last month):</p>

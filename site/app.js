@@ -238,6 +238,36 @@
       : { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
   }
 
+  function fmtTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.round(seconds % 60);
+    return mins + ":" + String(secs).padStart(2, "0");
+  }
+
+  function loadDetailCourseTimes(courseId) {
+    const listEl = document.getElementById("detail-course-times-list");
+    if (!listEl) return;
+    fetch(`${API_BASE}/me/course-times`, { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data) => {
+        const all = data.courseTimes || [];
+        const forCourse = all.filter((t) => String(t.course_id) === String(courseId));
+        if (forCourse.length === 0) {
+          listEl.innerHTML = '<li class="empty">No saved times yet</li>';
+        } else {
+          listEl.innerHTML = forCourse
+            .map((t) => {
+              const date = t.created_at ? t.created_at.slice(0, 10) : "—";
+              return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${fmtTime(t.time_s)}</span></li>`;
+            })
+            .join("");
+        }
+      })
+      .catch(() => {
+        listEl.innerHTML = '<li class="empty">Could not load times</li>';
+      });
+  }
+
   function renderDetail(full, meta) {
     const liked = userLiked.has(String(meta.id));
     const kmlUrl = API_BASE
@@ -249,6 +279,9 @@
     const calculateBtnHtml = isSignedIn
       ? `<button type="button" class="btn calculate-time-btn" data-id="${meta.id}" data-name="${escapeHtml(meta.name)}">Calculate my time</button>`
       : "";
+    const courseTimesSection = isSignedIn
+      ? `<div class="detail-course-times"><strong>Your times</strong><ul id="detail-course-times-list">Loading…</ul></div>`
+      : "";
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
       <p class="course-id"><strong>ID:</strong> <code>${meta.id}</code> — <code>courses/${meta.id}.json</code></p>
@@ -256,6 +289,7 @@
       <p><strong>Country:</strong> ${escapeHtml(meta.country || "—")}</p>
       <p><strong>Status:</strong> <span class="badge ${meta.status}">${meta.status}</span></p>
       ${meta.notes ? `<p class="notes">${escapeHtml(meta.notes)}</p>` : ""}
+      ${courseTimesSection}
       <p>
         <a href="${kmlUrl}" download="${meta.id}.kml" class="btn">Download KML</a>
         ${likeButtonHtml}
@@ -295,6 +329,31 @@
     const calcBtn = detailContent.querySelector(".calculate-time-btn");
     if (calcBtn) {
       calcBtn.addEventListener("click", () => openCalculateTimeModal(meta.id, meta.name));
+    }
+
+    if (isSignedIn) {
+      const listEl = detailContent.querySelector("#detail-course-times-list");
+      if (listEl) {
+        fetch(`${API_BASE}/me/course-times`, { credentials: "include" })
+          .then((r) => (r.ok ? r.json() : Promise.reject()))
+          .then((data) => {
+            const all = data.courseTimes || [];
+            const forCourse = all.filter((t) => String(t.course_id) === String(meta.id));
+            if (forCourse.length === 0) {
+              listEl.innerHTML = '<li class="empty">No saved times yet</li>';
+            } else {
+              listEl.innerHTML = forCourse
+                .map((t) => {
+                  const date = t.created_at ? t.created_at.slice(0, 10) : "—";
+                  return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${fmtTime(t.time_s)}</span></li>`;
+                })
+                .join("");
+            }
+          })
+          .catch(() => {
+            if (listEl) listEl.innerHTML = '<li class="empty">Could not load times</li>';
+          });
+      }
     }
   }
 
@@ -560,6 +619,7 @@
           .then((data) => {
             if (data.saved) {
               saveBtn.textContent = "Saved ✓";
+              loadDetailCourseTimes(calculateModalCourseId);
               setTimeout(() => closeCalculateTimeModal(), 800);
             }
           })
