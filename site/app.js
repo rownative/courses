@@ -374,7 +374,16 @@
     if (modal) modal.classList.remove("hidden");
 
     fetch(`${API_BASE}/me/activities`, { credentials: "include" })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then(async (r) => {
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          const err = new Error(data.error || `HTTP ${r.status}`);
+          err.status = r.status;
+          err.serverError = data.error;
+          throw err;
+        }
+        return data;
+      })
       .then((data) => {
         const acts = data.activities || [];
         if (!select) return;
@@ -390,8 +399,10 @@
         }
         calcBtn.disabled = false;
       })
-      .catch(() => {
-        if (select) select.innerHTML = "<option value=\"\">Failed to load activities</option>";
+      .catch((e) => {
+        const msg = e?.serverError || e?.message || "Failed to load activities";
+        showLoadError("Activities: " + msg);
+        if (select) select.innerHTML = "<option value=\"\">" + escapeHtml(msg) + "</option>";
       });
   }
 
