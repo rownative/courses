@@ -408,12 +408,26 @@
             clearTrackOnMap();
             return;
           }
-          fetch(`${API_BASE}/me/activities/${activityId}/track`, { credentials: "include" })
-            .then((r) => (r.ok ? r.json() : Promise.reject()))
-            .then((data) => {
-              if (data.latlng && data.latlng.length >= 2) showTrackOnMap(data.latlng);
+          const trackUrl = `${API_BASE}/me/activities/${encodeURIComponent(activityId)}/track`;
+          fetch(trackUrl, { credentials: "include" })
+            .then(async (r) => {
+              const data = await r.json().catch(() => ({}));
+              if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`);
+              return data;
             })
-            .catch(() => clearTrackOnMap());
+            .then((data) => {
+              const latlng = data.latlng;
+              if (Array.isArray(latlng) && latlng.length >= 2) {
+                showTrackOnMap(latlng);
+              } else {
+                clearTrackOnMap();
+                showLoadError("Track: no GPS data in response");
+              }
+            })
+            .catch((e) => {
+              clearTrackOnMap();
+              showLoadError("Track: " + (e.message || "failed to load"));
+            });
         };
       })
       .catch((e) => {
