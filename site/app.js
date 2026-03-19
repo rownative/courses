@@ -289,13 +289,13 @@
       <p><strong>Country:</strong> ${escapeHtml(meta.country || "—")}</p>
       <p><strong>Status:</strong> <span class="badge ${meta.status}">${meta.status}</span></p>
       ${meta.notes ? `<p class="notes">${escapeHtml(meta.notes)}</p>` : ""}
-      ${courseTimesSection}
       <p>
         <a href="${kmlUrl}" download="${meta.id}.kml" class="btn">Download KML</a>
         ${likeButtonHtml}
         ${calculateBtnHtml}
         ${isSignedIn && meta.status === 'provisional' ? `<a href="update.html?id=${meta.id}" class="btn">Update with new KML</a>` : ''}
       </p>
+      ${courseTimesSection}
     `;
 
     if (full.polygons && full.polygons.length > 0) {
@@ -437,7 +437,14 @@
     if (saveBtn) saveBtn.classList.add("hidden");
     if (modal) {
       modal.classList.remove("hidden");
-      modal.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      const detailPanel = document.getElementById("detail-panel");
+      if (detailPanel && !detailPanel.classList.contains("hidden")) {
+        const rect = detailPanel.getBoundingClientRect();
+        modal.style.top = (rect.bottom + 8) + "px";
+      } else {
+        modal.style.top = "1rem";
+      }
+      modal.style.right = "1rem";
     }
 
     fetch(`${API_BASE}/me/activities`, { credentials: "include" })
