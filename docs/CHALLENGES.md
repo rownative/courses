@@ -199,22 +199,22 @@ Response includes `isOrganizer: boolean` when signed in.
 
 ### Phase 2 — Worker and D1 (Remaining)
 
-| Step | Description |
-|------|-------------|
-| 5 | D1 migrations: challenges, challenge_results, standard_collections |
-| 6 | Organiser status: fetch `organisers.json`, extend `/api/me` |
-| 7 | Challenge CRUD API (Worker) |
-| 8 | Standard collections API |
-| 9 | Result submission with GPS validation (validate workout in row window) |
-| 10 | Handicap scoring logic |
-| 11 | Organiser moderation API |
-| 12 | Track overlay for moderation |
-| 13 | Validation log and multi-pass |
-| 14 | Private challenges |
-| 15 | Display name from intervals.icu profile |
-| 16 | Documentation and deploy |
-| 17 | Challenge removal (config file) |
-| 18 | (Future) intervals.icu activity metadata |
+| Step | Status | Description |
+|------|--------|-------------|
+| 5 | Done | D1 migrations: challenges, challenge_results, standard_collections |
+| 6 | Done | Organiser status: fetch `organisers.json`, extend `/api/me` |
+| 7 | | Challenge CRUD API (Worker) |
+| 8 | | Standard collections API |
+| 9 | | Result submission with GPS validation (validate workout in row window) |
+| 10 | | Handicap scoring logic |
+| 11 | | Organiser moderation API |
+| 12 | | Track overlay for moderation |
+| 13 | | Validation log and multi-pass |
+| 14 | | Private challenges |
+| 15 | | Display name from intervals.icu profile |
+| 16 | | Documentation and deploy |
+| 17 | | Challenge removal (config file) |
+| 18 | | (Future) intervals.icu activity metadata |
 
 ---
 
