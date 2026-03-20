@@ -28,9 +28,11 @@
       <a href="privacy.html">Privacy</a>
       <a href="about.html">About</a>
       <a href="index.html">Map</a>
+      <a href="challenges.html">Challenges</a>
       <a href="import.html" id="import-link">Import</a>
       <a href="submit.html" id="submit-link">Submit</a>
       <a href="update.html" id="update-link">Update</a>
+      <a href="organiser.html" id="organiser-link" class="hidden">My challenges</a>
       <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
       <span id="user-info" class="hidden"></span>
       <a href="/oauth/logout" id="sign-out-link" class="hidden">Sign out</a>
@@ -74,6 +76,7 @@
       const importLink = document.getElementById("import-link");
       const submitLink = document.getElementById("submit-link");
       const updateLink = document.getElementById("update-link");
+      const organiserLink = document.getElementById("organiser-link");
       const authTeaser = document.getElementById("auth-teaser");
 
       function showResult(html, isError) {
@@ -94,6 +97,8 @@
               importLink.classList.remove("hidden");
               submitLink.classList.remove("hidden");
               if (updateLink) updateLink.classList.remove("hidden");
+              if (data.isOrganizer && organiserLink) organiserLink.classList.remove("hidden");
+              else if (organiserLink) organiserLink.classList.add("hidden");
               authTeaser.classList.add("hidden");
             } else {
               signInLink.classList.remove("hidden");
@@ -102,6 +107,7 @@
               importLink.classList.add("hidden");
               submitLink.classList.add("hidden");
               if (updateLink) updateLink.classList.add("hidden");
+              if (organiserLink) organiserLink.classList.add("hidden");
               authTeaser.classList.remove("hidden");
             }
           })

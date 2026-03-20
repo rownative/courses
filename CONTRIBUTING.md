@@ -110,6 +110,14 @@ Then open http://localhost:8000/. You can:
 
 Mock data is in-memory and resets when you restart the server. Use `--no-build` to skip regenerating the index and KML on startup.
 
+### Speed Orders (Challenges) GUI testing
+
+The mock API includes challenge endpoints for testing the Speed Orders UI:
+
+- **Challenges list** — Visit http://localhost:8000/challenges.html to see active, upcoming, and past challenges
+- **Challenge detail** — Click "View leaderboard" on a challenge to see the leaderboard and submit a result (when signed in)
+- **Organiser panel** — To test creating challenges and moderating results, sign in as organiser: use [Sign in as organiser (mock)](http://localhost:8000/oauth/authorize?mock_organizer=1) or add `?mock_organizer=1` to the OAuth authorize URL. Then visit http://localhost:8000/organiser.html
+
 ## Reporting issues
 
 Open an issue at [github.com/rownative/courses/issues](https://github.com/rownative/courses/issues) for:

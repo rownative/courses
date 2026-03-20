@@ -28,7 +28,9 @@
       <a href="privacy.html">Privacy</a>
       <a href="about.html">About</a>
       <a href="index.html">Map</a>
+      <a href="challenges.html">Challenges</a>
       <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
+      <a href="organiser.html" id="organiser-link" class="hidden">My challenges</a>
       <a href="import.html" id="import-link">Import</a>
       <a href="submit.html" id="submit-link">Submit</a>
       <a href="update.html" id="update-link">Update</a>
@@ -91,6 +93,8 @@
         return Math.round(m) + " m";
       }
 
+      const organiserLink = document.getElementById("organiser-link");
+
       function checkAuth() {
         fetch(API_BASE + "/me", { credentials: "include" })
           .then((r) => r.json())
@@ -99,6 +103,8 @@
               signInLink.classList.add("hidden");
               signOutLink.classList.remove("hidden");
               myTimesLink?.classList.remove("hidden");
+              if (data.isOrganizer) organiserLink?.classList.remove("hidden");
+              else organiserLink?.classList.add("hidden");
               importLink?.classList.remove("hidden");
               submitLink?.classList.remove("hidden");
               updateLink?.classList.remove("hidden");
@@ -110,6 +116,7 @@
               signInLink.classList.remove("hidden");
               signOutLink.classList.add("hidden");
               myTimesLink?.classList.add("hidden");
+              organiserLink?.classList.add("hidden");
               importLink?.classList.add("hidden");
               submitLink?.classList.add("hidden");
               updateLink?.classList.add("hidden");

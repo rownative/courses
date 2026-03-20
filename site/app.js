@@ -697,6 +697,8 @@
         if (authTeaser) authTeaser.classList.toggle("hidden", !!data.athleteId);
         const myTimesLink = document.getElementById("my-times-link");
         if (myTimesLink) myTimesLink.classList.toggle("hidden", !data.athleteId);
+        const organiserLink = document.getElementById("organiser-link");
+        if (organiserLink) organiserLink.classList.toggle("hidden", !(data.athleteId && data.isOrganizer));
         renderMarkers();
         if (selectedId) {
           const c = courses.find((x) => x.id === selectedId);
