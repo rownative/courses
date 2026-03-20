@@ -22,6 +22,8 @@
     .leaderboard-table th, .leaderboard-table td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #ddd; }
     .leaderboard-table th { background: #f0f0f0; }
     .leaderboard-table .time { font-variant-numeric: tabular-nums; }
+    .leaderboard-table th.sortable { cursor: pointer; user-select: none; }
+    .leaderboard-table th.sortable:hover { text-decoration: underline; }
     .leaderboard-filters { margin: 0.5rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .leaderboard-filters select { padding: 0.35rem 0.5rem; }
     .submit-result-btn { margin: 1rem 0; }
@@ -88,7 +90,7 @@
               <th>Rank</th>
               <th>Athlete</th>
               <th>Boat</th>
-              <th>Raw time</th>
+              <th id="raw-time-header" class="sortable" role="button" tabindex="0" title="Click to sort by raw time">Raw time</th>
               <th id="corrected-header" class="hidden">Corrected</th>
               <th id="points-header" class="hidden">Points</th>
               <th>Date</th>

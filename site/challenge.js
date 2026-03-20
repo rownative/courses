@@ -20,6 +20,7 @@
   let results = [];
   let map = null;
   let coursesBase = "./courses/";
+  let sortByRawTime = null;  // null | "asc" | "desc"
 
   function escapeHtml(s) {
     if (!s) return "";
@@ -140,7 +141,7 @@
     if (c.notes) {
       html += "<p>" + escapeHtml(c.notes) + "</p>";
     }
-    html += "<p>Like this course in CrewNerd to sync it. Row the course during the window. Upload your workout here.</p>";
+    html += "<p>Like this course on the map to sync it to CrewNerd. Row the course during the window. Log your workout in intervals.icu, then submit it here.</p>";
     document.getElementById("sidebar-content").innerHTML = html;
   }
 
@@ -196,6 +197,12 @@
     if (boatType) filtered = filtered.filter((r) => (r.boatType || "") === boatType);
     if (sex) filtered = filtered.filter((r) => (r.sex || "") === sex);
 
+    if (sortByRawTime === "asc") {
+      filtered.sort((a, b) => (a.rawTimeS ?? 999999) - (b.rawTimeS ?? 999999));
+    } else if (sortByRawTime === "desc") {
+      filtered.sort((a, b) => (b.rawTimeS ?? 0) - (a.rawTimeS ?? 0));
+    }
+
     const boatTypes = [...new Set(results.map((r) => r.boatType).filter(Boolean))].sort();
     const sexes = [...new Set(results.map((r) => r.sex).filter(Boolean))].sort();
 
@@ -222,6 +229,25 @@
     document.getElementById("boat-filter")?.addEventListener("change", () => renderLeaderboard());
     document.getElementById("sex-filter")?.addEventListener("change", () => renderLeaderboard());
 
+    const rawTimeHeader = document.getElementById("raw-time-header");
+    if (rawTimeHeader && !rawTimeHeader.dataset.bound) {
+      rawTimeHeader.dataset.bound = "1";
+      rawTimeHeader.addEventListener("click", () => {
+        sortByRawTime = sortByRawTime === "asc" ? "desc" : "asc";
+        renderLeaderboard();
+      });
+      rawTimeHeader.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          rawTimeHeader.click();
+        }
+      });
+    }
+    if (rawTimeHeader) {
+      rawTimeHeader.title = sortByRawTime === "asc" ? "Click to sort descending (slowest first)" : "Click to sort ascending (fastest first)";
+      rawTimeHeader.textContent = sortByRawTime ? "Raw time " + (sortByRawTime === "asc" ? "↑" : "↓") : "Raw time";
+    }
+
     const tbody = document.getElementById("leaderboard-body");
     if (filtered.length === 0) {
       tbody.innerHTML = "<tr><td colspan='8'>No results yet.</td></tr>";
@@ -229,7 +255,7 @@
     }
     tbody.innerHTML = filtered
       .map((r, i) => {
-        const rank = r.rank != null ? r.rank : i + 1;
+        const rank = sortByRawTime ? i + 1 : (r.rank != null ? r.rank : i + 1);
         const workoutLink = r.activityId
           ? "<a href='https://intervals.icu/activities/i" + encodeURIComponent(String(r.activityId).replace(/^i/, "")) + "' target='_blank' rel='noopener'>↗</a>"
           : "";
