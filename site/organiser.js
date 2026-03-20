@@ -298,11 +298,13 @@
       .then((r) => r.json())
       .then((data) => {
         const results = data.results || [];
-        const pending = results.filter((r) => (r.validationStatus || "").match(/pending|invalid/));
-        if (pending.length === 0) {
-          moderationResults.innerHTML = "<p class='empty'>No pending results to moderate.</p>";
+        const needsModeration = results.filter((r) => (r.validationStatus || "").match(/pending|invalid/));
+        const allModeratable = results.filter((r) => (r.validationStatus || "") !== "dq");
+        const toShow = needsModeration.length > 0 ? needsModeration : allModeratable;
+        if (toShow.length === 0) {
+          moderationResults.innerHTML = "<p class='empty'>No results to moderate.</p>";
         } else {
-          moderationResults.innerHTML = pending
+          moderationResults.innerHTML = toShow
             .map(
               (r) =>
                 "<div class='moderation-item " + (r.validationStatus || "") + "'>" +
@@ -310,8 +312,9 @@
                 fmtTime(r.rawTimeS) +
                 (r.validationNote ? "<br><em>" + escapeHtml(r.validationNote) + "</em>" : "") +
                 "<br>" +
-                "<button type='button' class='btn approve-btn' data-result-id='" + escapeHtml(r.id) + "'>Approve</button> " +
-                "<button type='button' class='btn btn-secondary dq-btn' data-result-id='" + escapeHtml(r.id) + "'>Disqualify</button>" +
+                (needsModeration.includes(r) ? "<button type='button' class='btn approve-btn' data-result-id='" + escapeHtml(r.id) + "'>Approve</button> " : "") +
+                "<button type='button' class='btn btn-secondary dq-btn' data-result-id='" + escapeHtml(r.id) + "'>Disqualify</button> " +
+                "<button type='button' class='btn btn-secondary view-track-btn' data-result-id='" + escapeHtml(r.id) + "'>View track</button>" +
                 "</div>"
             )
             .join("");
@@ -321,6 +324,9 @@
           moderationResults.querySelectorAll(".dq-btn").forEach((btn) => {
             btn.addEventListener("click", () => overrideResult(btn.dataset.resultId, "dq"));
           });
+          moderationResults.querySelectorAll(".view-track-btn").forEach((btn) => {
+            btn.addEventListener("click", () => showTrackOverlay(btn.dataset.resultId));
+          });
         }
         moderationResults.classList.remove("hidden");
       })
@@ -328,6 +334,43 @@
         moderationResults.innerHTML = "<p class='error'>Failed to load results.</p>";
         moderationResults.classList.remove("hidden");
       });
+  });
+
+  let trackMap = null;
+
+  function showTrackOverlay(resultId) {
+    const modal = document.getElementById("track-modal");
+    const mapEl = document.getElementById("track-map");
+    if (!modal || !mapEl) return;
+    modal.classList.remove("hidden");
+    mapEl.innerHTML = "";
+    fetch(API_BASE + "/organiser/results/" + encodeURIComponent(resultId) + "/track", { credentials: "include" })
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load track");
+        return r.json();
+      })
+      .then((data) => {
+        const latlng = data.latlng || [];
+        if (latlng.length < 2) {
+          mapEl.innerHTML = "<p>No track data</p>";
+          return;
+        }
+        const bounds = latlng.map((p) => [p[0], p[1]]);
+        trackMap = L.map("track-map").fitBounds(bounds, { padding: [20, 20] });
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap" }).addTo(trackMap);
+        L.polyline(bounds, { color: "#1a3a4a", weight: 4 }).addTo(trackMap);
+      })
+      .catch((err) => {
+        mapEl.innerHTML = "<p class='error'>" + escapeHtml(err.message || "Failed to load track") + "</p>";
+      });
+  }
+
+  document.getElementById("track-modal-close")?.addEventListener("click", () => {
+    document.getElementById("track-modal")?.classList.add("hidden");
+    if (trackMap) {
+      trackMap.remove();
+      trackMap = null;
+    }
   });
 
   function overrideResult(resultId, status) {

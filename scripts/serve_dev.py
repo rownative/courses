@@ -669,6 +669,19 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         self._send_json({"results": results})
         return True
 
+    def _handle_api_organiser_results_track(self, result_id: str) -> bool:
+        """GET /api/organiser/results/{id}/track — track overlay for moderation"""
+        if not _is_mock_signed_in(self.headers.get("Cookie")):
+            self._send_json({"error": "Unauthorised"}, 401)
+            return True
+        if not _is_mock_organizer(self.headers.get("Cookie")):
+            self._send_json({"error": "Organiser access required"}, 403)
+            return True
+        # Mock track: simple line
+        latlng = [[52.23 + i * 0.001, 6.84 + i * 0.0005] for i in range(50)]
+        self._send_json({"latlng": latlng})
+        return True
+
     def _handle_api_courses_single_kml(self, course_id: str) -> bool:
         """Serve KML file from local build."""
         kml_path = BUILD_DIR / "kml" / f"{course_id}.kml"
@@ -792,6 +805,9 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         m = re.match(r"^/api/organiser/results/([^/]+)/override/?$", path)
         if m and self.command == "POST":
             return self._handle_api_organiser_results_override(m.group(1))
+        m = re.match(r"^/api/organiser/results/([^/]+)/track/?$", path)
+        if m and self.command == "GET":
+            return self._handle_api_organiser_results_track(m.group(1))
 
         return False
 

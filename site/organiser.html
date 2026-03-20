@@ -6,6 +6,7 @@
   <title>My challenges | rownative.icu</title>
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     .organiser-page { max-width: 56rem; margin: 2rem auto; padding: 0 1rem; }
     .organiser-page h1 { margin-top: 0; }
@@ -27,6 +28,10 @@
     .organiser-page .moderation-item { padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 0.5rem; }
     .organiser-page .moderation-item.pending { background: #fff9e6; }
     .organiser-page .moderation-item.invalid { background: #fce8e8; }
+    .organiser-page .track-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+    .organiser-page .track-modal-content { background: #fff; padding: 1rem; border-radius: 8px; max-width: 90vw; max-height: 90vh; width: 600px; }
+    .organiser-page .track-modal-content h3 { margin-top: 0; }
+    .organiser-page #track-map { height: 400px; border-radius: 4px; margin: 0.5rem 0; }
     .organiser-page .organiser-upload-form { margin: 1rem 0; padding: 1rem; background: #f9f9f9; border-radius: 8px; }
     .organiser-page .form-hint { display: block; font-size: 0.8rem; color: #666; margin-top: 0.25rem; }
     .organiser-page #upload-collection-result { margin-top: 0.5rem; padding: 0.5rem; }
@@ -157,9 +162,18 @@
         <option value="">— Select challenge —</option>
       </select>
       <div id="moderation-results" class="moderation-list hidden"></div>
+
+      <div id="track-modal" class="track-modal hidden">
+        <div class="track-modal-content">
+          <h3>GPS track overlay</h3>
+          <div id="track-map"></div>
+          <button type="button" class="btn" id="track-modal-close">Close</button>
+        </div>
+      </div>
     </div>
   </main>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="nav.js"></script>
   <script src="organiser.js"></script>
 </body>

@@ -197,10 +197,11 @@
     if (boatType) filtered = filtered.filter((r) => (r.boatType || "") === boatType);
     if (sex) filtered = filtered.filter((r) => (r.sex || "") === sex);
 
+    const sortKey = hasHandicap ? "correctedTimeS" : "rawTimeS";
     if (sortByRawTime === "asc") {
-      filtered.sort((a, b) => (a.rawTimeS ?? 999999) - (b.rawTimeS ?? 999999));
+      filtered.sort((a, b) => (a[sortKey] ?? 999999) - (b[sortKey] ?? 999999));
     } else if (sortByRawTime === "desc") {
-      filtered.sort((a, b) => (b.rawTimeS ?? 0) - (a.rawTimeS ?? 0));
+      filtered.sort((a, b) => (b[sortKey] ?? 0) - (a[sortKey] ?? 0));
     }
 
     const boatTypes = [...new Set(results.map((r) => r.boatType).filter(Boolean))].sort();
@@ -345,11 +346,13 @@
       return;
     }
 
+    const weightClassSelect = document.getElementById("submit-weight-class");
     const body = {
       activityId: activityId,
       displayName: displayNameInput.value.trim() || undefined,
       boatType: challenge && challenge.hasHandicap ? boatTypeSelect.value : undefined,
       sex: challenge && challenge.hasHandicap ? sexSelect.value : undefined,
+      weightClass: challenge && challenge.hasHandicap && weightClassSelect ? weightClassSelect.value : undefined,
     };
 
     submitBtn.disabled = true;

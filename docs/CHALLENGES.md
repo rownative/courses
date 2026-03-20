@@ -206,10 +206,10 @@ Response includes `isOrganizer: boolean` when signed in.
 | 7 | Done | Challenge CRUD API (Worker) |
 | 8 | Done | Standard collections API |
 | 9 | Done | Result submission with GPS validation (validate workout in row window) |
-| 10 | | Handicap scoring logic |
-| 11 | | Organiser moderation API |
-| 12 | | Track overlay for moderation |
-| 13 | | Validation log and multi-pass |
+| 10 | Done | Handicap scoring logic |
+| 11 | Done | Organiser moderation API |
+| 12 | Done | Track overlay for moderation |
+| 13 | Done | Validation log and multi-pass |
 | 14 | | Private challenges |
 | 15 | | Display name from intervals.icu profile |
 | 16 | | Documentation and deploy |
