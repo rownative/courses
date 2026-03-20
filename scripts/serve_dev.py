@@ -568,7 +568,7 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         return True
 
     def _handle_api_organiser_standard_collections_create(self) -> bool:
-        """POST /api/organiser/standard-collections"""
+        """POST /api/organiser/standard-collections — accepts JSON or multipart/form-data"""
         if not _is_mock_signed_in(self.headers.get("Cookie")):
             self._send_json({"error": "Unauthorised"}, 401)
             return True
@@ -576,16 +576,49 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             self._send_json({"error": "Organiser access required"}, 403)
             return True
         content_length = int(self.headers.get("Content-Length", 0))
-        body = self.rfile.read(content_length).decode("utf-8") if content_length else "{}"
-        try:
-            data = json.loads(body) if body.strip() else {}
-        except json.JSONDecodeError:
-            data = {}
+        content_type = self.headers.get("Content-Type", "")
+        name = "Custom collection"
+        if "multipart/form-data" in content_type:
+            try:
+                body = self.rfile.read(content_length) if content_length else b""
+                boundary = None
+                for part in content_type.split(";"):
+                    part = part.strip()
+                    if part.startswith("boundary="):
+                        boundary = part[9:].strip().strip('"')
+                        break
+                if boundary:
+                    parts = body.split(b"--" + boundary.encode("ascii"))
+                    for part in parts[1:]:
+                        if b"name=\"name\"" in part or b'name="name"' in part:
+                            idx = part.find(b"\r\n\r\n")
+                            if idx < 0:
+                                idx = part.find(b"\n\n")
+                                sep = 2
+                            else:
+                                sep = 4
+                            if idx >= 0:
+                                end = part.find(b"\r\n", idx + sep)
+                                if end < 0:
+                                    end = part.find(b"\n", idx + sep)
+                                val = part[idx + sep : end] if end >= 0 else part[idx + sep :]
+                                name = val.decode("utf-8", errors="replace").strip()
+                                if name:
+                                    break
+            except Exception:
+                pass
+        else:
+            body = self.rfile.read(content_length).decode("utf-8") if content_length else "{}"
+            try:
+                data = json.loads(body) if body.strip() else {}
+                name = data.get("name", name)
+            except json.JSONDecodeError:
+                pass
         global MOCK_STANDARD_COLLECTIONS
         coll_id = f"mock-coll-{len(MOCK_STANDARD_COLLECTIONS) + 1}"
         MOCK_STANDARD_COLLECTIONS.append({
             "id": coll_id,
-            "name": data.get("name", "Custom collection"),
+            "name": name,
             "isBuiltin": False,
         })
         self._send_json({"id": coll_id, "message": "Created (mock)"})

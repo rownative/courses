@@ -132,6 +132,58 @@
       .catch(() => {});
   }
 
+  const uploadCollectionForm = document.getElementById("upload-collection-form");
+  const uploadCollectionResult = document.getElementById("upload-collection-result");
+
+  if (uploadCollectionForm) {
+    uploadCollectionForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById("collection-name");
+      const fileInput = document.getElementById("collection-csv");
+      const name = nameInput?.value?.trim();
+      const file = fileInput?.files?.[0];
+      if (!name) {
+        uploadCollectionResult.textContent = "Please enter a collection name.";
+        uploadCollectionResult.classList.remove("hidden");
+        uploadCollectionResult.classList.add("error");
+        return;
+      }
+      if (!file) {
+        uploadCollectionResult.textContent = "Please select a CSV file.";
+        uploadCollectionResult.classList.remove("hidden");
+        uploadCollectionResult.classList.add("error");
+        return;
+      }
+      uploadCollectionResult.classList.add("hidden");
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("file", file);
+      fetch(API_BASE + "/organiser/standard-collections", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.error) {
+            uploadCollectionResult.textContent = data.error;
+            uploadCollectionResult.classList.add("error");
+          } else {
+            uploadCollectionResult.innerHTML = "Collection created: <strong>" + escapeHtml(data.id || name) + "</strong>. It will appear in the dropdown above.";
+            uploadCollectionResult.classList.remove("error");
+            uploadCollectionForm.reset();
+            loadCollections();
+          }
+          uploadCollectionResult.classList.remove("hidden");
+        })
+        .catch((err) => {
+          uploadCollectionResult.textContent = "Error: " + (err.message || "Upload failed");
+          uploadCollectionResult.classList.add("error");
+          uploadCollectionResult.classList.remove("hidden");
+        });
+    });
+  }
+
   let myChallenges = [];
 
   function loadMyChallenges() {
