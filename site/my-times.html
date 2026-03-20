@@ -91,6 +91,10 @@
         return Math.round(m) + " m";
       }
 
+      function escHtml(s) {
+        return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      }
+
       function checkAuth() {
         fetch(API_BASE + "/me", { credentials: "include" })
           .then((r) => r.json())
@@ -139,8 +143,9 @@
               .map((t) => {
                 const date = (t.workout_date || t.created_at) ? (t.workout_date || t.created_at).slice(0, 10) : "—";
                 const aid = t.activity_id ? String(t.activity_id).replace(/^i/, "") : "";
+                const workoutLabel = (t.workout_name && String(t.workout_name).trim()) || "View";
                 const workoutLink = aid
-                  ? "<a href=\"https://intervals.icu/activities/i" + encodeURIComponent(aid) + "\" target=\"_blank\" rel=\"noopener\">View ↗</a>"
+                  ? "<a href=\"https://intervals.icu/activities/i" + encodeURIComponent(aid) + "\" target=\"_blank\" rel=\"noopener\">" + escHtml(workoutLabel) + " ↗</a>"
                   : "—";
                 const trashSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2\"/><line x1=\"10\" y1=\"11\" x2=\"10\" y2=\"17\"/><line x1=\"14\" y1=\"11\" x2=\"14\" y2=\"17\"/></svg>";
                 return (
