@@ -203,8 +203,8 @@ Response includes `isOrganizer: boolean` when signed in.
 |------|--------|-------------|
 | 5 | Done | D1 migrations: challenges, challenge_results, standard_collections |
 | 6 | Done | Organiser status: fetch `organisers.json`, extend `/api/me` |
-| 7 | | Challenge CRUD API (Worker) |
-| 8 | | Standard collections API |
+| 7 | Done | Challenge CRUD API (Worker) |
+| 8 | Done | Standard collections API |
 | 9 | | Result submission with GPS validation (validate workout in row window) |
 | 10 | | Handicap scoring logic |
 | 11 | | Organiser moderation API |
