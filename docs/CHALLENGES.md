@@ -205,7 +205,7 @@ Response includes `isOrganizer: boolean` when signed in.
 | 6 | Done | Organiser status: fetch `organisers.json`, extend `/api/me` |
 | 7 | Done | Challenge CRUD API (Worker) |
 | 8 | Done | Standard collections API |
-| 9 | | Result submission with GPS validation (validate workout in row window) |
+| 9 | Done | Result submission with GPS validation (validate workout in row window) |
 | 10 | | Handicap scoring logic |
 | 11 | | Organiser moderation API |
 | 12 | | Track overlay for moderation |
