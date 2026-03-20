@@ -161,6 +161,7 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
                 "time_s": t.get("time_s"),
                 "distance_m": t.get("distance_m"),
                 "workout_date": t.get("workout_date"),
+                "workout_name": t.get("workout_name"),
                 "created_at": t.get("created_at"),
             })
         self._send_json({"courseTimes": out})
@@ -254,6 +255,7 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             "time_s": data.get("timeS", 0),
             "distance_m": data.get("distanceM", 0),
             "workout_date": data.get("workoutDate", ""),
+            "workout_name": data.get("workoutName", ""),
             "created_at": "2025-03-20T12:00:00",
         })
         self._send_json({"saved": True})

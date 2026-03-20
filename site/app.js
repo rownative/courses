@@ -364,7 +364,8 @@
     const removeBtn = t.id ? `<button type="button" class="detail-time-remove" data-time-id="${escapeHtml(t.id)}" aria-label="Remove">${trashSvg}</button>` : "";
     let linkPart = "";
     if (intervalsUrl) {
-      linkPart = ` <a href="${escapeHtml(intervalsUrl)}" target="_blank" rel="noopener" class="detail-time-link">Workout ↗</a>`;
+      const linkLabel = (t.workout_name && String(t.workout_name).trim()) || "Workout";
+      linkPart = ` <a href="${escapeHtml(intervalsUrl)}" target="_blank" rel="noopener" class="detail-time-link">${escapeHtml(linkLabel)} ↗</a>`;
     }
     return `<li><span class="detail-time-date">${escapeHtml(date)}</span> <span class="detail-time-value">${escapeHtml(timeStr)}</span>${linkPart} ${removeBtn}</li>`;
   }
@@ -476,8 +477,9 @@
         select.innerHTML = "<option value=\"\">Select a workout…</option>";
         acts.forEach((a) => {
           const date = a.start_date_local ? a.start_date_local.slice(0, 10) : "";
-          const label = date ? date + " — " + (a.name || "Untitled") : (a.name || "Untitled");
-          select.innerHTML += `<option value="${escapeHtml(a.id)}" data-date="${escapeHtml(date)}">${escapeHtml(label)}</option>`;
+          const name = a.name || "Untitled";
+          const label = date ? date + " — " + name : name;
+          select.innerHTML += `<option value="${escapeHtml(a.id)}" data-date="${escapeHtml(date)}" data-name="${escapeHtml(name)}">${escapeHtml(label)}</option>`;
         });
         if (acts.length === 0) {
           select.innerHTML = "<option value=\"\">No OTW rowing workouts in last month</option>";
@@ -629,6 +631,7 @@
         if (!activityId) return;
         const opt = select?.options[select.selectedIndex];
         const workoutDate = opt?.dataset?.date || "";
+        const workoutName = opt?.dataset?.name || "";
         saveBtn.disabled = true;
         fetch(`${API_BASE}/courses/${calculateModalCourseId}/course-times`, {
           method: "POST",
@@ -640,6 +643,7 @@
             distanceM: lastCalculateResult.distanceM,
             validationNote: lastCalculateResult.validationNote || "",
             workoutDate: workoutDate || undefined,
+            workoutName: workoutName || undefined,
           }),
         })
           .then((r) => r.json())
