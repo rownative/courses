@@ -5,15 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy — rownative.icu</title>
   <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="stylesheet" href="style.css" />
   <style>
-    body { font-family: sans-serif; max-width: 720px; margin: 40px auto; padding: 0 20px; line-height: 1.6; color: #333; }
-    h1 { font-size: 1.6em; }
-    h2 { font-size: 1.1em; margin-top: 2em; }
-    a { color: #1a73e8; }
+    .privacy-page { max-width: 720px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
+    .privacy-page h1 { font-size: 1.6em; margin-top: 0; }
+    .privacy-page h2 { font-size: 1.1em; margin-top: 2em; }
+    .privacy-page a { color: #1a73e8; }
+    .privacy-page ul { padding-left: 1.25rem; }
   </style>
 </head>
 <body>
-  <!-- privacy policy page -->
+  <header>
+    <div class="header-top">
+      <div class="header-brand">
+        <h1><a href="index.html"><img src="logo.png" alt="" class="logo" /> Rowing Courses</a></h1>
+        <p class="tagline">Privacy Policy</p>
+      </div>
+      <button type="button" class="hamburger" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-overlay">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-overlay-backdrop" data-dismiss="nav"></div>
+        <div id="auth-status">
+          <a href="index.html">Map</a>
+          <a href="challenges.html">Challenges</a>
+          <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
+          <a href="organiser.html" id="organiser-link" class="hidden">My challenges</a>
+          <a href="import.html" id="import-link">Import</a>
+          <a href="submit.html" id="submit-link">Submit</a>
+          <a href="update.html" id="update-link">Update</a>
+          <a href="about.html">About</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
+          <span id="user-info" class="hidden"></span>
+          <a href="/oauth/logout" id="sign-out-link" class="hidden">Sign out</a>
+          <p id="auth-teaser" class="auth-teaser hidden">Sign in to import your Rowsandall courses, submit new ones, or like courses for CrewNerd.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="privacy-page">
   <h1>Privacy Policy</h1>
   <p>Last updated: March 2026</p>
 
@@ -56,6 +88,59 @@
   <h2>Changes to this policy</h2>
   <p>We may update this policy as the platform evolves. Changes will be committed to the <a href="https://github.com/rownative/courses">rownative/courses</a> repository with a date stamp.</p>
 
-  <p><a href="index.html">← Back to the course map</a> · <a href="about.html">About</a> · <a href="challenges.html">Challenges</a></p>
+  <p><a href="index.html">← Back to the course map</a></p>
+  </main>
+
+  <script>
+    (function () {
+      const API_BASE = (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API)
+        ? window.ROWNATIVE_API
+        : "/api";
+      const signInLink = document.getElementById("sign-in-link");
+      const userInfo = document.getElementById("user-info");
+      const signOutLink = document.getElementById("sign-out-link");
+      const organiserLink = document.getElementById("organiser-link");
+      const myTimesLink = document.getElementById("my-times-link");
+      const importLink = document.getElementById("import-link");
+      const submitLink = document.getElementById("submit-link");
+      const updateLink = document.getElementById("update-link");
+      const authTeaser = document.getElementById("auth-teaser");
+
+      fetch(API_BASE + "/me", { credentials: "include" })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.athleteId) {
+            signInLink.classList.add("hidden");
+            userInfo.classList.remove("hidden");
+            userInfo.textContent = "Signed in";
+            signOutLink.classList.remove("hidden");
+            importLink.classList.remove("hidden");
+            submitLink.classList.remove("hidden");
+            if (updateLink) updateLink.classList.remove("hidden");
+            if (myTimesLink) myTimesLink.classList.remove("hidden");
+            if (data.isOrganizer && organiserLink) organiserLink.classList.remove("hidden");
+            else if (organiserLink) organiserLink.classList.add("hidden");
+            authTeaser.classList.add("hidden");
+          } else {
+            signInLink.classList.remove("hidden");
+            userInfo.classList.add("hidden");
+            signOutLink.classList.add("hidden");
+            if (organiserLink) organiserLink.classList.add("hidden");
+            if (myTimesLink) myTimesLink.classList.add("hidden");
+            importLink.classList.add("hidden");
+            submitLink.classList.add("hidden");
+            if (updateLink) updateLink.classList.add("hidden");
+            authTeaser.classList.remove("hidden");
+          }
+        })
+        .catch(() => {
+          importLink.classList.add("hidden");
+          submitLink.classList.add("hidden");
+          if (updateLink) updateLink.classList.add("hidden");
+          authTeaser.classList.remove("hidden");
+        });
+    })();
+  </script>
+  <script src="nav.js"></script>
 </body>
 </html>
