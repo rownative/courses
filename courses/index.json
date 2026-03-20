@@ -1044,6 +1044,24 @@
     "status": "established"
   },
   {
+    "id": "273",
+    "name": "Twentekanaal 1km",
+    "country": "Unknown",
+    "center_lat": 52.235179472370284,
+    "center_lon": 6.835660303365065,
+    "distance_m": 1020,
+    "status": "provisional"
+  },
+  {
+    "id": "274",
+    "name": "Twentekanaal 500m",
+    "country": "Unknown",
+    "center_lat": 52.233518591744414,
+    "center_lon": 6.838097258842331,
+    "distance_m": 525,
+    "status": "provisional"
+  },
+  {
     "id": "28",
     "name": "Naarden - 1k",
     "country": "Netherlands",

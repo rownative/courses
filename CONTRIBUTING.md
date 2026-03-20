@@ -93,6 +93,23 @@ Validation checks:
 - **New scripts** — Place in `scripts/` and document in the README
 - **Site changes** — The site lives in `site/`. Run `python scripts/serve_dev.py` for local development
 
+### Local development with mock API
+
+`serve_dev.py` includes a mock API that intercepts `/api/*` and `/oauth/*` requests. This lets you test the full GUI locally without the Cloudflare Worker backend:
+
+```bash
+python scripts/serve_dev.py
+```
+
+Then open http://localhost:8000/. You can:
+
+- Browse the map, search, and filter courses
+- Click **Sign in with intervals.icu** to simulate being signed in (no real OAuth)
+- Like/unlike courses, calculate times, save course times
+- Test the Import, Submit, and Update pages
+
+Mock data is in-memory and resets when you restart the server. Use `--no-build` to skip regenerating the index and KML on startup.
+
 ## Reporting issues
 
 Open an issue at [github.com/rownative/courses/issues](https://github.com/rownative/courses/issues) for:
