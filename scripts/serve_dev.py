@@ -109,7 +109,7 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(status)
         self.send_header("Location", location)
         if extra_headers:
-            for k, v in extra_headers.items():
+            for k, v in extra_headers:
                 self.send_header(k, v)
         self.end_headers()
 
@@ -118,18 +118,18 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         parsed = urlparse(self.path)
         qs = parse_qs(parsed.query)
         is_organizer = "1" in qs.get("mock_organizer", [])
-        cookies = ["rn_mock_signed_in=1; Path=/; Max-Age=86400; SameSite=Lax"]
+        headers = [("Set-Cookie", "rn_mock_signed_in=1; Path=/; Max-Age=86400; SameSite=Lax")]
         if is_organizer:
-            cookies.append("rn_mock_organizer=1; Path=/; Max-Age=86400; SameSite=Lax")
-        headers = {"Set-Cookie": ", ".join(cookies)}
+            headers.append(("Set-Cookie", "rn_mock_organizer=1; Path=/; Max-Age=86400; SameSite=Lax"))
         self._send_redirect("/", 302, headers)
         return True
 
     def _handle_oauth_logout(self) -> bool:
         """Mock sign-out: clear cookies and redirect to /."""
-        headers = {
-            "Set-Cookie": "rn_mock_signed_in=; Path=/; Max-Age=0; SameSite=Lax, rn_mock_organizer=; Path=/; Max-Age=0; SameSite=Lax",
-        }
+        headers = [
+            ("Set-Cookie", "rn_mock_signed_in=; Path=/; Max-Age=0; SameSite=Lax"),
+            ("Set-Cookie", "rn_mock_organizer=; Path=/; Max-Age=0; SameSite=Lax"),
+        ]
         self._send_redirect("/", 302, headers)
         return True
 
