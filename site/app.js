@@ -9,8 +9,9 @@
 
   let coursesBase = "./courses/";  // Base for course JSON; set to "../courses/" when using fallback
   let kmlBase = "./kml/";          // Base for KML; set to "../kml/" when using fallback
-  const API_BASE = (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API) 
-    ? window.ROWNATIVE_API 
+  const urlApi = typeof URLSearchParams !== "undefined" ? new URLSearchParams(location.search).get("api") : null;
+  const API_BASE = (urlApi || (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API))
+    ? (urlApi || window.ROWNATIVE_API)
     : "/api";
 
   let map;
