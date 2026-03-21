@@ -584,7 +584,8 @@
         if (!activityId || !calculateModalCourseId) return;
         calcBtn.disabled = true;
         calcBtn.textContent = "Calculating…";
-        fetch(`${API_BASE}/courses/${calculateModalCourseId}/calculate-time`, {
+        const calcUrl = `${API_BASE}/courses/${calculateModalCourseId}/calculate-time${location.search.includes("debug=1") ? "?debug=1" : ""}`;
+        fetch(calcUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -594,6 +595,7 @@
           .then((data) => {
             lastCalculateResult = data;
             const resultEl = document.getElementById("calculate-result");
+            if (data._debug) console.log("Course time _debug:", data._debug);
             if (data.valid) {
               const mins = Math.floor(data.timeS / 60);
               const secs = (data.timeS % 60).toFixed(1);
