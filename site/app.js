@@ -190,7 +190,6 @@
   }
 
   function renderMarkers(preserveView) {
-    const prevBounds = preserveView && selectedId ? map.getBounds() : null;
     markersLayer.clearLayers();
     const filtered = applyFilters();
     filtered.forEach((c) => {
@@ -213,17 +212,19 @@
       markersLayer.addLayer(m);
     });
 
-    // Re-zoom to fit all visible markers
-    if (filtered.length === 0) {
-      renderLikedCourses();
-      return;
-    }
-    if (filtered.length === 1) {
-      const c = filtered[0];
-      map.setView([c.center_lat, c.center_lon], 10);
-    } else {
-      const bounds = markersLayer.getBounds();
-      if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+    // Re-zoom to fit all visible markers (skip when closing a course to keep local zoom)
+    if (!preserveView) {
+      if (filtered.length === 0) {
+        renderLikedCourses();
+        return;
+      }
+      if (filtered.length === 1) {
+        const c = filtered[0];
+        map.setView([c.center_lat, c.center_lon], 10);
+      } else {
+        const bounds = markersLayer.getBounds();
+        if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+      }
     }
     renderLikedCourses();
   }
@@ -788,7 +789,7 @@
     if (detailClose) detailClose.addEventListener("click", () => {
       detailPanel.classList.add("hidden");
       selectedId = null;
-      renderMarkers();
+      renderMarkers(true);  // preserve local zoom when closing course
     });
 
     if (detailContent) {
