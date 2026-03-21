@@ -9,9 +9,19 @@
 
   let coursesBase = "./courses/";  // Base for course JSON; set to "../courses/" when using fallback
   let kmlBase = "./kml/";          // Base for KML; set to "../kml/" when using fallback
-  const API_BASE = (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API) 
-    ? window.ROWNATIVE_API 
+  const urlApi = typeof URLSearchParams !== "undefined" ? new URLSearchParams(location.search).get("api") : null;
+  const API_BASE = (urlApi || (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API))
+    ? (urlApi || window.ROWNATIVE_API)
     : "/api";
+  /** OAuth links must target the Worker when API_BASE is a full URL (e.g. local dev). */
+  function oauthHref(path) {
+    if (API_BASE.startsWith("http")) {
+      const base = API_BASE.replace(/\/api\/?$/, "");
+      const returnTo = encodeURIComponent(location.origin + location.pathname + location.search);
+      return base + path + "?local=1&return_to=" + returnTo;
+    }
+    return path;
+  }
 
   let map;
   let markersLayer;
@@ -86,13 +96,19 @@
         })
         .then((data) => {
           courses = Array.isArray(data) ? data : [];
+          if (API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http")) {
+            coursesBase = "https://raw.githubusercontent.com/rownative/courses/main/courses/";
+          }
           renderMarkers();
           fillCountryFilter();
         });
     }
 
-    tryLoad("./index.json")
+    const apiFirst = API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http");
+    const firstTry = apiFirst ? (API_BASE.replace(/\/api\/?$/, "") + "/api/courses") : "./index.json";
+    tryLoad(firstTry)
       .catch(() => {
+        if (apiFirst) return tryLoad("./index.json");
         coursesBase = "../courses/";
         kmlBase = "../kml/";
         return tryLoad("../courses/index.json");
@@ -174,7 +190,6 @@
   }
 
   function renderMarkers(preserveView) {
-    const prevBounds = preserveView && selectedId ? map.getBounds() : null;
     markersLayer.clearLayers();
     const filtered = applyFilters();
     filtered.forEach((c) => {
@@ -197,17 +212,19 @@
       markersLayer.addLayer(m);
     });
 
-    // Re-zoom to fit all visible markers
-    if (filtered.length === 0) {
-      renderLikedCourses();
-      return;
-    }
-    if (filtered.length === 1) {
-      const c = filtered[0];
-      map.setView([c.center_lat, c.center_lon], 10);
-    } else {
-      const bounds = markersLayer.getBounds();
-      if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+    // Re-zoom to fit all visible markers (skip when closing a course to keep local zoom)
+    if (!preserveView) {
+      if (filtered.length === 0) {
+        renderLikedCourses();
+        return;
+      }
+      if (filtered.length === 1) {
+        const c = filtered[0];
+        map.setView([c.center_lat, c.center_lon], 10);
+      } else {
+        const bounds = markersLayer.getBounds();
+        if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+      }
     }
     renderLikedCourses();
   }
@@ -686,10 +703,10 @@
         if (loginBtn) {
           if (data.athleteId) {
             loginBtn.textContent = "Sign out";
-            loginBtn.href = "/oauth/logout";
+            loginBtn.href = oauthHref("/oauth/logout");
           } else {
             loginBtn.textContent = "Sign in with intervals.icu";
-            loginBtn.href = "/oauth/authorize";
+            loginBtn.href = oauthHref("/oauth/authorize");
           }
           loginBtn.classList.remove("hidden");
         }
@@ -730,7 +747,7 @@
         if (authTeaser) authTeaser.classList.remove("hidden");
         if (loginBtn) {
           loginBtn.textContent = "Sign in with intervals.icu";
-          loginBtn.href = "/oauth/authorize";
+          loginBtn.href = oauthHref("/oauth/authorize");
           loginBtn.classList.remove("hidden");
         }
       });
@@ -772,7 +789,7 @@
     if (detailClose) detailClose.addEventListener("click", () => {
       detailPanel.classList.add("hidden");
       selectedId = null;
-      renderMarkers();
+      renderMarkers(true);  // preserve local zoom when closing course
     });
 
     if (detailContent) {
