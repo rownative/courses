@@ -13,14 +13,23 @@
   const API_BASE = (urlApi || (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API))
     ? (urlApi || window.ROWNATIVE_API)
     : "/api";
+  // #region agent log
+  try { fetch("http://127.0.0.1:7691/ingest/770bd333-f0c6-4569-b816-3db8bb63447a",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"e1b1a2"},body:JSON.stringify({sessionId:"e1b1a2",location:"app.js:init",message:"API_BASE on load",data:{API_BASE,urlApi:urlApi||"(none)",search:location.search},timestamp:Date.now(),hypothesisId:"A"})}).catch(()=>{}); } catch(e) {}
+  // #endregion
 
   /** OAuth links must target the Worker when API_BASE is a full URL (e.g. local dev). */
   function oauthHref(path) {
+    // #region agent log
+    let result;
     if (API_BASE.startsWith("http")) {
       const base = API_BASE.replace(/\/api\/?$/, "");
-      return base + path;
+      result = base + path;
+    } else {
+      result = path;
     }
-    return path;
+    try { fetch("http://127.0.0.1:7691/ingest/770bd333-f0c6-4569-b816-3db8bb63447a",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"e1b1a2"},body:JSON.stringify({sessionId:"e1b1a2",location:"app.js:oauthHref",message:"oauth href computed",data:{API_BASE,path,result},timestamp:Date.now(),hypothesisId:"A"})}).catch(()=>{}); } catch(e) {}
+    return result;
+    // #endregion
   }
 
   let map;
@@ -756,6 +765,9 @@
     detailContent = document.getElementById("detail-content");
     detailClose = document.getElementById("close-detail");
     loginBtn = document.getElementById("sign-in-link");
+    if (loginBtn) loginBtn.addEventListener("click", function() {
+      try { fetch("http://127.0.0.1:7691/ingest/770bd333-f0c6-4569-b816-3db8bb63447a",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"e1b1a2"},body:JSON.stringify({sessionId:"e1b1a2",location:"app.js:sign-in click",message:"sign-in clicked",data:{href:loginBtn.href},timestamp:Date.now(),hypothesisId:"B"})}).catch(()=>{}); } catch(e) {}
+    });
 
     const runFilters = () => renderMarkers();
     if (searchEl) searchEl.addEventListener("input", runFilters);
