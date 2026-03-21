@@ -17,7 +17,8 @@
   function oauthHref(path) {
     if (API_BASE.startsWith("http")) {
       const base = API_BASE.replace(/\/api\/?$/, "");
-      return base + path + "?local=1";
+      const returnTo = encodeURIComponent(location.origin + location.pathname + location.search);
+      return base + path + "?local=1&return_to=" + returnTo;
     }
     return path;
   }
@@ -95,13 +96,19 @@
         })
         .then((data) => {
           courses = Array.isArray(data) ? data : [];
+          if (API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http")) {
+            coursesBase = "https://raw.githubusercontent.com/rownative/courses/main/courses/";
+          }
           renderMarkers();
           fillCountryFilter();
         });
     }
 
-    tryLoad("./index.json")
+    const apiFirst = API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http");
+    const firstTry = apiFirst ? (API_BASE.replace(/\/api\/?$/, "") + "/api/courses") : "./index.json";
+    tryLoad(firstTry)
       .catch(() => {
+        if (apiFirst) return tryLoad("./index.json");
         coursesBase = "../courses/";
         kmlBase = "../kml/";
         return tryLoad("../courses/index.json");
