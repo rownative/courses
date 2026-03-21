@@ -14,6 +14,15 @@
     ? (urlApi || window.ROWNATIVE_API)
     : "/api";
 
+  /** OAuth links must target the Worker when API_BASE is a full URL (e.g. local dev). */
+  function oauthHref(path) {
+    if (API_BASE.startsWith("http")) {
+      const base = API_BASE.replace(/\/api\/?$/, "");
+      return base + path;
+    }
+    return path;
+  }
+
   let map;
   let markersLayer;
   let trackLayer;
@@ -687,10 +696,10 @@
         if (loginBtn) {
           if (data.athleteId) {
             loginBtn.textContent = "Sign out";
-            loginBtn.href = "/oauth/logout";
+            loginBtn.href = oauthHref("/oauth/logout");
           } else {
             loginBtn.textContent = "Sign in with intervals.icu";
-            loginBtn.href = "/oauth/authorize";
+            loginBtn.href = oauthHref("/oauth/authorize");
           }
           loginBtn.classList.remove("hidden");
         }
@@ -731,7 +740,7 @@
         if (authTeaser) authTeaser.classList.remove("hidden");
         if (loginBtn) {
           loginBtn.textContent = "Sign in with intervals.icu";
-          loginBtn.href = "/oauth/authorize";
+          loginBtn.href = oauthHref("/oauth/authorize");
           loginBtn.classList.remove("hidden");
         }
       });
