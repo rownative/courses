@@ -241,8 +241,9 @@
 
   function fmtTime(seconds) {
     const mins = Math.floor(seconds / 60);
-    const secs = Math.round(seconds % 60);
-    return mins + ":" + String(secs).padStart(2, "0");
+    const secs = (seconds % 60).toFixed(1);
+    const secsStr = ((seconds % 60) < 10 ? "0" : "") + secs;
+    return mins + ":" + secsStr;
   }
 
   function loadDetailCourseTimes(courseId) {
@@ -595,8 +596,9 @@
             const resultEl = document.getElementById("calculate-result");
             if (data.valid) {
               const mins = Math.floor(data.timeS / 60);
-              const secs = Math.round(data.timeS % 60);
-              resultEl.innerHTML = `<p class="success">Time: ${mins}:${String(secs).padStart(2, "0")}</p>`;
+              const secs = (data.timeS % 60).toFixed(1);
+              const secsStr = ((data.timeS % 60) < 10 ? "0" : "") + secs;
+              resultEl.innerHTML = `<p class="success">Time: ${mins}:${secsStr}</p>`;
               saveBtn.classList.remove("hidden");
               saveBtn.disabled = false;
             } else {

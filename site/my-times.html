@@ -82,8 +82,9 @@
 
       function fmtTime(seconds) {
         const mins = Math.floor(seconds / 60);
-        const secs = Math.round(seconds % 60);
-        return mins + ":" + String(secs).padStart(2, "0");
+        const secs = (seconds % 60).toFixed(1);
+        const secsStr = ((seconds % 60) < 10 ? "0" : "") + secs;
+        return mins + ":" + secsStr;
       }
 
       function fmtDistance(m) {
