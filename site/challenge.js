@@ -280,6 +280,21 @@
   }
 
   let isSignedIn = false;
+  let statusCheckInterval = null;
+
+  function startStatusRefresh() {
+    if (statusCheckInterval) return;
+    statusCheckInterval = setInterval(() => {
+      if (document.visibilityState === "visible") showSubmitSection();
+    }, 60000);
+  }
+
+  function stopStatusRefresh() {
+    if (statusCheckInterval) {
+      clearInterval(statusCheckInterval);
+      statusCheckInterval = null;
+    }
+  }
 
   function showSubmitSection() {
     const c = challenge;
@@ -318,8 +333,20 @@
       .then((r) => r.json())
       .then((data) => {
         const acts = data.activities || [];
+        const rowStart = c?.rowStart ? String(c.rowStart).slice(0, 10) : null;
+        const rowEnd = c?.rowEnd ? String(c.rowEnd).slice(0, 10) : null;
+        const filtered = (rowStart && rowEnd)
+          ? acts.filter((a) => {
+              const d = a.start_date_local ? String(a.start_date_local).slice(0, 10) : "";
+              return d >= rowStart && d <= rowEnd;
+            })
+          : acts;
         activitySelect.innerHTML = "<option value=''>Select a workout…</option>";
-        acts.forEach((a) => {
+        if (filtered.length === 0) {
+          const msg = acts.length === 0 ? "No workouts" : ("No workouts in row window (" + fmtDate(rowStart) + " – " + fmtDate(rowEnd) + ")");
+          activitySelect.innerHTML += "<option value='' disabled>" + msg + "</option>";
+        }
+        filtered.forEach((a) => {
           const date = a.start_date_local ? a.start_date_local.slice(0, 10) : "";
           const label = date ? date + " — " + (a.name || "Untitled") : (a.name || "Untitled");
           activitySelect.innerHTML += "<option value='" + escapeHtml(a.id) + "'>" + escapeHtml(label) + "</option>";
@@ -398,12 +425,22 @@
   document.getElementById("submit-modal-submit")?.addEventListener("click", doSubmit);
   document.querySelector("[data-dismiss='modal']")?.addEventListener("click", closeSubmitModal);
 
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      showSubmitSection();
+      startStatusRefresh();
+    } else {
+      stopStatusRefresh();
+    }
+  });
+
   checkAuth()
     .then((signedIn) => {
       isSignedIn = signedIn;
       return loadChallenge().then(() => {
         loadResults();
         showSubmitSection();
+        startStatusRefresh();
       });
     })
     .catch((err) => {
