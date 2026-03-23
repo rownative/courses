@@ -401,7 +401,8 @@
           resultMsg.textContent = data.error;
           resultMsg.classList.add("error");
         } else {
-          resultMsg.innerHTML = "Submitted! Rank: " + (data.rank || "—") + ". <a href='#' onclick='location.reload(); return false;'>Refresh</a> to see your result.";
+          const replaceNote = data.replaced ? " Your previous result in this category has been replaced." : "";
+          resultMsg.innerHTML = "Submitted! Rank: " + (data.rank || "—") + "." + replaceNote + " <a href='#' onclick='location.reload(); return false;'>Refresh</a> to see your result.";
           resultMsg.classList.remove("error");
           setTimeout(() => {
             closeSubmitModal();
