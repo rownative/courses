@@ -836,7 +836,7 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Serve rownative courses site locally")
-    parser.add_argument("-p", "--port", type=int, default=8000, help="Port (default: 8000)")
+    parser.add_argument("-p", "--port", type=int, default=8080, help="Port (default: 8080)")
     parser.add_argument("--no-build", action="store_true", help="Skip regenerating index and KML")
     args = parser.parse_args()
 

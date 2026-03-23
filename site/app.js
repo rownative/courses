@@ -601,7 +601,7 @@
         if (!activityId || !calculateModalCourseId) return;
         calcBtn.disabled = true;
         calcBtn.textContent = "Calculating…";
-        const calcUrl = `${API_BASE}/courses/${calculateModalCourseId}/calculate-time${location.search.includes("debug=1") ? "?debug=1" : ""}`;
+        const calcUrl = `${API_BASE}/courses/${calculateModalCourseId}/calculate-time${(location.search.includes("debug=1") || window.ROWNATIVE_DEBUG) ? "?debug=1" : ""}`;
         fetch(calcUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

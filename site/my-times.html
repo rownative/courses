@@ -74,6 +74,7 @@
     </div>
   </main>
 
+  <script src="api-config.js"></script>
   <script>
     (function () {
       const API_BASE = (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API)
@@ -196,7 +197,8 @@
             tbody.querySelectorAll("a[data-id]").forEach((a) => {
               a.addEventListener("click", (e) => {
                 e.preventDefault();
-                window.location.href = "index.html#course-" + a.dataset.id;
+                var u = "index.html#course-" + a.dataset.id;
+                window.location.href = (window.rownativeAppendToHref && window.rownativeAppendToHref(u)) || u;
               });
             });
             tbody.querySelectorAll(".remove-btn").forEach((btn) => {

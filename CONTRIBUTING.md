@@ -91,17 +91,21 @@ Validation checks:
 
 - **Bug fixes and improvements** — Open an issue first to discuss, or open a PR directly for small changes
 - **New scripts** — Place in `scripts/` and document in the README
-- **Site changes** — The site lives in `site/`. Run `python scripts/serve_dev.py` for local development
+- **Site changes** — The site lives in `site/`. Run locally with `npm run dev` (from courses root) or `python serve.py` (from `site/`)
 
 ### Local development with mock API
 
-`serve_dev.py` includes a mock API that intercepts `/api/*` and `/oauth/*` requests. This lets you test the full GUI locally without the Cloudflare Worker backend:
+The dev server includes a mock API that intercepts `/api/*` and `/oauth/*` requests. This lets you test the full GUI locally without the Cloudflare Worker backend:
 
 ```bash
-python scripts/serve_dev.py
+# From courses root:
+npm run dev
+
+# Or from courses/site:
+python serve.py
 ```
 
-Then open http://localhost:8000/. You can:
+Then open http://localhost:8080/. You can:
 
 - Browse the map, search, and filter courses
 - Click **Sign in with intervals.icu** to simulate being signed in (no real OAuth)
@@ -110,13 +114,23 @@ Then open http://localhost:8000/. You can:
 
 Mock data is in-memory and resets when you restart the server. Use `--no-build` to skip regenerating the index and KML on startup.
 
+### Local development with real Worker
+
+To test against the real Cloudflare Worker (e.g. real OAuth, real challenges, real course times):
+
+1. Start the worker: `cd worker && npm run dev` (serves on port 8787)
+2. Start the site: `cd courses && npm run dev` (serves on port 8080)
+3. Open **http://localhost:8080/?debug=1&api=http://localhost:8787/api**
+
+The `api` and `debug` params are persisted in sessionStorage and carried across all pages (including Challenges, My times, Submit, etc.). Sign-in and OAuth will use the worker; post-auth redirects back to the site.
+
 ### Speed Orders (Challenges) GUI testing
 
 The mock API includes challenge endpoints for testing the Speed Orders UI:
 
-- **Challenges list** — Visit http://localhost:8000/challenges.html to see active, upcoming, and past challenges
+- **Challenges list** — Visit http://localhost:8080/challenges.html to see active, upcoming, and past challenges
 - **Challenge detail** — Click "View leaderboard" on a challenge to see the leaderboard and submit a result (when signed in)
-- **Organiser panel** — To test creating challenges and moderating results, sign in as organiser: use [Sign in as organiser (mock)](http://localhost:8000/oauth/authorize?mock_organizer=1) or add `?mock_organizer=1` to the OAuth authorize URL. Then visit http://localhost:8000/organiser.html
+- **Organiser panel** — To test creating challenges and moderating results, sign in as organiser: use [Sign in as organiser (mock)](http://localhost:8080/oauth/authorize?mock_organizer=1) or add `?mock_organizer=1` to the OAuth authorize URL. Then visit http://localhost:8080/organiser.html
 
 ## Reporting issues
 

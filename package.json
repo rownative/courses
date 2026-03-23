@@ -1,0 +1,7 @@
+{
+  "name": "rownative-courses",
+  "private": true,
+  "scripts": {
+    "dev": "python scripts/serve_dev.py"
+  }
+}
