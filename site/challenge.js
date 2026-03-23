@@ -411,7 +411,7 @@
       .then((r) => r.json())
       .then((data) => {
         if (data.error) {
-          resultMsg.textContent = data.error;
+          resultMsg.textContent = data.validationNote ? data.error + ": " + data.validationNote : data.error;
           resultMsg.classList.add("error");
           if (data.error.includes("crewAvgAge") || data.error.includes("crew age")) {
             const crewAgeInput = document.getElementById("submit-crew-avg-age");
