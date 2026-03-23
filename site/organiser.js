@@ -335,21 +335,20 @@
       }),
       credentials: "include",
     })
-      .then((r) => r.json())
+      .then(async (r) => {
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data.error || "Server error (" + r.status + ")");
+        return data;
+      })
       .then((data) => {
-        if (data.error) {
-          createResult.textContent = data.error;
-          createResult.classList.add("error");
-        } else {
-          createResult.innerHTML = "Challenge created: <a href='challenge.html?id=" + encodeURIComponent(data.id) + "'>" + escapeHtml(data.challenge?.name || data.id) + "</a>";
-          createResult.classList.remove("error");
-          createForm.reset();
-          challengeCourseSearch.value = "";
-          challengeCourse.value = "";
-          challengeCourseSearch.placeholder = "Search courses…";
-          challengeCourseDropdown.classList.add("hidden");
-          loadMyChallenges();
-        }
+        createResult.innerHTML = "Challenge created: <a href='challenge.html?id=" + encodeURIComponent(data.id) + "'>" + escapeHtml(data.challenge?.name || data.id) + "</a>";
+        createResult.classList.remove("error");
+        createForm.reset();
+        challengeCourseSearch.value = "";
+        challengeCourse.value = "";
+        challengeCourseSearch.placeholder = "Search courses…";
+        challengeCourseDropdown.classList.add("hidden");
+        loadMyChallenges();
         createResult.classList.remove("hidden");
       })
       .catch((err) => {
