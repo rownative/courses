@@ -117,11 +117,12 @@
   }
 
   function loadCollections() {
+    challengeCollection.innerHTML = "<option value=''>Loading…</option>";
     fetch(API_BASE + "/organiser/standard-collections", { credentials: "include" })
       .then((r) => r.json())
       .then((data) => {
         const colls = data.collections || [];
-        challengeCollection.innerHTML = "<option value=''>—</option>";
+        challengeCollection.innerHTML = "<option value=''>— Select collection —</option>";
         colls.forEach((c) => {
           challengeCollection.innerHTML +=
             "<option value='" + escapeHtml(c.id) + "'>" + escapeHtml(c.name) + (c.isBuiltin ? " (built-in)" : "") + "</option>";
@@ -129,7 +130,9 @@
         const listEl = document.getElementById("collections-list");
         listEl.innerHTML = colls.map((c) => "<span class='badge'>" + escapeHtml(c.name) + "</span> ").join("") || "—";
       })
-      .catch(() => {});
+      .catch(() => {
+        challengeCollection.innerHTML = "<option value=''>Failed to load</option>";
+      });
   }
 
   const uploadCollectionForm = document.getElementById("upload-collection-form");
