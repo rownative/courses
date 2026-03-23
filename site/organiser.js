@@ -13,6 +13,8 @@
   const createForm = document.getElementById("create-challenge-form");
   const createResult = document.getElementById("create-result");
   const challengeCourse = document.getElementById("challenge-course");
+  const challengeCourseSearch = document.getElementById("challenge-course-search");
+  const challengeCourseDropdown = document.getElementById("challenge-course-dropdown");
   const challengeCollection = document.getElementById("challenge-collection");
   const collectionRow = document.getElementById("collection-row");
   const handicapCheckbox = document.getElementById("challenge-handicap");
@@ -100,20 +102,83 @@
       });
   }
 
+  let allCourses = [];
+
+  function filterCourseOptions(query) {
+    const q = (query || "").toLowerCase().trim();
+    const filtered = q
+      ? allCourses.filter(
+          (c) =>
+            (c.name || "").toLowerCase().includes(q) ||
+            String(c.id || "").toLowerCase().includes(q) ||
+            (c.country || "").toLowerCase().includes(q)
+        )
+      : allCourses;
+    return filtered.slice(0, 100);
+  }
+
+  function renderCourseDropdown(courses) {
+    challengeCourseDropdown.innerHTML = "";
+    challengeCourseDropdown.classList.remove("hidden");
+    if (courses.length === 0) {
+      const el = document.createElement("div");
+      el.className = "dropdown-item no-results";
+      el.textContent = "No courses match";
+      challengeCourseDropdown.appendChild(el);
+      return;
+    }
+    courses.forEach((c) => {
+      const name = (c.name || "Course " + c.id).slice(0, 80);
+      const sub = c.country ? " (" + c.country + ")" : "";
+      const el = document.createElement("div");
+      el.className = "dropdown-item";
+      el.dataset.id = String(c.id);
+      el.dataset.name = name;
+      el.textContent = name + sub;
+      el.addEventListener("click", () => {
+        challengeCourse.value = String(c.id);
+        challengeCourseSearch.value = name;
+        challengeCourseDropdown.classList.add("hidden");
+        challengeCourseSearch.placeholder = name;
+      });
+      challengeCourseDropdown.appendChild(el);
+    });
+  }
+
   function loadCourses() {
+    challengeCourseSearch.placeholder = "Loading…";
+    challengeCourseSearch.value = "";
+    challengeCourse.value = "";
+    challengeCourseDropdown.classList.add("hidden");
     fetch(API_BASE + "/courses", { credentials: "include" })
       .then((r) => r.json())
       .then((data) => {
-        const courses = data.courses || [];
-        challengeCourse.innerHTML = "<option value=''>Select course…</option>";
-        courses.slice(0, 50).forEach((c) => {
-          const name = (c.name || "Course " + c.id).slice(0, 60);
-          challengeCourse.innerHTML += "<option value='" + escapeHtml(c.id) + "'>" + escapeHtml(name) + "</option>";
-        });
+        allCourses = data.courses || [];
+        challengeCourseSearch.placeholder = "Search courses…";
+        challengeCourseSearch.value = "";
+        renderCourseDropdown(filterCourseOptions(""));
       })
       .catch(() => {
-        challengeCourse.innerHTML = "<option value=''>Failed to load</option>";
+        challengeCourseSearch.placeholder = "Failed to load";
       });
+  }
+
+  if (challengeCourseSearch && challengeCourseDropdown) {
+    challengeCourseSearch.addEventListener("input", () => {
+      renderCourseDropdown(filterCourseOptions(challengeCourseSearch.value));
+    });
+    challengeCourseSearch.addEventListener("focus", () => {
+      challengeCourseSearch.select();
+      renderCourseDropdown(filterCourseOptions(challengeCourseSearch.value));
+    });
+    document.addEventListener("click", (e) => {
+      if (
+        !challengeCourseSearch.contains(e.target) &&
+        !challengeCourseDropdown.contains(e.target)
+      ) {
+        challengeCourseDropdown.classList.add("hidden");
+      }
+    });
   }
 
   function loadCollections() {
@@ -279,6 +344,10 @@
           createResult.innerHTML = "Challenge created: <a href='challenge.html?id=" + encodeURIComponent(data.id) + "'>" + escapeHtml(data.challenge?.name || data.id) + "</a>";
           createResult.classList.remove("error");
           createForm.reset();
+          challengeCourseSearch.value = "";
+          challengeCourse.value = "";
+          challengeCourseSearch.placeholder = "Search courses…";
+          challengeCourseDropdown.classList.add("hidden");
           loadMyChallenges();
         }
         createResult.classList.remove("hidden");

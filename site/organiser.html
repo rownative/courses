@@ -36,6 +36,12 @@
     .organiser-page .form-hint { display: block; font-size: 0.8rem; color: #666; margin-top: 0.25rem; }
     .organiser-page #upload-collection-result { margin-top: 0.5rem; padding: 0.5rem; }
     .organiser-page #upload-collection-result.error { color: #c00; }
+    .organiser-page .searchable-select { position: relative; max-width: 24rem; }
+    .organiser-page .searchable-select input[type="text"] { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .organiser-page .searchable-select .dropdown { position: absolute; top: 100%; left: 0; right: 0; max-height: 12rem; overflow-y: auto; background: #fff; border: 1px solid #ccc; border-top: none; border-radius: 0 0 4px 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 100; }
+    .organiser-page .searchable-select .dropdown-item { padding: 0.5rem 0.75rem; cursor: pointer; }
+    .organiser-page .searchable-select .dropdown-item:hover, .organiser-page .searchable-select .dropdown-item.selected { background: #e8f4e8; }
+    .organiser-page .searchable-select .dropdown-item.no-results { color: #666; cursor: default; }
     .hidden { display: none !important; }
     #auth-status .hidden { display: none; }
   </style>
@@ -88,10 +94,12 @@
           <input type="text" id="challenge-name" required placeholder="e.g. March Speed Order" />
         </div>
         <div class="form-row">
-          <label for="challenge-course">Course *</label>
-          <select id="challenge-course">
-            <option value="">Loading…</option>
-          </select>
+          <label for="challenge-course-search">Course *</label>
+          <div class="searchable-select">
+            <input type="text" id="challenge-course-search" placeholder="Search courses…" autocomplete="off" />
+            <input type="hidden" id="challenge-course" name="courseId" />
+            <div id="challenge-course-dropdown" class="dropdown hidden"></div>
+          </div>
         </div>
         <div class="form-row">
           <label for="challenge-row-start">Row window start *</label>
