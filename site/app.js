@@ -9,9 +9,19 @@
 
   let coursesBase = "./courses/";  // Base for course JSON; set to "../courses/" when using fallback
   let kmlBase = "./kml/";          // Base for KML; set to "../kml/" when using fallback
-  const API_BASE = (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API) 
-    ? window.ROWNATIVE_API 
+  const urlApi = typeof URLSearchParams !== "undefined" ? new URLSearchParams(location.search).get("api") : null;
+  const API_BASE = (urlApi || (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API))
+    ? (urlApi || window.ROWNATIVE_API)
     : "/api";
+  /** OAuth links must target the Worker when API_BASE is a full URL (e.g. local dev). */
+  function oauthHref(path) {
+    if (API_BASE.startsWith("http")) {
+      const base = API_BASE.replace(/\/api\/?$/, "");
+      const returnTo = encodeURIComponent(location.origin + location.pathname + location.search);
+      return base + path + "?local=1&return_to=" + returnTo;
+    }
+    return path;
+  }
 
   let map;
   let markersLayer;
@@ -86,13 +96,19 @@
         })
         .then((data) => {
           courses = Array.isArray(data) ? data : [];
+          if (API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http")) {
+            coursesBase = "https://raw.githubusercontent.com/rownative/courses/main/courses/";
+          }
           renderMarkers();
           fillCountryFilter();
         });
     }
 
-    tryLoad("./index.json")
+    const apiFirst = API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http");
+    const firstTry = apiFirst ? (API_BASE.replace(/\/api\/?$/, "") + "/api/courses") : "./index.json";
+    tryLoad(firstTry)
       .catch(() => {
+        if (apiFirst) return tryLoad("./index.json");
         coursesBase = "../courses/";
         kmlBase = "../kml/";
         return tryLoad("../courses/index.json");
@@ -174,7 +190,6 @@
   }
 
   function renderMarkers(preserveView) {
-    const prevBounds = preserveView && selectedId ? map.getBounds() : null;
     markersLayer.clearLayers();
     const filtered = applyFilters();
     filtered.forEach((c) => {
@@ -197,17 +212,19 @@
       markersLayer.addLayer(m);
     });
 
-    // Re-zoom to fit all visible markers
-    if (filtered.length === 0) {
-      renderLikedCourses();
-      return;
-    }
-    if (filtered.length === 1) {
-      const c = filtered[0];
-      map.setView([c.center_lat, c.center_lon], 10);
-    } else {
-      const bounds = markersLayer.getBounds();
-      if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+    // Re-zoom to fit all visible markers (skip when closing a course to keep local zoom)
+    if (!preserveView) {
+      if (filtered.length === 0) {
+        renderLikedCourses();
+        return;
+      }
+      if (filtered.length === 1) {
+        const c = filtered[0];
+        map.setView([c.center_lat, c.center_lon], 10);
+      } else {
+        const bounds = markersLayer.getBounds();
+        if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+      }
     }
     renderLikedCourses();
   }
@@ -241,8 +258,9 @@
 
   function fmtTime(seconds) {
     const mins = Math.floor(seconds / 60);
-    const secs = Math.round(seconds % 60);
-    return mins + ":" + String(secs).padStart(2, "0");
+    const secs = (seconds % 60).toFixed(1);
+    const secsStr = ((seconds % 60) < 10 ? "0" : "") + secs;
+    return mins + ":" + secsStr;
   }
 
   function loadDetailCourseTimes(courseId) {
@@ -583,7 +601,8 @@
         if (!activityId || !calculateModalCourseId) return;
         calcBtn.disabled = true;
         calcBtn.textContent = "Calculating…";
-        fetch(`${API_BASE}/courses/${calculateModalCourseId}/calculate-time`, {
+        const calcUrl = `${API_BASE}/courses/${calculateModalCourseId}/calculate-time${location.search.includes("debug=1") ? "?debug=1" : ""}`;
+        fetch(calcUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -593,10 +612,12 @@
           .then((data) => {
             lastCalculateResult = data;
             const resultEl = document.getElementById("calculate-result");
+            if (data._debug) console.log("Course time _debug:", data._debug);
             if (data.valid) {
               const mins = Math.floor(data.timeS / 60);
-              const secs = Math.round(data.timeS % 60);
-              resultEl.innerHTML = `<p class="success">Time: ${mins}:${String(secs).padStart(2, "0")}</p>`;
+              const secs = (data.timeS % 60).toFixed(1);
+              const secsStr = ((data.timeS % 60) < 10 ? "0" : "") + secs;
+              resultEl.innerHTML = `<p class="success">Time: ${mins}:${secsStr}</p>`;
               saveBtn.classList.remove("hidden");
               saveBtn.disabled = false;
             } else {
@@ -682,10 +703,10 @@
         if (loginBtn) {
           if (data.athleteId) {
             loginBtn.textContent = "Sign out";
-            loginBtn.href = "/oauth/logout";
+            loginBtn.href = oauthHref("/oauth/logout");
           } else {
             loginBtn.textContent = "Sign in with intervals.icu";
-            loginBtn.href = "/oauth/authorize";
+            loginBtn.href = oauthHref("/oauth/authorize");
           }
           loginBtn.classList.remove("hidden");
         }
@@ -728,7 +749,7 @@
         if (authTeaser) authTeaser.classList.remove("hidden");
         if (loginBtn) {
           loginBtn.textContent = "Sign in with intervals.icu";
-          loginBtn.href = "/oauth/authorize";
+          loginBtn.href = oauthHref("/oauth/authorize");
           loginBtn.classList.remove("hidden");
         }
       });
@@ -770,7 +791,7 @@
     if (detailClose) detailClose.addEventListener("click", () => {
       detailPanel.classList.add("hidden");
       selectedId = null;
-      renderMarkers();
+      renderMarkers(true);  // preserve local zoom when closing course
     });
 
     if (detailContent) {
