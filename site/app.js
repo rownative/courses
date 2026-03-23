@@ -95,7 +95,7 @@
           return r.json();
         })
         .then((data) => {
-          courses = Array.isArray(data) ? data : [];
+          courses = Array.isArray(data) ? data : (data?.courses && Array.isArray(data.courses) ? data.courses : []);
           if (API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http")) {
             coursesBase = "https://raw.githubusercontent.com/rownative/courses/main/courses/";
           }
