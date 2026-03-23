@@ -454,9 +454,9 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         results = [r for r in MOCK_CHALLENGE_RESULTS if r.get("challengeId") == challenge_id]
         if not results and challenge_id in ("mock-ch-1", "mock-ch-2", "mock-ch-3"):
             results = [
-                {"id": "r1", "rank": 1, "displayName": "Alice R.", "boatType": "1x", "sex": "F", "rawTimeS": 1320, "correctedTimeS": 1280, "points": 98.5, "workoutDate": "2026-03-10", "validationStatus": "valid"},
-                {"id": "r2", "rank": 2, "displayName": "Bob M.", "boatType": "1x", "sex": "M", "rawTimeS": 1280, "correctedTimeS": 1290, "points": 97.2, "workoutDate": "2026-03-12", "validationStatus": "valid"},
-                {"id": "r3", "rank": 3, "displayName": "Crew Masters 8+", "boatType": "8+", "sex": "M", "rawTimeS": 1100, "correctedTimeS": 1305, "points": 96.1, "workoutDate": "2026-03-14", "validationStatus": "valid"},
+                {"id": "r1", "rank": 1, "displayName": "Alice R.", "boatType": "1x", "sex": "F", "crewAvgAge": 28, "rawTimeS": 1320, "correctedTimeS": 1280, "points": 98.5, "workoutDate": "2026-03-10", "validationStatus": "valid"},
+                {"id": "r2", "rank": 2, "displayName": "Bob M.", "boatType": "1x", "sex": "M", "crewAvgAge": 35, "rawTimeS": 1280, "correctedTimeS": 1290, "points": 97.2, "workoutDate": "2026-03-12", "validationStatus": "valid"},
+                {"id": "r3", "rank": 3, "displayName": "Crew Masters 8+", "boatType": "8+", "sex": "M", "crewAvgAge": 52, "rawTimeS": 1100, "correctedTimeS": 1305, "points": 96.1, "workoutDate": "2026-03-14", "validationStatus": "valid"},
             ]
         self._send_json({"results": results})
         return True
@@ -484,6 +484,7 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             "displayName": data.get("displayName", "Mock User"),
             "boatType": data.get("boatType", "1x"),
             "sex": data.get("sex", "M"),
+            "crewAvgAge": data.get("crewAvgAge"),
             "rawTimeS": raw_time,
             "correctedTimeS": data.get("correctedTimeS", raw_time),
             "points": data.get("points", 95),

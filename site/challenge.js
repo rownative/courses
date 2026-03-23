@@ -185,8 +185,10 @@
   function renderLeaderboard() {
     const c = challenge;
     const hasHandicap = c && c.hasHandicap;
+    const showAge = hasHandicap && results.some((r) => r.crewAvgAge != null);
     document.getElementById("corrected-header").classList.toggle("hidden", !hasHandicap);
     document.getElementById("points-header").classList.toggle("hidden", !hasHandicap);
+    document.getElementById("age-header").classList.toggle("hidden", !showAge);
 
     const boatFilter = document.getElementById("boat-filter");
     const sexFilter = document.getElementById("sex-filter");
@@ -250,8 +252,9 @@
     }
 
     const tbody = document.getElementById("leaderboard-body");
+    const colSpan = 6 + (hasHandicap ? 2 : 0) + (showAge ? 1 : 0);
     if (filtered.length === 0) {
-      tbody.innerHTML = "<tr><td colspan='8'>No results yet.</td></tr>";
+      tbody.innerHTML = "<tr><td colspan='" + colSpan + "'>No results yet.</td></tr>";
       return;
     }
     tbody.innerHTML = filtered
@@ -264,8 +267,11 @@
           "<tr>" +
           "<td>" + rank + "</td>" +
           "<td>" + escapeHtml(r.displayName || "Anonymous") + " " + workoutLink + "</td>" +
-          "<td>" + escapeHtml(r.boatType || "—") + "</td>" +
-          "<td class='time'>" + fmtTime(r.rawTimeS) + "</td>";
+          "<td>" + escapeHtml(r.boatType || "—") + "</td>";
+        if (showAge) {
+          row += "<td>" + (r.crewAvgAge != null ? escapeHtml(String(r.crewAvgAge)) : "—") + "</td>";
+        }
+        row += "<td class='time'>" + fmtTime(r.rawTimeS) + "</td>";
         if (hasHandicap) {
           row += "<td class='time'>" + fmtTime(r.correctedTimeS) + "</td>";
           row += "<td>" + (r.points != null ? r.points.toFixed(1) + "%" : "—") + "</td>";
@@ -380,12 +386,19 @@
     }
 
     const weightClassSelect = document.getElementById("submit-weight-class");
+    const crewAvgAgeInput = document.getElementById("submit-crew-avg-age");
+    let crewAvgAge = undefined;
+    if (challenge && challenge.hasHandicap && crewAvgAgeInput && crewAvgAgeInput.value.trim() !== "") {
+      const n = parseInt(crewAvgAgeInput.value.trim(), 10);
+      if (!isNaN(n) && n >= 8 && n <= 120) crewAvgAge = n;
+    }
     const body = {
       activityId: activityId,
       displayName: displayNameInput.value.trim() || undefined,
       boatType: challenge && challenge.hasHandicap ? boatTypeSelect.value : undefined,
       sex: challenge && challenge.hasHandicap ? sexSelect.value : undefined,
       weightClass: challenge && challenge.hasHandicap && weightClassSelect ? weightClassSelect.value : undefined,
+      crewAvgAge: crewAvgAge,
     };
 
     submitBtn.disabled = true;

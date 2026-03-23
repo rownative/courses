@@ -91,6 +91,7 @@
               <th>Rank</th>
               <th>Athlete</th>
               <th>Boat</th>
+              <th id="age-header" class="hidden">Age</th>
               <th id="raw-time-header" class="sortable" role="button" tabindex="0" title="Click to sort by raw time">Raw time</th>
               <th id="corrected-header" class="hidden">Corrected</th>
               <th id="points-header" class="hidden">Points</th>
@@ -148,6 +149,11 @@
             <option value="HWT">Heavyweight</option>
             <option value="LWT">Lightweight</option>
           </select>
+          <div style="margin-top: 0.5rem;">
+            <label for="submit-crew-avg-age">Average crew age (optional)</label>
+            <input type="number" id="submit-crew-avg-age" min="8" max="120" placeholder="e.g. 28" />
+            <small class="form-hint">Average age of all rowers — used for age-band handicaps when applicable.</small>
+          </div>
         </div>
       </div>
       <div id="submit-result-msg" class="hidden"></div>
