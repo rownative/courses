@@ -413,6 +413,10 @@
         if (data.error) {
           resultMsg.textContent = data.error;
           resultMsg.classList.add("error");
+          if (data.error.includes("crewAvgAge") || data.error.includes("crew age")) {
+            const crewAgeInput = document.getElementById("submit-crew-avg-age");
+            if (crewAgeInput) crewAgeInput.focus();
+          }
         } else {
           const replaceNote = data.replaced ? " Your previous result in this category has been replaced." : "";
           resultMsg.innerHTML = "Submitted! Rank: " + (data.rank || "—") + "." + replaceNote + " <a href='#' onclick='location.reload(); return false;'>Refresh</a> to see your result.";
