@@ -867,13 +867,31 @@ def main() -> None:
             shutil.copy2(f, dst / f.name)
 
     os.chdir(BUILD_DIR)
-    with socketserver.TCPServer(("", args.port), MockAPIRequestHandler) as httpd:
-        print(f"Serving at http://localhost:{args.port}/")
-        print("Mock API enabled: /api/* and /oauth/* return mock data for GUI testing.")
-        print("  Sign in: click 'Sign in with intervals.icu' (no real OAuth)")
-        print("  Sign in as organiser: /oauth/authorize?mock_organizer=1")
-        print("Press Ctrl+C to stop")
-        httpd.serve_forever()
+    port = args.port
+    for attempt in range(10):
+        try:
+            with socketserver.TCPServer(("", port), MockAPIRequestHandler) as httpd:
+                if port != args.port:
+                    print(f"Port {args.port} was in use; using port {port} instead.")
+                print(f"Serving at http://localhost:{port}/")
+                print("Mock API enabled: /api/* and /oauth/* return mock data for GUI testing.")
+                print("  Sign in: click 'Sign in with intervals.icu' (no real OAuth)")
+                print("  Sign in as organiser: /oauth/authorize?mock_organizer=1")
+                print("Press Ctrl+C to stop")
+                httpd.serve_forever()
+        except OSError as e:
+            addr_in_use = (
+                getattr(e, "errno", None) in (98, 10048)  # EADDRINUSE, WSAEADDRINUSE
+                or "address already in use" in str(e).lower()
+            )
+            if addr_in_use:
+                port += 1
+                if attempt == 9:
+                    print(f"Error: Could not bind to port {args.port} or fallback ports.", file=sys.stderr)
+                    print("Stop the process using the port, or run with -p PORT", file=sys.stderr)
+                    sys.exit(1)
+            else:
+                raise
 
 
 if __name__ == "__main__":
