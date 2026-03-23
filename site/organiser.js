@@ -343,7 +343,10 @@
         return data;
       })
       .then((data) => {
-        createResult.innerHTML = "Challenge created: <a href='challenge.html?id=" + encodeURIComponent(data.id) + "'>" + escapeHtml(data.challenge?.name || data.id) + "</a>";
+        const href = (typeof window.rownativeAppendToHref === "function"
+          ? window.rownativeAppendToHref("challenge.html?id=" + encodeURIComponent(data.id))
+          : "challenge.html?id=" + encodeURIComponent(data.id));
+        createResult.innerHTML = "Challenge created: <a href='" + escapeHtml(href) + "'>" + escapeHtml(data.challenge?.name || data.id) + "</a>";
         createResult.classList.remove("error");
         createForm.reset();
         challengeCourseSearch.value = "";
