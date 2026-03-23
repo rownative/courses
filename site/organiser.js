@@ -319,7 +319,9 @@
     const submitEndISO = submitEnd ? new Date(submitEnd).toISOString().slice(0, 19) : null;
 
     createResult.classList.add("hidden");
-    fetch(API_BASE + "/organiser/challenges", {
+    const url = API_BASE + "/organiser/challenges";
+    console.log("[organiser] POST", url);
+    fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -352,6 +354,7 @@
         createResult.classList.remove("hidden");
       })
       .catch((err) => {
+        console.error("[organiser] Create challenge failed:", err);
         createResult.textContent = "Error: " + (err.message || "Create failed");
         createResult.classList.add("error");
         createResult.classList.remove("hidden");
