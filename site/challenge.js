@@ -305,7 +305,13 @@
     categoryRow.classList.toggle("hidden", !(c && c.hasHandicap));
     resultMsg.classList.add("hidden");
     resultMsg.innerHTML = "";
-    displayNameInput.value = "Mock User";
+    displayNameInput.value = "";
+    fetch(API_BASE + "/me", { credentials: "include" })
+      .then((r) => r.ok ? r.json() : {})
+      .then((me) => {
+        displayNameInput.value = me.athleteDisplayName || "";
+      })
+      .catch(() => {});
 
     activitySelect.innerHTML = "<option value=''>Loading…</option>";
     fetch(API_BASE + "/me/activities", { credentials: "include" })

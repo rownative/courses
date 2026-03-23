@@ -35,6 +35,7 @@
     .submit-modal h3 { margin-top: 0; }
     .submit-modal .form-row { margin: 1rem 0; }
     .submit-modal label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
+    .submit-modal .form-hint { display: block; margin-top: 0.25rem; font-size: 0.85rem; color: #666; }
     .submit-modal input, .submit-modal select { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
     .submit-modal .actions { margin-top: 1.5rem; display: flex; gap: 0.5rem; }
     .hidden { display: none !important; }
@@ -123,8 +124,9 @@
           </select>
         </div>
         <div class="form-row">
-          <label for="submit-display-name">Display name</label>
-          <input type="text" id="submit-display-name" placeholder="Your name or crew" />
+          <label for="submit-display-name">Name or crew</label>
+          <input type="text" id="submit-display-name" placeholder="e.g. Gingerbread Girls Quad" />
+          <small class="form-hint">Your name or your crew/boat name — this is shown on the leaderboard.</small>
         </div>
         <div id="submit-category-row" class="form-row hidden">
           <label>Category (handicap)</label>

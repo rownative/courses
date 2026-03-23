@@ -211,8 +211,8 @@ Response includes `isOrganizer: boolean` when signed in.
 | 12 | Done | Track overlay for moderation |
 | 13 | Done | Validation log and multi-pass |
 | 14 | | Private challenges |
-| 15 | | Display name from intervals.icu profile |
-| 16 | | Documentation and deploy |
+| 15 | Done | Display name from intervals.icu profile |
+| 16 | Done | Documentation and deploy |
 | 17 | | Challenge removal (config file) |
 | 18 | | (Future) intervals.icu activity metadata |
 

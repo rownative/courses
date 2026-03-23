@@ -147,9 +147,21 @@
       }
 
       function loadCourseTimes() {
-        fetch(API_BASE + "/me/course-times", { credentials: "include" })
-          .then((r) => r.ok ? r.json() : Promise.reject())
+        const coursesPromise = fetch(API_BASE + "/courses", { credentials: "include" })
+          .then((r) => r.ok ? r.json() : { courses: [] })
           .then((data) => {
+            const courses = data.courses || [];
+            const map = {};
+            courses.forEach((c) => { if (c && c.id) map[String(c.id)] = c.name || ""; });
+            return map;
+          })
+          .catch(() => ({}));
+
+        const timesPromise = fetch(API_BASE + "/me/course-times", { credentials: "include" })
+          .then((r) => r.ok ? r.json() : Promise.reject());
+
+        Promise.all([coursesPromise, timesPromise])
+          .then(([courseNames, data]) => {
             const times = data.courseTimes || [];
             if (times.length === 0) {
               noTimesMsg.classList.remove("hidden");
@@ -159,6 +171,9 @@
             noTimesMsg.classList.add("hidden");
             tbody.innerHTML = times
               .map((t) => {
+                const courseId = t.course_id;
+                const courseName = courseNames[courseId] || "";
+                const courseLabel = courseName ? escHtml(courseName) + " (" + escHtml(courseId) + ")" : "Course " + escHtml(courseId);
                 const date = (t.workout_date || t.created_at) ? (t.workout_date || t.created_at).slice(0, 10) : "—";
                 const aid = t.activity_id ? String(t.activity_id).replace(/^i/, "") : "";
                 const workoutLabel = (t.workout_name && String(t.workout_name).trim()) || "View";
@@ -168,7 +183,7 @@
                 const trashSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2\"/><line x1=\"10\" y1=\"11\" x2=\"10\" y2=\"17\"/><line x1=\"14\" y1=\"11\" x2=\"14\" y2=\"17\"/></svg>";
                 return (
                   "<tr>" +
-                  "<td><a href=\"index.html\" data-id=\"" + t.course_id + "\">Course " + t.course_id + "</a></td>" +
+                  "<td><a href=\"index.html\" data-id=\"" + escHtml(courseId) + "\">" + courseLabel + "</a></td>" +
                   "<td class=\"time\">" + fmtTime(t.time_s) + "</td>" +
                   "<td>" + fmtDistance(t.distance_m || 0) + "</td>" +
                   "<td>" + date + "</td>" +
