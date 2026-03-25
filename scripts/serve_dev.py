@@ -300,7 +300,8 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         if path in ("/api/me", "/api/me/"):
             return self._handle_api_me()
         if path in ("/api/me/course-times", "/api/me/course-times/"):
-            return self._handle_api_me_course_times()
+            if self.command == "GET":
+                return self._handle_api_me_course_times()
         m = re.match(r"^/api/me/course-times/([^/]+)/?$", path)
         if m and self.command == "DELETE":
             return self._handle_api_me_course_times_delete(m.group(1))

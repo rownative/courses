@@ -59,8 +59,9 @@ def polygon_area_signed(points: list[dict]) -> float:
 
 def segments_intersect(a1: dict, a2: dict, b1: dict, b2: dict) -> bool:
     """
-    Check if segment a1-a2 intersects segment b1-b2 (excluding endpoints).
-    Uses cross-product orientation.
+    Check if segment a1-a2 intersects segment b1-b2 (excluding shared endpoints).
+    Uses cross-product orientation; handles proper intersections and T-intersections
+    (one endpoint lying on the other segment).
     """
     def cross(o, a, b):
         return (a["lon"] - o["lon"]) * (b["lat"] - o["lat"]) - (a["lat"] - o["lat"]) * (b["lon"] - o["lon"])
@@ -76,14 +77,20 @@ def segments_intersect(a1: dict, a2: dict, b1: dict, b2: dict) -> bool:
     o3 = cross(b1, b2, a1)
     o4 = cross(b1, b2, a2)
 
-    if o1 != 0 or o2 != 0 or o3 != 0 or o4 != 0:
-        return (o1 * o2 < 0) and (o3 * o4 < 0)
+    # General case: proper crossing intersection
+    if (o1 * o2 < 0) and (o3 * o4 < 0):
+        return True
 
-    # Collinear
-    if on_segment(a1, b1, b2) or on_segment(a2, b1, b2):
+    # Collinear / T-intersection: check each endpoint against the other segment
+    if o1 == 0 and on_segment(b1, a1, a2):
         return True
-    if on_segment(b1, a1, a2) or on_segment(b2, a1, a2):
+    if o2 == 0 and on_segment(b2, a1, a2):
         return True
+    if o3 == 0 and on_segment(a1, b1, b2):
+        return True
+    if o4 == 0 and on_segment(a2, b1, b2):
+        return True
+
     return False
 
 
@@ -166,6 +173,9 @@ def validate_course(path: Path) -> tuple[bool, str]:
     except OSError as e:
         return False, f"Could not read file: {e}"
 
+    if not isinstance(data, dict):
+        return False, "Course file must be a JSON object"
+
     # Required fields
     required = ["id", "name", "country", "center_lat", "center_lon", "distance_m", "status", "polygons"]
     for key in required:
@@ -184,19 +194,26 @@ def validate_course(path: Path) -> tuple[bool, str]:
     # Sort by order for consistent processing
     polygons = sorted(polygons, key=lambda p: p.get("order", 0))
 
+    pts_list = []  # deduplicated points used for all geometric checks
+
     for i, poly in enumerate(polygons):
         if "name" not in poly or "order" not in poly or "points" not in poly:
             return False, f"Polygon {i}: missing name, order, or points"
         pts = poly["points"]
         if not isinstance(pts, list):
             return False, f"Polygon {i} ({poly['name']}): points must be array"
-        if len(pts) < 3:
-            return False, f"Polygon {i} ({poly['name']}): at least 3 points required"
         for j, p in enumerate(pts):
             if "lat" not in p or "lon" not in p:
                 return False, f"Polygon {i} ({poly['name']}) point {j}: lat and lon required"
             if not isinstance(p["lat"], (int, float)) or not isinstance(p["lon"], (int, float)):
                 return False, f"Polygon {i} ({poly['name']}) point {j}: lat/lon must be numbers"
+
+        # Remove duplicate closing vertex (KML closed-ring encoding: first == last)
+        if len(pts) >= 2 and pts[0]["lat"] == pts[-1]["lat"] and pts[0]["lon"] == pts[-1]["lon"]:
+            pts = pts[:-1]
+
+        if len(pts) < 3:
+            return False, f"Polygon {i} ({poly['name']}): at least 3 points required"
 
         area = polygon_area_signed(pts)
         if abs(area) < 1e-12:
@@ -205,8 +222,12 @@ def validate_course(path: Path) -> tuple[bool, str]:
         if polygon_self_intersects(pts):
             return False, f"Polygon {i} ({poly['name']}): self-intersecting edges"
 
+        pts_list.append(pts)
+
+    # pts_list is guaranteed complete here: any polygon failure returns early above.
+
     # Distance sanity
-    centroids = [polygon_centroid(p["points"]) for p in polygons]
+    centroids = [polygon_centroid(pts) for pts in pts_list]
     total_length = 0
     for i in range(len(centroids) - 1):
         d = haversine_m(centroids[i][0], centroids[i][1], centroids[i + 1][0], centroids[i + 1][1])
@@ -221,7 +242,7 @@ def validate_course(path: Path) -> tuple[bool, str]:
 
     # No polygon overlap
     for i, j in combinations(range(len(polygons)), 2):
-        if polygons_overlap(polygons[i]["points"], polygons[j]["points"]):
+        if polygons_overlap(pts_list[i], pts_list[j]):
             return False, f"Polygons {i} ({polygons[i]['name']}) and {j} ({polygons[j]['name']}) overlap"
 
     return True, "OK"

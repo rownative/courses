@@ -16,6 +16,7 @@ from validate_course import (
     polygon_centroid,
     polygon_area_signed,
     polygon_self_intersects,
+    segments_intersect,
     point_in_polygon,
     bboxes_overlap,
     polygons_overlap,
@@ -113,6 +114,36 @@ class TestPolygonSelfIntersects:
         assert polygon_self_intersects(pts) is True
 
 
+class TestSegmentsIntersect:
+    def test_proper_crossing(self):
+        # Two diagonals of a unit square cross
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 1, "lon": 1}
+        b1, b2 = {"lat": 0, "lon": 1}, {"lat": 1, "lon": 0}
+        assert segments_intersect(a1, a2, b1, b2) is True
+
+    def test_parallel_non_intersecting(self):
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 1, "lon": 0}
+        b1, b2 = {"lat": 0, "lon": 1}, {"lat": 1, "lon": 1}
+        assert segments_intersect(a1, a2, b1, b2) is False
+
+    def test_t_intersection_endpoint_on_segment(self):
+        # b1 lies exactly on a1-a2; was missed by old implementation
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 0, "lon": 2}
+        b1, b2 = {"lat": 0, "lon": 1}, {"lat": 1, "lon": 1}
+        assert segments_intersect(a1, a2, b1, b2) is True
+
+    def test_fully_collinear_overlapping(self):
+        # Overlapping collinear segments
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 0, "lon": 3}
+        b1, b2 = {"lat": 0, "lon": 1}, {"lat": 0, "lon": 4}
+        assert segments_intersect(a1, a2, b1, b2) is True
+
+    def test_fully_collinear_disjoint(self):
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 0, "lon": 1}
+        b1, b2 = {"lat": 0, "lon": 2}, {"lat": 0, "lon": 3}
+        assert segments_intersect(a1, a2, b1, b2) is False
+
+
 class TestPointInPolygon:
     def test_inside_triangle(self):
         pts = [{"lat": 0, "lon": 0}, {"lat": 1, "lon": 0}, {"lat": 0.5, "lon": 1}]
@@ -189,7 +220,8 @@ class TestValidateCourse:
         assert "At least two polygons" in msg
 
     def test_polygon_with_fewer_than_three_points(self, tmp_path):
-        data = VALID_COURSE.copy()
+        import copy
+        data = copy.deepcopy(VALID_COURSE)
         data["polygons"][0]["points"] = [{"lat": 0, "lon": 0}, {"lat": 1, "lon": 0}]
         path = tmp_path / "course.json"
         write_course(path, data)
@@ -203,6 +235,51 @@ class TestValidateCourse:
         ok, msg = validate_course(path)
         assert ok is False
         assert "Invalid JSON" in msg
+
+    def test_json_array_rejected(self, tmp_path):
+        """Top-level JSON array must be rejected with a clear message, not a TypeError."""
+        path = tmp_path / "course.json"
+        path.write_text("[]", encoding="utf-8")
+        ok, msg = validate_course(path)
+        assert ok is False
+        assert "JSON object" in msg
+
+    def test_closed_ring_polygon_accepted(self, tmp_path):
+        """A polygon where first == last point (KML closed-ring encoding) must pass validation."""
+        data = {
+            "id": "001",
+            "name": "Test Course",
+            "country": "NL",
+            "center_lat": 52.3512,
+            "center_lon": 4.9284,
+            "distance_m": 300,
+            "status": "provisional",
+            "polygons": [
+                {
+                    "name": "Start",
+                    "order": 0,
+                    "points": [
+                        {"lat": 52.3500, "lon": 4.9270},
+                        {"lat": 52.3505, "lon": 4.9275},
+                        {"lat": 52.3495, "lon": 4.9280},
+                        {"lat": 52.3500, "lon": 4.9270},  # KML closed-ring: first point repeated as last
+                    ],
+                },
+                {
+                    "name": "Finish",
+                    "order": 1,
+                    "points": [
+                        {"lat": 52.3520, "lon": 4.9300},
+                        {"lat": 52.3525, "lon": 4.9305},
+                        {"lat": 52.3515, "lon": 4.9310},
+                    ],
+                },
+            ],
+        }
+        path = tmp_path / "course.json"
+        write_course(path, data)
+        ok, msg = validate_course(path)
+        assert ok is True, msg
 
     def test_nonexistent_file(self, tmp_path):
         path = tmp_path / "nonexistent.json"

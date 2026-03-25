@@ -284,30 +284,31 @@
 
   function renderDetail(full, meta) {
     const liked = userLiked.has(String(meta.id));
+    const safeId = escapeHtml(String(meta.id));
     const kmlUrl = API_BASE
-      ? `${API_BASE}/courses/${meta.id}`
-      : `${kmlBase}${meta.id}.kml`;
+      ? `${API_BASE}/courses/${encodeURIComponent(meta.id)}`
+      : `${kmlBase}${encodeURIComponent(meta.id)}.kml`;
     const likeButtonHtml = isSignedIn
-      ? `<button type="button" class="btn like-btn ${liked ? "liked" : ""}" data-id="${meta.id}">${liked ? "♥ Liked" : "♡ Like"}</button>`
+      ? `<button type="button" class="btn like-btn ${liked ? "liked" : ""}" data-id="${safeId}">${liked ? "♥ Liked" : "♡ Like"}</button>`
       : "";
     const calculateBtnHtml = isSignedIn
-      ? `<button type="button" class="btn calculate-time-btn" data-id="${meta.id}" data-name="${escapeHtml(meta.name)}">Calculate my time</button>`
+      ? `<button type="button" class="btn calculate-time-btn" data-id="${safeId}" data-name="${escapeHtml(meta.name)}">Calculate my time</button>`
       : "";
     const courseTimesSection = isSignedIn
       ? `<div class="detail-course-times"><strong>My times</strong><ul id="detail-course-times-list">Loading…</ul></div>`
       : "";
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
-      <p class="course-id"><strong>ID:</strong> <code>${meta.id}</code> — <code>courses/${meta.id}.json</code></p>
+      <p class="course-id"><strong>ID:</strong> <code>${safeId}</code> — <code>courses/${safeId}.json</code></p>
       <p><strong>Distance:</strong> ${meta.distance_m || "—"} m</p>
       <p><strong>Country:</strong> ${escapeHtml(meta.country || "—")}</p>
       <p><strong>Status:</strong> <span class="badge ${meta.status}">${meta.status}</span></p>
       ${meta.notes ? `<p class="notes">${escapeHtml(meta.notes)}</p>` : ""}
       <p>
-        <a href="${kmlUrl}" download="${meta.id}.kml" class="btn">Download KML</a>
+        <a href="${kmlUrl}" download="${safeId}.kml" class="btn">Download KML</a>
         ${likeButtonHtml}
         ${calculateBtnHtml}
-        ${isSignedIn && meta.status === 'provisional' ? `<a href="update.html?id=${meta.id}" class="btn">Update with new KML</a>` : ''}
+        ${isSignedIn && meta.status === 'provisional' ? `<a href="update.html?id=${encodeURIComponent(meta.id)}" class="btn">Update with new KML</a>` : ''}
       </p>
       ${courseTimesSection}
     `;
@@ -346,25 +347,7 @@
     }
 
     if (isSignedIn) {
-      const listEl = detailContent.querySelector("#detail-course-times-list");
-      if (listEl) {
-        fetch(`${API_BASE}/me/course-times`, { credentials: "include" })
-          .then((r) => (r.ok ? r.json() : Promise.reject()))
-          .then((data) => {
-            const all = data.courseTimes || [];
-            const forCourse = all.filter((t) => String(t.course_id) === String(meta.id));
-            if (forCourse.length === 0) {
-              listEl.innerHTML = '<li class="empty">No saved times yet</li>';
-            } else {
-              listEl.innerHTML = forCourse
-                .map((t) => renderCourseTimeItem(t))
-                .join("");
-            }
-          })
-          .catch(() => {
-            if (listEl) listEl.innerHTML = '<li class="empty">Could not load times</li>';
-          });
-      }
+      loadDetailCourseTimes(meta.id);
     }
   }
 
@@ -686,10 +669,11 @@
   }
 
   function checkAuth() {
-    const authUrl = `${location.origin}${API_BASE}/me`;
-    fetch(`${API_BASE}/me`, { credentials: "include" })
+    const meUrl = `${API_BASE}/me`;
+    const displayUrl = API_BASE.startsWith("http") ? meUrl : `${location.origin}${meUrl}`;
+    fetch(meUrl, { credentials: "include" })
       .then((r) => {
-        if (!r.ok) throw new Error(`/api/me HTTP ${r.status} from ${authUrl}`);
+        if (!r.ok) throw new Error(`/api/me HTTP ${r.status} from ${displayUrl}`);
         return r.json();
       })
       .then((data) => {
