@@ -282,6 +282,37 @@ aside#sidebar {
   width: 100%;
 }
 
+.map-display-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.65rem 0.75rem;
+  background: #f0f6fa;
+  border: 1px solid #c5d4dc;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.map-display-controls-label {
+  font-weight: 600;
+  color: #1a3a4a;
+  margin-bottom: 0.15rem;
+}
+
+.map-display-option {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.map-display-option-overlay {
+  margin-top: 0.25rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid #d8e4ec;
+}
+
 .map-legend {
   display: flex;
   flex-wrap: wrap;

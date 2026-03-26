@@ -63,6 +63,12 @@
             <option value="10-25">Very long (10–25 km)</option>
           </select>
         </div>
+        <div class="map-display-controls" id="map-display-controls" aria-label="Map appearance">
+          <div class="map-display-controls-label">Base map</div>
+          <label class="map-display-option"><input type="radio" name="rownative-map-base-ui" value="osm" checked /> Map (OpenStreetMap)</label>
+          <label class="map-display-option"><input type="radio" name="rownative-map-base-ui" value="satellite" /> Satellite (Esri)</label>
+          <label class="map-display-option map-display-option-overlay"><input type="checkbox" id="map-seamarks" /> Sea marks (OpenSeaMap)</label>
+        </div>
         <div id="map-legend" class="map-legend">
           <span id="legend-liked" class="legend-item hidden"><span class="legend-dot liked"></span> Liked</span>
           <span class="legend-item"><span class="legend-dot established"></span> Established</span>
