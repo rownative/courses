@@ -156,6 +156,12 @@
     });
   }
 
+  function showMockOrganiserNav() {
+    return (
+      typeof window.rownativeIsLocalDevHost === "function" && window.rownativeIsLocalDevHost()
+    );
+  }
+
   function checkAuth() {
     return fetch(API_BASE + "/me", { credentials: "include" })
       .then((r) => r.json())
@@ -163,8 +169,20 @@
         isSignedIn = !!data.athleteId;
         isOrganizer = !!data.isOrganizer;
         if (isSignedIn) {
+          meAthleteId = data.athleteId != null ? String(data.athleteId) : null;
+          meAthleteDisplayName =
+            data.athleteDisplayName != null ? String(data.athleteDisplayName) : null;
+        } else {
+          meAthleteId = null;
+          meAthleteDisplayName = null;
+        }
+        if (isSignedIn) {
           signInLink.classList.add("hidden");
-          signInOrganiserLink.classList.toggle("hidden", isOrganizer);
+          if (showMockOrganiserNav()) {
+            signInOrganiserLink.classList.toggle("hidden", isOrganizer);
+          } else {
+            signInOrganiserLink.classList.add("hidden");
+          }
           signOutLink.classList.remove("hidden");
           myTimesLink?.classList.remove("hidden");
           importLink?.classList.remove("hidden");
@@ -180,7 +198,11 @@
           }
         } else {
           signInLink.classList.remove("hidden");
-          signInOrganiserLink.classList.remove("hidden");
+          if (showMockOrganiserNav()) {
+            signInOrganiserLink.classList.remove("hidden");
+          } else {
+            signInOrganiserLink.classList.add("hidden");
+          }
           signOutLink.classList.add("hidden");
           myTimesLink?.classList.add("hidden");
           organiserLink?.classList.add("hidden");
