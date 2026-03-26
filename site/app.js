@@ -57,9 +57,11 @@
     };
     trackLayer = L.featureGroup().addTo(map);
 
-    if (navigator.geolocation) {
+    if (navigator.geolocation && !parseCourseHash()) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => map.setView([pos.coords.latitude, pos.coords.longitude], 8),
+        (pos) => {
+          map.setView([pos.coords.latitude, pos.coords.longitude], 8);
+        },
         () => {},
         { enableHighAccuracy: false, timeout: 5000 }
       );
@@ -83,6 +85,64 @@
     }
   }
 
+  /** `#course-id` deep links (e.g. from challenges / my-times). */
+  function parseCourseHash() {
+    const h = (location.hash || "").replace(/^#/, "");
+    if (!h.startsWith("course-")) return null;
+    const rest = h.slice("course-".length);
+    if (!rest) return null;
+    try {
+      return decodeURIComponent(rest);
+    } catch (e) {
+      return rest;
+    }
+  }
+
+  function findCourseById(id) {
+    return courses.find((x) => String(x.id) === String(id));
+  }
+
+  /** Re-draw polygons + sidebar after renderMarkers() cleared the layer (e.g. checkAuth). */
+  function refreshOpenCourseDetail() {
+    if (!selectedId || !detailPanel || detailPanel.classList.contains("hidden")) return;
+    const c = findCourseById(selectedId);
+    if (!c) return;
+    fetchCourseDetail(selectedId)
+      .then((full) => renderDetail(full, c))
+      .catch(() => renderDetail(c, c));
+  }
+
+  function applyCourseHashFromLocation() {
+    const rawId = parseCourseHash();
+    if (!rawId) return;
+    const c = findCourseById(rawId);
+    if (c) {
+      if (
+        String(selectedId) === String(c.id) &&
+        detailPanel &&
+        !detailPanel.classList.contains("hidden")
+      ) {
+        return;
+      }
+      showDetail(c.id);
+    } else if (detailPanel && detailContent) {
+      selectedId = rawId;
+      detailPanel.classList.remove("hidden");
+      detailContent.innerHTML = `<p class="error">Course <code>${escapeHtml(String(rawId))}</code> is not in the list (check filters or index).</p>`;
+    }
+  }
+
+  function onCourseHashChange() {
+    const rawId = parseCourseHash();
+    if (!rawId) {
+      if (detailPanel) detailPanel.classList.add("hidden");
+      selectedId = null;
+      renderMarkers(true);
+      return;
+    }
+    applyCourseHashFromLocation();
+  }
+
   function loadCourses() {
     const base = location.origin + (location.pathname.endsWith("/") ? location.pathname : location.pathname.replace(/[^/]+$/, ""));
     function tryLoad(url) {
@@ -101,12 +161,13 @@
           }
           renderMarkers();
           fillCountryFilter();
+          applyCourseHashFromLocation();
         });
     }
 
     const apiFirst = API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http");
     const firstTry = apiFirst ? (API_BASE.replace(/\/api\/?$/, "") + "/api/courses") : "./index.json";
-    tryLoad(firstTry)
+    return tryLoad(firstTry)
       .catch(() => {
         if (apiFirst) return tryLoad("./index.json");
         coursesBase = "../courses/";
@@ -230,23 +291,33 @@
   }
 
   function showDetail(id) {
-    selectedId = id;
-    const c = courses.find((x) => x.id === id);
-    if (c) {
-      detailContent.innerHTML = `<p>Loading…</p>`;
-      detailPanel.classList.remove("hidden");
-      fetchCourseDetail(id)
-        .then((full) => renderDetail(full, c))
-        .catch(() => {
-          renderDetail(c, c);
-        });
+    const c = findCourseById(id);
+    if (!c) {
+      selectedId = null;
+      return;
     }
+    selectedId = id;
+    detailContent.innerHTML = `<p>Loading…</p>`;
+    detailPanel.classList.remove("hidden");
+    fetchCourseDetail(id)
+      .then((full) => renderDetail(full, c))
+      .catch(() => {
+        renderDetail(c, c);
+      });
   }
 
   function fetchCourseDetail(id) {
-    return fetch(`${coursesBase}${id}.json`).then((r) => {
-      if (!r.ok) throw new Error(r.statusText);
-      return r.json();
+    const idStr = encodeURIComponent(String(id));
+    const load = (base) =>
+      fetch(`${base}${idStr}.json`).then((r) => {
+        if (!r.ok) throw new Error(String(r.status));
+        return r.json();
+      });
+    return load(coursesBase).catch(() => {
+      if (String(coursesBase).includes("raw.githubusercontent.com")) {
+        return load("./courses/");
+      }
+      throw new Error("Course JSON not found");
     });
   }
 
@@ -318,28 +389,6 @@
       ${courseTimesSection}
     `;
 
-    if (full.polygons && full.polygons.length > 0) {
-      const bounds = [];
-      full.polygons.forEach((poly) => {
-        (poly.points || []).forEach((pt) => bounds.push([pt.lat, pt.lon]));
-      });
-      if (bounds.length > 0) {
-        map.fitBounds(bounds, { padding: [20, 20], maxZoom: 16 });
-        markersLayer.clearLayers();
-        full.polygons.forEach((poly, idx) => {
-          const pts = (poly.points || []).map((p) => [p.lat, p.lon]);
-          if (pts.length >= 2) {
-            if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
-              pts.push(pts[0]);
-            }
-            const layer = L.polygon(pts, getPolygonOptions());
-            layer.bindTooltip(poly.name || `Gate ${idx}`);
-            markersLayer.addLayer(layer);
-          }
-        });
-      }
-    }
-
     detailContent.innerHTML = html;
 
     const likeBtn = detailContent.querySelector(".like-btn");
@@ -353,6 +402,35 @@
 
     if (isSignedIn) {
       loadDetailCourseTimes(meta.id);
+    }
+
+    if (full.polygons && full.polygons.length > 0) {
+      const bounds = [];
+      full.polygons.forEach((poly) => {
+        (poly.points || []).forEach((pt) => bounds.push([pt.lat, pt.lon]));
+      });
+      if (bounds.length > 0) {
+        markersLayer.clearLayers();
+        full.polygons.forEach((poly, idx) => {
+          const pts = (poly.points || []).map((p) => [p.lat, p.lon]);
+          if (pts.length >= 2) {
+            if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
+              pts.push(pts[0]);
+            }
+            const layer = L.polygon(pts, getPolygonOptions());
+            layer.bindTooltip(poly.name || `Gate ${idx}`);
+            markersLayer.addLayer(layer);
+          }
+        });
+        /** Desktop: map container size often wrong until after layout; devtools device mode masks this. */
+        function fitMapToCourseBounds() {
+          map.invalidateSize();
+          map.fitBounds(bounds, { padding: [20, 20], maxZoom: 16 });
+        }
+        requestAnimationFrame(() => {
+          requestAnimationFrame(fitMapToCourseBounds);
+        });
+      }
     }
   }
 
@@ -386,7 +464,7 @@
     const wasLikedBeforeOptimistic = userLiked.has(String(id));
     // Optimistic UI update when viewing this course
     if (String(selectedId) === String(id)) {
-      const c = courses.find((x) => x.id === id);
+      const c = findCourseById(id);
       if (c) {
         const sid = String(id);
         if (userLiked.has(sid)) {
@@ -715,11 +793,8 @@
         if (myTimesLink) myTimesLink.classList.toggle("hidden", !data.athleteId);
         const organiserLink = document.getElementById("organiser-link");
         if (organiserLink) organiserLink.classList.toggle("hidden", !(data.athleteId && data.isOrganizer));
-        renderMarkers();
-        if (selectedId) {
-          const c = courses.find((x) => x.id === selectedId);
-          if (c) fetchCourseDetail(selectedId).then((full) => renderDetail(full, c)).catch(() => renderDetail(c, c));
-        }
+        renderMarkers(!!selectedId);
+        refreshOpenCourseDetail();
       })
       .catch((e) => {
         isSignedIn = false;
@@ -773,16 +848,18 @@
         const mapEl = document.getElementById("map");
         if (mapEl) mapEl.classList.toggle("high-contrast", highContrastMode);
         renderMarkers(true);
-        if (selectedId) {
-          const c = courses.find((x) => x.id === selectedId);
-          if (c) fetchCourseDetail(selectedId).then((full) => renderDetail(full, c)).catch(() => renderDetail(c, c));
-        }
+        refreshOpenCourseDetail();
       });
     }
+
+    window.addEventListener("hashchange", onCourseHashChange);
 
     if (detailClose) detailClose.addEventListener("click", () => {
       detailPanel.classList.add("hidden");
       selectedId = null;
+      if (location.hash && /^#course-/.test(location.hash)) {
+        history.replaceState(null, "", location.pathname + location.search);
+      }
       renderMarkers(true);  // preserve local zoom when closing course
     });
 
@@ -808,13 +885,14 @@
 
     initCalculateTimeModal();
     renderLikedCourses();
-    checkAuth();
   }
 
   function main() {
     initMap();
     bindUI();
-    loadCourses();
+    loadCourses().finally(() => {
+      checkAuth();
+    });
   }
 
   if (document.readyState === "loading") {

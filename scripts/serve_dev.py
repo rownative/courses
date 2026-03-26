@@ -11,6 +11,7 @@ enabling full GUI testing without the Cloudflare Worker backend.
 from __future__ import annotations
 
 import argparse
+import errno
 import json
 from urllib.parse import parse_qs, urlparse
 import http.server
@@ -27,6 +28,23 @@ SITE_DIR = ROOT / "site"
 COURSES_DIR = ROOT / "courses"
 KML_DIR = ROOT / "kml"
 BUILD_DIR = ROOT / "_site"
+
+
+def _is_client_disconnect_oserror(exc: OSError) -> bool:
+    """True when the browser closed the socket mid-response (common after Ctrl+C or tab close)."""
+    if exc.errno in (errno.EPIPE, errno.ECONNRESET, errno.ESHUTDOWN):
+        return True
+    win = getattr(exc, "winerror", None)
+    if win in (10053, 10054):  # WSAECONNABORTED, WSAECONNRESET
+        return True
+    return False
+
+
+class ReusableTCPServer(socketserver.TCPServer):
+    """Allow quick restart after Ctrl+C without waiting for TIME_WAIT (especially on Windows)."""
+
+    allow_reuse_address = True
+
 
 # In-memory mock state (persists for the lifetime of the server process)
 MOCK_LIKED = set()  # type: set[str]
@@ -122,6 +140,16 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(BUILD_DIR), **kwargs)
+
+    def handle(self) -> None:
+        try:
+            super().handle()
+        except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError):
+            pass
+        except OSError as e:
+            if _is_client_disconnect_oserror(e):
+                return
+            raise
 
     def _send_json(self, data, status=200):
         self.send_response(status)
@@ -898,7 +926,7 @@ def main() -> None:
     port = args.port
     for attempt in range(10):
         try:
-            with socketserver.TCPServer(("", port), MockAPIRequestHandler) as httpd:
+            with ReusableTCPServer(("", port), MockAPIRequestHandler) as httpd:
                 if port != args.port:
                     print(f"Port {args.port} was in use; using port {port} instead.")
                 print(f"Serving at http://localhost:{port}/")
@@ -906,7 +934,11 @@ def main() -> None:
                 print("  Sign in: click 'Sign in with intervals.icu' (no real OAuth)")
                 print("  Sign in as organiser: /oauth/authorize?mock_organizer=1")
                 print("Press Ctrl+C to stop")
-                httpd.serve_forever()
+                try:
+                    httpd.serve_forever()
+                except KeyboardInterrupt:
+                    print("\nStopped.")
+                    return
         except OSError as e:
             addr_in_use = (
                 getattr(e, "errno", None) in (98, 10048)  # EADDRINUSE, WSAEADDRINUSE
@@ -923,4 +955,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nStopped.")
+        sys.exit(0)
