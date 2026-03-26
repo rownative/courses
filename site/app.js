@@ -26,9 +26,11 @@
   let coursesBase = "./courses/";  // Base for course JSON; set to "../courses/" when using fallback
   let kmlBase = "./kml/";          // Base for KML; set to "../kml/" when using fallback
   const urlApi = typeof URLSearchParams !== "undefined" ? new URLSearchParams(location.search).get("api") : null;
-  const API_BASE = (urlApi || (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API))
-    ? (urlApi || window.ROWNATIVE_API)
-    : "/api";
+  /** Prefer api-config.js (normalized ?api= including /api suffix); raw urlApi alone can omit /api. */
+  const API_BASE =
+    (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API)
+      ? window.ROWNATIVE_API
+      : urlApi || "/api";
   /** OAuth links must target the Worker when API_BASE is a full URL (e.g. local dev). */
   function oauthHref(path) {
     if (API_BASE.startsWith("http")) {

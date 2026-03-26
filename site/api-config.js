@@ -1,17 +1,35 @@
 /**
  * API config for local dev: ?debug=1&api=http://localhost:8787/api (port must match wrangler dev, e.g. 8788)
+ * You may pass ?api=http://localhost:8788 — the /api suffix is added automatically for http(s) origin URLs.
  * Persists api/debug in sessionStorage and rewrites nav/OAuth links so they work across all pages.
  */
 (function () {
   "use strict";
+
+  /** Worker routes live under /api; treat bare http(s) origins as .../api so /me becomes .../api/me. */
+  function normalizeWorkerApiBase(raw) {
+    if (!raw || typeof raw !== "string") return raw;
+    var s = raw.trim();
+    if (!/^https?:\/\//i.test(s)) return s;
+    try {
+      var u = new URL(s);
+      var path = u.pathname.replace(/\/+$/, "") || "/";
+      if (path === "/api") return u.origin + "/api";
+      if (path === "/") return u.origin + "/api";
+    } catch (e) {}
+    return s;
+  }
+
   var params = typeof URLSearchParams !== "undefined" ? new URLSearchParams(location.search) : null;
   var api = params && params.get("api");
   var debug = params && (params.get("debug") === "1" || params.get("debug") === "true");
 
-  if (api) {
-    try { sessionStorage.setItem("rownative_api", api); } catch (e) {}
-  } else {
+  if (!api) {
     try { api = sessionStorage.getItem("rownative_api"); } catch (e) {}
+  }
+  if (api) {
+    api = normalizeWorkerApiBase(api);
+    try { sessionStorage.setItem("rownative_api", api); } catch (e) {}
   }
   if (debug) {
     try { sessionStorage.setItem("rownative_debug", "1"); } catch (e) {}
