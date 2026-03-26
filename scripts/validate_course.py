@@ -60,7 +60,7 @@ def polygon_area_signed(points: list[dict]) -> float:
 def segments_intersect(a1: dict, a2: dict, b1: dict, b2: dict) -> bool:
     """
     Check if segment a1-a2 intersects segment b1-b2 (excluding endpoints).
-    Uses cross-product orientation.
+    Uses cross-product orientation (CLRS-style: proper crossing, then collinear cases).
     """
     def cross(o, a, b):
         return (a["lon"] - o["lon"]) * (b["lat"] - o["lat"]) - (a["lat"] - o["lat"]) * (b["lon"] - o["lon"])
@@ -76,15 +76,32 @@ def segments_intersect(a1: dict, a2: dict, b1: dict, b2: dict) -> bool:
     o3 = cross(b1, b2, a1)
     o4 = cross(b1, b2, a2)
 
-    if o1 != 0 or o2 != 0 or o3 != 0 or o4 != 0:
-        return (o1 * o2 < 0) and (o3 * o4 < 0)
-
-    # Collinear
-    if on_segment(a1, b1, b2) or on_segment(a2, b1, b2):
+    if (o1 * o2 < 0) and (o3 * o4 < 0):
         return True
-    if on_segment(b1, a1, a2) or on_segment(b2, a1, a2):
+    if o1 == 0 and on_segment(b1, a1, a2):
         return True
+    if o2 == 0 and on_segment(b2, a1, a2):
+        return True
+    if o3 == 0 and on_segment(a1, b1, b2):
+        return True
+    if o4 == 0 and on_segment(a2, b1, b2):
+        return True
+    if o1 == 0 and o2 == 0 and o3 == 0 and o4 == 0:
+        if on_segment(a1, b1, b2) or on_segment(a2, b1, b2):
+            return True
+        if on_segment(b1, a1, a2) or on_segment(b2, a1, a2):
+            return True
     return False
+
+
+def strip_duplicate_closing_vertex(points: list[dict]) -> list[dict]:
+    """If first and last vertices coincide (KML closed ring), drop the duplicate for geometry."""
+    if len(points) < 4:
+        return points
+    a, b = points[0], points[-1]
+    if a["lat"] == b["lat"] and a["lon"] == b["lon"]:
+        return points[:-1]
+    return points
 
 
 def polygon_self_intersects(points: list[dict]) -> bool:
@@ -166,6 +183,9 @@ def validate_course(path: Path) -> tuple[bool, str]:
     except OSError as e:
         return False, f"Could not read file: {e}"
 
+    if not isinstance(data, dict):
+        return False, "Top-level JSON must be an object"
+
     # Required fields
     required = ["id", "name", "country", "center_lat", "center_lon", "distance_m", "status", "polygons"]
     for key in required:
@@ -198,15 +218,22 @@ def validate_course(path: Path) -> tuple[bool, str]:
             if not isinstance(p["lat"], (int, float)) or not isinstance(p["lon"], (int, float)):
                 return False, f"Polygon {i} ({poly['name']}) point {j}: lat/lon must be numbers"
 
-        area = polygon_area_signed(pts)
+        pts_geo = strip_duplicate_closing_vertex(pts)
+        if len(pts_geo) < 3:
+            return False, f"Polygon {i} ({poly['name']}): at least 3 distinct vertices required"
+
+        area = polygon_area_signed(pts_geo)
         if abs(area) < 1e-12:
             return False, f"Polygon {i} ({poly['name']}): zero area (degenerate)"
 
-        if polygon_self_intersects(pts):
+        if polygon_self_intersects(pts_geo):
             return False, f"Polygon {i} ({poly['name']}): self-intersecting edges"
 
-    # Distance sanity
-    centroids = [polygon_centroid(p["points"]) for p in polygons]
+    # Distance sanity (centroids from geometry without duplicate closing vertex)
+    centroids = [
+        polygon_centroid(strip_duplicate_closing_vertex(p["points"]))
+        for p in polygons
+    ]
     total_length = 0
     for i in range(len(centroids) - 1):
         d = haversine_m(centroids[i][0], centroids[i][1], centroids[i + 1][0], centroids[i + 1][1])
@@ -221,7 +248,9 @@ def validate_course(path: Path) -> tuple[bool, str]:
 
     # No polygon overlap
     for i, j in combinations(range(len(polygons)), 2):
-        if polygons_overlap(polygons[i]["points"], polygons[j]["points"]):
+        pa = strip_duplicate_closing_vertex(polygons[i]["points"])
+        pb = strip_duplicate_closing_vertex(polygons[j]["points"])
+        if polygons_overlap(pa, pb):
             return False, f"Polygons {i} ({polygons[i]['name']}) and {j} ({polygons[j]['name']}) overlap"
 
     return True, "OK"

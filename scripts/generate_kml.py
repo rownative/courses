@@ -34,9 +34,9 @@ def sort_coordinates_ccw(points: list[dict]) -> list[dict]:
     if len(points) < 3:
         return points
     n = len(points)
-    cx = sum(p["lat"] for p in points) / n
-    cy = sum(p["lon"] for p in points) / n
-    return sorted(points, key=lambda p: get_polar_angle(p, cx, cy))
+    clat = sum(p["lat"] for p in points) / n
+    clon = sum(p["lon"] for p in points) / n
+    return sorted(points, key=lambda p: get_polar_angle(p, clat, clon))
 
 
 def crewnerdify_names(polygons: list[dict]) -> list[str]:

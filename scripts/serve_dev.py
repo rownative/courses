@@ -731,18 +731,18 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         if path in ("/oauth/logout", "/oauth/logout/"):
             return self._handle_oauth_logout()
 
-        # API
-        if path in ("/api/me", "/api/me/"):
+        # API (GET-only for read endpoints so POST in do_POST is not misrouted)
+        if path in ("/api/me", "/api/me/") and self.command == "GET":
             return self._handle_api_me()
-        if path in ("/api/me/course-times", "/api/me/course-times/"):
+        if path in ("/api/me/course-times", "/api/me/course-times/") and self.command == "GET":
             return self._handle_api_me_course_times()
         m = re.match(r"^/api/me/course-times/([^/]+)/?$", path)
         if m and self.command == "DELETE":
             return self._handle_api_me_course_times_delete(m.group(1))
-        if path in ("/api/me/activities", "/api/me/activities/"):
+        if path in ("/api/me/activities", "/api/me/activities/") and self.command == "GET":
             return self._handle_api_me_activities()
         m = re.match(r"^/api/me/activities/([^/]+)/track/?$", path)
-        if m:
+        if m and self.command == "GET":
             return self._handle_api_me_activities_track(m.group(1))
         m = re.match(r"^/api/rowers/courses/(\d+)/(follow|unfollow)/?$", path)
         if m and self.command == "POST":

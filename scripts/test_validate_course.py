@@ -3,6 +3,7 @@ Tests for validate_course.py
 Run with: pytest scripts/test_validate_course.py -v
 """
 
+import copy
 import json
 import sys
 from pathlib import Path
@@ -19,6 +20,7 @@ from validate_course import (
     point_in_polygon,
     bboxes_overlap,
     polygons_overlap,
+    segments_intersect,
     validate_course,
 )
 
@@ -150,6 +152,35 @@ class TestPolygonsOverlap:
         assert polygons_overlap(a, b) is False
 
 
+class TestSegmentsIntersect:
+    """Segment intersection in (lat, lon) as used by validate_course."""
+
+    def test_proper_crossing(self):
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 2, "lon": 2}
+        b1, b2 = {"lat": 0, "lon": 2}, {"lat": 2, "lon": 0}
+        assert segments_intersect(a1, a2, b1, b2) is True
+
+    def test_parallel_disjoint(self):
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 0, "lon": 2}
+        b1, b2 = {"lat": 1, "lon": 0}, {"lat": 1, "lon": 2}
+        assert segments_intersect(a1, a2, b1, b2) is False
+
+    def test_t_intersection(self):
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 0, "lon": 2}
+        b1, b2 = {"lat": 0, "lon": 1}, {"lat": 1, "lon": 1}
+        assert segments_intersect(a1, a2, b1, b2) is True
+
+    def test_collinear_overlapping(self):
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 0, "lon": 2}
+        b1, b2 = {"lat": 0, "lon": 1}, {"lat": 0, "lon": 3}
+        assert segments_intersect(a1, a2, b1, b2) is True
+
+    def test_collinear_disjoint(self):
+        a1, a2 = {"lat": 0, "lon": 0}, {"lat": 0, "lon": 1}
+        b1, b2 = {"lat": 0, "lon": 2}, {"lat": 0, "lon": 3}
+        assert segments_intersect(a1, a2, b1, b2) is False
+
+
 # --- Integration tests for validate_course ---
 
 
@@ -162,7 +193,7 @@ class TestValidateCourse:
         assert msg == "OK"
 
     def test_missing_required_field(self, tmp_path):
-        data = VALID_COURSE.copy()
+        data = copy.deepcopy(VALID_COURSE)
         del data["id"]
         path = tmp_path / "course.json"
         write_course(path, data)
@@ -171,7 +202,7 @@ class TestValidateCourse:
         assert "Missing required field" in msg
 
     def test_invalid_status(self, tmp_path):
-        data = VALID_COURSE.copy()
+        data = copy.deepcopy(VALID_COURSE)
         data["status"] = "invalid"
         path = tmp_path / "course.json"
         write_course(path, data)
@@ -180,8 +211,8 @@ class TestValidateCourse:
         assert "Invalid status" in msg
 
     def test_fewer_than_two_polygons(self, tmp_path):
-        data = VALID_COURSE.copy()
-        data["polygons"] = [VALID_COURSE["polygons"][0]]
+        data = copy.deepcopy(VALID_COURSE)
+        data["polygons"] = [data["polygons"][0]]
         path = tmp_path / "course.json"
         write_course(path, data)
         ok, msg = validate_course(path)
@@ -189,7 +220,7 @@ class TestValidateCourse:
         assert "At least two polygons" in msg
 
     def test_polygon_with_fewer_than_three_points(self, tmp_path):
-        data = VALID_COURSE.copy()
+        data = copy.deepcopy(VALID_COURSE)
         data["polygons"][0]["points"] = [{"lat": 0, "lon": 0}, {"lat": 1, "lon": 0}]
         path = tmp_path / "course.json"
         write_course(path, data)
@@ -203,6 +234,26 @@ class TestValidateCourse:
         ok, msg = validate_course(path)
         assert ok is False
         assert "Invalid JSON" in msg
+
+    def test_json_array_rejected(self, tmp_path):
+        path = tmp_path / "course.json"
+        path.write_text("[1, 2, 3]", encoding="utf-8")
+        ok, msg = validate_course(path)
+        assert ok is False
+        assert "object" in msg.lower()
+
+    def test_closed_ring_polygon_accepted(self, tmp_path):
+        """KML-style ring with first point repeated at end should validate."""
+        data = copy.deepcopy(VALID_COURSE)
+        for poly in data["polygons"]:
+            pts = poly["points"]
+            first = pts[0]
+            poly["points"] = pts + [dict(first)]
+        path = tmp_path / "course.json"
+        write_course(path, data)
+        ok, msg = validate_course(path)
+        assert ok is True, msg
+        assert msg == "OK"
 
     def test_nonexistent_file(self, tmp_path):
         path = tmp_path / "nonexistent.json"
