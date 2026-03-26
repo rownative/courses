@@ -43,6 +43,22 @@
     return mins + ":" + String(secs).padStart(2, "0");
   }
 
+  /** `datetime-local` value for a calendar day at local midnight (or given hour/minute). */
+  function toDatetimeLocalString(date, hour, minute) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    const h = String(hour).padStart(2, "0");
+    const min = String(minute).padStart(2, "0");
+    return y + "-" + m + "-" + d + "T" + h + ":" + min;
+  }
+
+  function setDefaultChallengeRowStart() {
+    const el = document.getElementById("challenge-row-start");
+    if (!el) return;
+    el.value = toDatetimeLocalString(new Date(), 0, 0);
+  }
+
   function checkAuth() {
     return fetch(API_BASE + "/me", { credentials: "include" })
       .then((r) => r.json())
@@ -86,6 +102,7 @@
         if (signedIn && isOrganizer) {
           accessDenied.classList.add("hidden");
           organiserContent.classList.remove("hidden");
+          setDefaultChallengeRowStart();
           loadCourses();
           loadCollections();
           loadMyChallenges();
@@ -349,6 +366,7 @@
         createResult.innerHTML = "Challenge created: <a href='" + escapeHtml(href) + "'>" + escapeHtml(data.challenge?.name || data.id) + "</a>";
         createResult.classList.remove("error");
         createForm.reset();
+        setDefaultChallengeRowStart();
         challengeCourseSearch.value = "";
         challengeCourse.value = "";
         challengeCourseSearch.placeholder = "Search courses…";

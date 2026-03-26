@@ -50,6 +50,99 @@
     return div.innerHTML;
   }
 
+  function escapeAttr(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+  }
+
+  function leaderboardHref(id) {
+    const u = "challenge.html?id=" + encodeURIComponent(id);
+    return typeof window.rownativeAppendToHref === "function" ? window.rownativeAppendToHref(u) : u;
+  }
+
+  function courseOnMapHref(courseId) {
+    const u = "index.html#course-" + encodeURIComponent(courseId);
+    return typeof window.rownativeAppendToHref === "function" ? window.rownativeAppendToHref(u) : u;
+  }
+
+  function fmtDistanceM(m) {
+    if (m == null || m === "") return "";
+    const n = Number(m);
+    if (!Number.isFinite(n) || n <= 0) return "";
+    if (n >= 1000) {
+      const km = n / 1000;
+      const s = km >= 10 ? String(Math.round(km)) : String(Math.round(km * 10) / 10).replace(/\.0$/, "");
+      return s + " km";
+    }
+    return Math.round(n) + " m";
+  }
+
+  function safeMapId(id) {
+    return String(id).replace(/\W/g, "_");
+  }
+
+  const miniMaps = [];
+
+  function destroyMiniMaps() {
+    miniMaps.forEach((m) => {
+      try {
+        m.remove();
+      } catch (e) {
+        /* ignore */
+      }
+    });
+    miniMaps.length = 0;
+  }
+
+  function initMiniMaps(challenges) {
+    if (typeof L === "undefined") return;
+    challenges.forEach((c) => {
+      const el = document.getElementById("challenge-mini-map-" + safeMapId(c.id));
+      if (!el) return;
+      const center =
+        c.center_lat != null && c.center_lon != null ? [c.center_lat, c.center_lon] : [20, 0];
+      const map = L.map(el, { scrollWheelZoom: false });
+      miniMaps.push(map);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap",
+        maxZoom: 19,
+      }).addTo(map);
+      map.setView(center, 4);
+      const courseId = c.courseId;
+      if (!courseId) {
+        setTimeout(() => map.invalidateSize(), 0);
+        return;
+      }
+      fetch("./courses/" + encodeURIComponent(courseId) + ".json")
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((data) => {
+          if (!data.polygons || data.polygons.length === 0) return;
+          const bounds = [];
+          data.polygons.forEach((poly) => {
+            const pts = (poly.points || []).map((p) => [p.lat, p.lon]);
+            if (pts.length >= 2) {
+              if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
+                pts.push(pts[0]);
+              }
+              L.polygon(pts, {
+                color: "#1a7a9e",
+                fillColor: "#1a7a9e",
+                fillOpacity: 0.22,
+                weight: 2,
+              }).addTo(map);
+              pts.forEach((p) => bounds.push(p));
+            }
+          });
+          if (bounds.length > 0) {
+            map.fitBounds(bounds, { padding: [6, 6], maxZoom: 14 });
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          setTimeout(() => map.invalidateSize(), 0);
+        });
+    });
+  }
+
   function checkAuth() {
     return fetch(API_BASE + "/me", { credentials: "include" })
       .then((r) => r.json())
@@ -94,6 +187,7 @@
 
   function loadChallenges(status) {
     currentStatus = status;
+    destroyMiniMaps();
     listEl.innerHTML = "<p>Loading…</p>";
     emptyState.classList.add("hidden");
 
@@ -117,26 +211,50 @@
           emptyState.classList.add("hidden");
           listEl.innerHTML = challenges
             .map((c) => {
-              const courseLink = '<a href="index.html#course-' + escapeHtml(c.courseId) + '">' + escapeHtml(c.courseName || "Course " + c.courseId) + "</a>";
+              const dist = fmtDistanceM(c.distance_m);
+              const distHtml = dist
+                ? "<span class='challenge-distance'> · " + escapeHtml(dist) + "</span>"
+                : "";
               const badge = c.hasHandicap
                 ? '<span class="badge handicap">Handicap scoring</span>'
                 : '<span class="badge raw">Raw times only</span>';
               return (
                 '<div class="challenge-card">' +
-                '<div class="course-name">' + courseLink + "</div>" +
-                '<h3>' + escapeHtml(c.name) + "</h3>" +
-                '<div class="meta">' +
-                "Row between " + fmtDateRange(c.rowStart, c.rowEnd) + "<br>" +
-                "Submit by " + fmtDate(c.submitEnd) + " · " + (c.resultsCount || 0) + " results" +
+                '<h3 class="challenge-title">' +
+                '<a href="' +
+                escapeAttr(leaderboardHref(c.id)) +
+                '">' +
+                escapeHtml(c.name) +
+                "</a></h3>" +
+                '<div class="challenge-course-line">' +
+                '<a href="' +
+                escapeAttr(courseOnMapHref(c.courseId)) +
+                '">' +
+                escapeHtml(c.courseName || "Course " + c.courseId) +
+                "</a>" +
+                distHtml +
                 "</div>" +
-                '<div class="meta">' + badge + "</div>" +
-                '<div class="actions">' +
-                '<a href="challenge.html?id=' + encodeURIComponent(c.id) + '" class="btn">View leaderboard</a>' +
+                '<div class="challenge-mini-map" id="challenge-mini-map-' +
+                safeMapId(c.id) +
+                '" role="img" aria-label="Course map"></div>' +
+                '<div class="meta">' +
+                "Row between " +
+                fmtDateRange(c.rowStart, c.rowEnd) +
+                "<br>" +
+                "Submit by " +
+                fmtDate(c.submitEnd) +
+                " · " +
+                (c.resultsCount || 0) +
+                " results" +
+                "</div>" +
+                '<div class="meta">' +
+                badge +
                 "</div>" +
                 "</div>"
               );
             })
             .join("");
+          requestAnimationFrame(() => initMiniMaps(challenges));
         }
 
         if (isSignedIn) {
@@ -151,6 +269,7 @@
         }
       })
       .catch(() => {
+        destroyMiniMaps();
         listEl.innerHTML = "<p class='error'>Failed to load challenges.</p>";
         emptyState.classList.add("hidden");
       });

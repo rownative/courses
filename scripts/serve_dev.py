@@ -86,6 +86,32 @@ def _load_courses_index():
     return {}
 
 
+def _enrich_challenge_from_course_index(ch):
+    """Add center_lat, center_lon, distance_m from index.json (matches Worker challenge API)."""
+    out = dict(ch)
+    cid = str(out.get("courseId") or "")
+    if not cid:
+        return out
+    for path in (BUILD_DIR / "index.json", COURSES_DIR / "index.json"):
+        if not path.exists():
+            continue
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f)
+            for row in data if isinstance(data, list) else []:
+                if str(row.get("id")) == cid:
+                    if row.get("center_lat") is not None:
+                        out["center_lat"] = row["center_lat"]
+                    if row.get("center_lon") is not None:
+                        out["center_lon"] = row["center_lon"]
+                    if row.get("distance_m") is not None:
+                        out["distance_m"] = row["distance_m"]
+                    return out
+        except (json.JSONDecodeError, OSError, KeyError, TypeError):
+            continue
+    return out
+
+
 def _json_response(data, status=200):
     body = json.dumps(data).encode("utf-8")
     return body
@@ -369,13 +395,13 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             submit_end = datetime.fromisoformat(se) if se else now
             if status == "active":
                 if row_start <= now <= row_end and now <= submit_end:
-                    result.append(c)
+                    result.append(_enrich_challenge_from_course_index(dict(c)))
             elif status == "upcoming":
                 if row_start > now:
-                    result.append(c)
+                    result.append(_enrich_challenge_from_course_index(dict(c)))
             elif status == "past":
                 if row_end < now or submit_end < now:
-                    result.append(c)
+                    result.append(_enrich_challenge_from_course_index(dict(c)))
         self._send_json({"challenges": result})
         return True
 
@@ -440,7 +466,7 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         if not ch:
             ch = next((c for c in MOCK_CHALLENGES if c["id"] == challenge_id), None)
         if ch:
-            self._send_json(ch)
+            self._send_json(_enrich_challenge_from_course_index(dict(ch)))
         else:
             self._send_json({"error": "Not found"}, 404)
         return True
