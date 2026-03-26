@@ -106,4 +106,33 @@
       ? { color: "#e65c00", fillColor: "#e65c00", fillOpacity: 0.45, weight: 4 }
       : { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
   };
+
+  /**
+   * GitHub "new issue" URL with title + body for organiser access requests.
+   * When athleteId is null (not signed in), body asks user to sign in and add ID manually.
+   */
+  window.rownativeOrganiserRequestIssueUrl = function (athleteId, athleteDisplayName) {
+    var base = "https://github.com/rownative/courses/issues/new";
+    var title = "Request to become challenge organiser";
+    var body;
+    if (athleteId) {
+      var name =
+        athleteDisplayName && String(athleteDisplayName).trim()
+          ? String(athleteDisplayName).trim()
+          : "(not available)";
+      body =
+        "Please grant challenge organiser access.\r\n\r\n" +
+        "- intervals.icu athlete ID: " +
+        String(athleteId) +
+        "\r\n" +
+        "- Display name (intervals.icu): " +
+        name +
+        "\r\n";
+    } else {
+      body =
+        "Please grant challenge organiser access.\r\n\r\n" +
+        "Sign in to rownative.icu first, then open the request link again so your athlete ID is pre-filled — or add your intervals.icu athlete ID below.\r\n\r\n";
+    }
+    return base + "?title=" + encodeURIComponent(title) + "&body=" + encodeURIComponent(body);
+  };
 })();

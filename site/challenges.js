@@ -8,8 +8,6 @@
     ? window.ROWNATIVE_API
     : "/api";
 
-  const ORGANISER_ISSUE_URL = "https://github.com/rownative/courses/issues/new?title=Request+to+become+challenge+organiser";
-
   const listEl = document.getElementById("challenges-list");
   const emptyState = document.getElementById("empty-state");
   const emptyCta = document.getElementById("empty-cta");
@@ -29,6 +27,15 @@
   let currentStatus = "active";
   let isSignedIn = false;
   let isOrganizer = false;
+  let meAthleteId = null;
+  let meAthleteDisplayName = null;
+
+  function organiserIssueUrl() {
+    if (typeof window.rownativeOrganiserRequestIssueUrl === "function") {
+      return window.rownativeOrganiserRequestIssueUrl(meAthleteId, meAthleteDisplayName);
+    }
+    return "https://github.com/rownative/courses/issues/new?title=Request+to+become+challenge+organiser";
+  }
 
   function fmtDateRange(start, end) {
     if (!start || !end) return "—";
@@ -185,6 +192,8 @@
         }
       })
       .catch(() => {
+        meAthleteId = null;
+        meAthleteDisplayName = null;
         signInLink.classList.remove("hidden");
         signInOrganiserLink.classList.add("hidden");
         organiserLink?.classList.add("hidden");
@@ -209,7 +218,10 @@
             if (isOrganizer) {
               emptyCta.innerHTML = '<a href="organiser.html" class="btn">Set up a Challenge</a>';
             } else {
-              emptyCta.innerHTML = '<a href="' + ORGANISER_ISSUE_URL + '" target="_blank" rel="noopener" class="btn">Request to become challenge organiser</a>';
+              emptyCta.innerHTML =
+                '<a href="' +
+                escapeAttr(organiserIssueUrl()) +
+                '" target="_blank" rel="noopener" class="btn">Request to become challenge organiser</a>';
             }
           } else {
             emptyCta.innerHTML = '<a href="/oauth/authorize" class="btn">Sign in</a> to set up or join challenges.';
@@ -274,7 +286,10 @@
           if (isOrganizer) {
             organiserCtaText.innerHTML = '<a href="organiser.html">Set up a Challenge</a> — create and manage your own Speed Orders.';
           } else {
-            organiserCtaText.innerHTML = 'Want to run your own? <a href="' + ORGANISER_ISSUE_URL + '" target="_blank" rel="noopener">Request to become challenge organiser</a>.';
+            organiserCtaText.innerHTML =
+              'Want to run your own? <a href="' +
+              escapeAttr(organiserIssueUrl()) +
+              '" target="_blank" rel="noopener">Request to become challenge organiser</a>.';
           }
         } else {
           organiserCta.classList.add("hidden");

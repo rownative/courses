@@ -111,6 +111,14 @@
           userInfo?.classList.add("hidden");
         }
 
+        const reqLink = document.getElementById("organiser-request-link");
+        if (reqLink && typeof window.rownativeOrganiserRequestIssueUrl === "function") {
+          reqLink.href = window.rownativeOrganiserRequestIssueUrl(
+            signedIn ? data.athleteId : null,
+            signedIn ? data.athleteDisplayName : null
+          );
+        }
+
         if (signedIn && isOrganizer) {
           accessDenied.classList.add("hidden");
           organiserContent.classList.remove("hidden");

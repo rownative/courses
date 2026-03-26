@@ -168,6 +168,7 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
                 "athleteId": "mock-123",
                 "liked": list(MOCK_LIKED),
                 "isOrganizer": is_organizer,
+                "athleteDisplayName": "Mock Athlete",
             })
         else:
             self._send_json({"athleteId": None, "liked": [], "isOrganizer": False})
