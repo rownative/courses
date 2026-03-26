@@ -40,6 +40,16 @@
   window.ROWNATIVE_API = api || undefined;
   window.ROWNATIVE_DEBUG = !!debug;
 
+  /** True when the site is served from local dev (mock organiser OAuth only works here). */
+  window.rownativeIsLocalDevHost = function () {
+    try {
+      var h = location.hostname;
+      return h === "localhost" || h === "127.0.0.1" || h === "[::1]";
+    } catch (e) {
+      return false;
+    }
+  };
+
   function devParams() {
     if (!api) return "";
     var q = "api=" + encodeURIComponent(api);

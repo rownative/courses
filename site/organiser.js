@@ -28,6 +28,13 @@
     return p.get("moderate") || p.get("challenge");
   })();
 
+  (function hideDevMockOrganiserHint() {
+    const el = document.getElementById("dev-mock-organiser-hint");
+    if (el && (!window.rownativeIsLocalDevHost || !window.rownativeIsLocalDevHost())) {
+      el.classList.add("hidden");
+    }
+  })();
+
   function escapeHtml(s) {
     if (!s) return "";
     const div = document.createElement("div");
@@ -133,6 +140,9 @@
         const updateLink = document.getElementById("update-link");
         const userInfo = document.getElementById("user-info");
 
+        const showMockOrganiserNav =
+          typeof window.rownativeIsLocalDevHost === "function" && window.rownativeIsLocalDevHost();
+
         if (signedIn) {
           signInLink.classList.add("hidden");
           signInOrganiserLink.classList.add("hidden");
@@ -147,7 +157,11 @@
           userInfo.textContent = "Signed in";
         } else {
           signInLink.classList.remove("hidden");
-          signInOrganiserLink.classList.remove("hidden");
+          if (showMockOrganiserNav) {
+            signInOrganiserLink.classList.remove("hidden");
+          } else {
+            signInOrganiserLink.classList.add("hidden");
+          }
           signOutLink.classList.add("hidden");
           myTimesLink?.classList.add("hidden");
           organiserLink?.classList.add("hidden");
