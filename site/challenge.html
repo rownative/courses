@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Challenge | rownative.icu</title>
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .challenge-page { max-width: 64rem; margin: 0 auto; padding: 0 1rem; display: grid; grid-template-columns: 1fr 280px; gap: 1.5rem; }
+    @media (max-width: 768px) { .challenge-page { grid-template-columns: 1fr; } }
+    .challenge-page h1 { margin-top: 0; }
+    .challenge-header .meta { color: #666; font-size: 0.9rem; margin: 0.5rem 0; }
+    .challenge-header .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+    .challenge-header .badge.open { background: #e8f4e8; color: #2d5a2d; }
+    .challenge-header .badge.closed { background: #fce8e8; color: #5a2d2d; }
+    .challenge-header .badge.upcoming { background: #e8e8f4; color: #2d2d5a; }
+    #challenge-map { height: 300px; border-radius: 8px; margin: 1rem 0; }
+    .leaderboard-section h3 { margin: 1rem 0 0.5rem; }
+    .leaderboard-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .leaderboard-table th, .leaderboard-table td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #ddd; }
+    .leaderboard-table th { background: #f0f0f0; }
+    .leaderboard-table .time { font-variant-numeric: tabular-nums; }
+    .leaderboard-table th.sortable { cursor: pointer; user-select: none; }
+    .leaderboard-table th.sortable:hover { text-decoration: underline; }
+    .leaderboard-filters { margin: 0.5rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .leaderboard-filters select { padding: 0.35rem 0.5rem; }
+    .submit-result-btn { margin: 1rem 0; }
+    .sidebar { background: #f9f9f9; padding: 1rem; border-radius: 8px; height: fit-content; }
+    .sidebar h3 { margin-top: 0; font-size: 1rem; }
+    .sidebar p { font-size: 0.9rem; color: #555; margin: 0.5rem 0; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; }
+    .submit-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 1.5rem; border-radius: 8px; z-index: 1001; max-width: 24rem; width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .submit-modal h3 { margin-top: 0; }
+    .submit-modal .form-row { margin: 1rem 0; }
+    .submit-modal label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
+    .submit-modal .form-hint { display: block; margin-top: 0.25rem; font-size: 0.85rem; color: #666; }
+    .submit-modal input, .submit-modal select { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .submit-modal .actions { margin-top: 1.5rem; display: flex; gap: 0.5rem; }
+    .hidden { display: none !important; }
+    .btn { padding: 0.5rem 1rem; background: #1a3a4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; font-size: 0.9rem; }
+    .btn:hover { background: #2a4a5a; }
+    .btn-secondary { background: #666; }
+    .btn-secondary:hover { background: #555; }
+    .error { color: #c00; }
+    .organiser-moderate-callout {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem 1rem;
+      margin: 1rem 0;
+      padding: 0.75rem 1rem;
+      background: #e8f4e8;
+      border: 1px solid #b8d4b8;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .organiser-moderate-callout p { margin: 0; color: #2d4a2d; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <div class="header-brand">
+        <h1><a href="index.html"><img src="logo.png" alt="" class="logo" /> Rowing Courses</a></h1>
+        <p class="tagline">Speed Order</p>
+      </div>
+      <button type="button" class="hamburger" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-overlay">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-overlay-backdrop" data-dismiss="nav"></div>
+        <div id="auth-status">
+          <a href="index.html">Map</a>
+          <a href="challenges.html">Challenges</a>
+          <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
+          <a href="organiser.html" id="organiser-link" class="hidden">My challenges</a>
+          <a href="import.html" id="import-link">Import</a>
+          <a href="submit.html" id="submit-link">Submit</a>
+          <a href="update.html" id="update-link">Update</a>
+          <a href="about.html">About</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
+          <span id="user-info" class="hidden"></span>
+          <a href="/oauth/logout" id="sign-out-link" class="hidden">Sign out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="challenge-page">
+    <div class="main-col">
+      <div id="challenge-header" class="challenge-header">
+        <p>Loading…</p>
+      </div>
+      <div id="challenge-map"></div>
+      <div id="organiser-moderate-callout" class="organiser-moderate-callout hidden" role="region" aria-label="Organiser tools">
+        <p>You're the organiser of this challenge.</p>
+        <a href="organiser.html" id="organiser-moderate-link" class="btn">Review results</a>
+      </div>
+      <div class="leaderboard-section">
+        <h3>Leaderboard</h3>
+        <div class="leaderboard-filters" id="leaderboard-filters"></div>
+        <table class="leaderboard-table" id="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Athlete</th>
+              <th>Boat</th>
+              <th id="age-header" class="hidden">Age</th>
+              <th id="raw-time-header" class="sortable" role="button" tabindex="0" title="Click to sort by raw time">Raw time</th>
+              <th id="corrected-header" class="hidden">Corrected</th>
+              <th id="points-header" class="hidden">Points</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body"></tbody>
+        </table>
+      </div>
+      <div id="submit-result-section" class="hidden">
+        <button type="button" class="btn submit-result-btn" id="submit-result-btn">Submit my result</button>
+      </div>
+    </div>
+    <aside class="sidebar">
+      <div id="sidebar-content">
+        <p>Loading…</p>
+      </div>
+    </aside>
+  </main>
+
+  <div id="submit-modal" class="hidden">
+    <div class="modal-backdrop" data-dismiss="modal"></div>
+    <div class="submit-modal">
+      <h3>Submit my result</h3>
+      <div id="submit-modal-body">
+        <div class="form-row">
+          <label for="submit-activity">Select your workout</label>
+          <select id="submit-activity">
+            <option value="">Loading…</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="submit-boat-type">Boat type</label>
+          <select id="submit-boat-type">
+            <option value="1x">1x</option>
+            <option value="2x">2x</option>
+            <option value="2-">2-</option>
+            <option value="4x">4x</option>
+            <option value="4-">4-</option>
+            <option value="4+">4+</option>
+            <option value="8+">8+</option>
+          </select>
+          <small class="form-hint">Your boat class — shown on the leaderboard and used for handicap scoring when this challenge has a handicap.</small>
+        </div>
+        <div class="form-row">
+          <label for="submit-display-name">Name or crew</label>
+          <input type="text" id="submit-display-name" placeholder="e.g. Charles River Four" />
+          <small class="form-hint">Your name or your crew/boat name — this is shown on the leaderboard. Leave blank to use your intervals.icu name.</small>
+        </div>
+        <div id="submit-handicap-row" class="form-row hidden">
+          <label>Category (handicap)</label>
+          <select id="submit-sex" style="margin-top: 0.25rem;">
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="X">Mixed</option>
+          </select>
+          <select id="submit-weight-class" style="margin-top: 0.5rem;">
+            <option value="HWT">Heavyweight</option>
+            <option value="LWT">Lightweight</option>
+          </select>
+          <div style="margin-top: 0.5rem;">
+            <label for="submit-crew-avg-age">Average crew age (optional)</label>
+            <input type="number" id="submit-crew-avg-age" min="8" max="120" placeholder="e.g. 28" />
+            <small class="form-hint">Average age of all rowers — used for age-band handicaps when applicable.</small>
+          </div>
+        </div>
+      </div>
+      <div id="submit-result-msg" class="hidden"></div>
+      <div class="actions">
+        <button type="button" class="btn" id="submit-modal-submit">Submit</button>
+        <button type="button" class="btn btn-secondary" id="submit-modal-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="api-config.js"></script>
+  <script src="nav.js"></script>
+  <script src="challenge.js"></script>
+</body>
+</html>

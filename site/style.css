@@ -25,6 +25,19 @@ header {
   padding: 0.75rem 1rem;
   background: #1a3a4a;
   color: #fff;
+  position: relative;
+}
+
+.header-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.header-brand {
+  flex: 1 1 auto;
 }
 
 header h1 {
@@ -33,6 +46,17 @@ header h1 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+/* Site title link — avoid browser :visited purple on dark header */
+header h1 a:link,
+header h1 a:visited {
+  color: #fff;
+  text-decoration: none;
+}
+
+header h1 a:hover {
+  text-decoration: underline;
 }
 
 header .logo {
@@ -47,16 +71,151 @@ header .logo {
   opacity: 0.9;
 }
 
-#auth-status {
-  margin-top: 0.5rem;
+/* Hamburger button — visible on mobile only */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
 }
 
-#auth-status a {
+.hamburger span {
+  display: block;
+  width: 1.25rem;
+  height: 2px;
+  background: currentColor;
+  margin: 0 auto;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.hamburger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+#auth-status {
+  margin-top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+#auth-status a:link,
+#auth-status a:visited {
   color: #7dd;
 }
 
 #auth-status .hidden {
   display: none;
+}
+
+/* Nav overlay — slide-out on mobile */
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(20rem, 85vw);
+  background: #1a3a4a;
+  padding: 1rem;
+  z-index: 1100;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  overflow-y: auto;
+}
+
+.nav-overlay[aria-hidden="false"] {
+  transform: translateX(0);
+}
+
+.nav-overlay .nav-overlay-backdrop {
+  display: none;
+}
+
+.nav-overlay #auth-status {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.nav-overlay #auth-status a {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-overlay .auth-teaser {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Desktop: nav inline, no overlay */
+@media (min-width: 768px) {
+  .hamburger {
+    display: none !important;
+  }
+
+  .nav-overlay {
+    position: static;
+    width: auto;
+    transform: none;
+    padding: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .nav-overlay #auth-status {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .nav-overlay #auth-status a {
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .nav-overlay .auth-teaser {
+    width: 100%;
+    margin-top: 0.35rem;
+    padding-top: 0;
+    border-top: none;
+  }
+}
+
+/* Mobile: hamburger visible, nav in overlay */
+@media (max-width: 767px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-overlay {
+    padding-top: 3.5rem;
+  }
+
+  .nav-overlay .nav-overlay-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+  }
 }
 
 .load-error-banner {
@@ -161,20 +320,26 @@ aside#sidebar {
   background: #fa0;
 }
 
-.high-contrast-toggle {
+#map .leaflet-control-layers-high-contrast {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  margin: 0.45rem 0 0;
+  padding-top: 0.4rem;
+  border-top: 1px solid #ddd;
   font-size: 0.875rem;
+  font-weight: normal;
+  cursor: pointer;
+  color: #333;
+}
+
+#map .leaflet-control-layers-high-contrast input {
   cursor: pointer;
 }
 
-.high-contrast-toggle input {
-  cursor: pointer;
-}
-
-/* Mute base map when high contrast is on */
-#map.high-contrast .leaflet-tile-pane {
+/* Mute base map when high contrast is on (main map + challenge list / leaderboard) */
+#map.high-contrast .leaflet-tile-pane,
+.map-high-contrast .leaflet-tile-pane {
   filter: grayscale(0.6) contrast(0.9);
 }
 
@@ -234,13 +399,27 @@ main {
   min-height: 400px;
 }
 
+/* Layer control is rendered inside #map .leaflet-container (bottom-left) */
+#map .leaflet-control-layers {
+  background: #fff;
+  color: #333;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  line-height: 1.35;
+}
+
+#map .leaflet-control-layers-expanded {
+  padding: 0.35rem 0.5rem;
+}
+
 #right-panels {
   position: fixed;
-  top: 1rem;
+  top: 5.5rem;
   right: 1rem;
   width: 320px;
   max-width: 90vw;
-  max-height: 90vh;
+  max-height: calc(100vh - 6rem);
   overflow-y: auto;
   display: flex;
   flex-direction: column;

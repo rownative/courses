@@ -11,20 +11,32 @@
 <body>
   <div id="app">
     <header>
-      <h1><img src="logo.png" alt="" class="logo" /> Rowing Courses</h1>
-      <p class="tagline">GPS-defined courses for CrewNerd and rownative.icu</p>
-      <div id="auth-status">
-        <a href="privacy.html">Privacy</a>
-        <a href="about.html">About</a>
-        <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
-        <a href="import.html" id="import-link">Import</a>
-        <a href="submit.html" id="submit-link">Submit</a>
-        <a href="update.html" id="update-link">Update</a>
-        <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
-        <span id="user-info" class="hidden"></span>
-        <p id="auth-teaser" class="auth-teaser hidden">Sign in to import your Rowsandall courses, submit new ones, or like courses for CrewNerd.</p>
-      <div id="load-error-banner" class="load-error-banner hidden" role="alert"></div>
+      <div class="header-top">
+        <div class="header-brand">
+          <h1><img src="logo.png" alt="" class="logo" /> Rowing Courses</h1>
+          <p class="tagline">GPS-defined courses for CrewNerd and rownative.icu</p>
+        </div>
+        <button type="button" class="hamburger" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-overlay">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+          <div class="nav-overlay-backdrop" data-dismiss="nav"></div>
+          <div id="auth-status">
+            <a href="challenges.html">Challenges</a>
+            <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
+            <a href="organiser.html" id="organiser-link" class="hidden">My challenges</a>
+            <a href="import.html" id="import-link">Import</a>
+            <a href="submit.html" id="submit-link">Submit</a>
+            <a href="update.html" id="update-link">Update</a>
+            <a href="about.html">About</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
+            <span id="user-info" class="hidden"></span>
+            <p id="auth-teaser" class="auth-teaser hidden">Sign in to import your Rowsandall courses, submit new ones, or like courses for CrewNerd.</p>
+          </div>
+        </div>
       </div>
+      <div id="load-error-banner" class="load-error-banner hidden" role="alert"></div>
     </header>
 
     <aside id="sidebar">
@@ -56,10 +68,6 @@
           <span class="legend-item"><span class="legend-dot established"></span> Established</span>
           <span class="legend-item"><span class="legend-dot provisional"></span> Provisional</span>
         </div>
-        <label class="high-contrast-toggle">
-          <input type="checkbox" id="high-contrast" aria-label="High contrast mode for course polygons" />
-          High contrast
-        </label>
         <div id="liked-courses-section" class="liked-courses">
           <div class="liked-courses-title">My liked courses</div>
           <ul id="liked-courses-list"></ul>
@@ -99,6 +107,8 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="api-config.js"></script>
+  <script src="nav.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

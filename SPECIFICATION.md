@@ -151,11 +151,13 @@ The Worker is **implemented** in `rownative/worker`.
 - **GUI**: "Calculate my time" button and modal in course detail; "My times" page at `/my-times.html`.
 - **intervals.icu**: Fetches activities (`oldest`/`newest`) and streams (`latlng`, `time`); filters to `type === 'Rowing'`.
 
-### 2.1 Part 2 — Full scope (not started)
+### 2.1 Part 2 — Full scope (in progress)
 
 **Scope:** D1 tables (challenges, challenge_results, standard_collections, course_standards); GPS validation via intervals.icu; handicap scoring; organiser panel; leaderboard pages.
 
-**Status:** Not started. Full specification in [rowing-courses-spec §2](https://git.wereldraadsel.tech/sander/rowsandall/src/branch/develop/rowing-courses-spec.md).
+**Status:** Phase 1 (GUI with mock API) complete. Phase 2 (Worker, D1) not started.
+
+**Specification and implementation plan:** [docs/CHALLENGES.md](docs/CHALLENGES.md)
 
 ---
 
@@ -190,6 +192,6 @@ The Worker is **implemented** in `rownative/worker`.
 
 **Part 2a — Time on course:** Implemented. D1 `course_times`, intervals.icu fetch, calculate-time/course-times endpoints (GET, POST, DELETE), map UI and My times page. Times store `workout_date` (activity date) and link to intervals.icu activities.
 
-**Part 2 (full):** Not started.
+**Part 2 (full):** Phase 1 (Speed Orders GUI + mock API) complete. Phase 2 (Worker, D1, GPS validation) not started. See [docs/CHALLENGES.md](docs/CHALLENGES.md).
 
-**Next steps:** Configure intervals.icu OAuth; provision KV and secrets; set up DNS for rownative.icu; or proceed to Part 2.
+**Next steps:** Proceed to Part 2 Phase 2 (D1 migrations, Worker implementation); or configure intervals.icu OAuth; provision KV and secrets; set up DNS for rownative.icu.

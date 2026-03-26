@@ -7,12 +7,30 @@
 (function () {
   "use strict";
 
+  function storageGet(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function storageSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      /* ignore — private mode / disabled storage */
+    }
+  }
+
   let coursesBase = "./courses/";  // Base for course JSON; set to "../courses/" when using fallback
   let kmlBase = "./kml/";          // Base for KML; set to "../kml/" when using fallback
   const urlApi = typeof URLSearchParams !== "undefined" ? new URLSearchParams(location.search).get("api") : null;
-  const API_BASE = (urlApi || (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API))
-    ? (urlApi || window.ROWNATIVE_API)
-    : "/api";
+  /** Prefer api-config.js (normalized ?api= including /api suffix); raw urlApi alone can omit /api. */
+  const API_BASE =
+    (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API)
+      ? window.ROWNATIVE_API
+      : urlApi || "/api";
   /** OAuth links must target the Worker when API_BASE is a full URL (e.g. local dev). */
   function oauthHref(path) {
     if (API_BASE.startsWith("http")) {
@@ -25,6 +43,8 @@
 
   let map;
   let markersLayer;
+  /** Course outline polygons when a course is open — not cleared by renderMarkers() (avoids reload loop with checkAuth). */
+  let courseDetailLayer;
   let trackLayer;
   let courses = [];
   let selectedId = null;
@@ -39,14 +59,92 @@
   let detailPanel, detailContent, detailClose;
   let loginBtn;
   let highContrastCheckbox;
+  let baseLayerOsm;
+  let baseLayerSatellite;
+  let seaMarksLayer;
+
+  /** High contrast toggle lives in the Leaflet layers panel (same box as base map / seamarks). */
+  function appendHighContrastToLayersControl(layersCtrl) {
+    const container = layersCtrl.getContainer();
+    const section = container.querySelector("section.leaflet-control-layers-list");
+    if (!section) return;
+    const label = document.createElement("label");
+    label.className = "leaflet-control-layers-high-contrast";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.id = "high-contrast";
+    input.setAttribute("aria-label", "High contrast mode for course polygons");
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(" High contrast"));
+    section.appendChild(label);
+  }
 
   function initMap() {
+    if (typeof L === "undefined" || typeof L.map !== "function") {
+      showLoadError("Map library (Leaflet) did not load. Check the network tab or disable ad blockers for this site.");
+      return;
+    }
+    try {
     map = L.map("map").setView([30, 0], 2);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap",
-    }).addTo(map);
 
-    highContrastMode = localStorage.getItem("rownative-high-contrast") === "1";
+    baseLayerOsm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '© <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>',
+      maxZoom: 19,
+    });
+
+    baseLayerSatellite = L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      {
+        attribution:
+          "Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+        maxZoom: 19,
+      }
+    );
+
+    seaMarksLayer = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", {
+      attribution: 'Sea marks © <a href="https://www.openseamap.org" rel="noopener">OpenSeaMap</a>',
+      opacity: 0.95,
+      minZoom: 9,
+      maxZoom: 18,
+    });
+
+    const basePref = storageGet("rownative-map-base");
+    const useSatellite = basePref === "satellite";
+    if (useSatellite) {
+      baseLayerSatellite.addTo(map);
+    } else {
+      baseLayerOsm.addTo(map);
+    }
+
+    if (storageGet("rownative-map-seamarks") === "1") {
+      seaMarksLayer.addTo(map);
+    }
+
+    const layersCtrl = L.control
+      .layers(
+        { Map: baseLayerOsm, Satellite: baseLayerSatellite },
+        { "Sea marks (OpenSeaMap)": seaMarksLayer },
+        { collapsed: false, position: "bottomleft" }
+      )
+      .addTo(map);
+    appendHighContrastToLayersControl(layersCtrl);
+
+    map.on("baselayerchange", function (e) {
+      storageSet("rownative-map-base", e.name === "Satellite" ? "satellite" : "osm");
+    });
+    map.on("overlayadd", function (e) {
+      if (e.name === "Sea marks (OpenSeaMap)") {
+        storageSet("rownative-map-seamarks", "1");
+      }
+    });
+    map.on("overlayremove", function (e) {
+      if (e.name === "Sea marks (OpenSeaMap)") {
+        storageSet("rownative-map-seamarks", "0");
+      }
+    });
+
+    highContrastMode = storageGet("rownative-high-contrast") === "1";
     const mapEl = document.getElementById("map");
     if (mapEl) mapEl.classList.toggle("high-contrast", highContrastMode);
 
@@ -56,13 +154,20 @@
       this.eachLayer((l) => this.removeLayer(l));
     };
     trackLayer = L.featureGroup().addTo(map);
+    courseDetailLayer = L.featureGroup().addTo(map);
 
-    if (navigator.geolocation) {
+    if (navigator.geolocation && !parseCourseHash()) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => map.setView([pos.coords.latitude, pos.coords.longitude], 8),
+        (pos) => {
+          map.setView([pos.coords.latitude, pos.coords.longitude], 8);
+        },
         () => {},
         { enableHighAccuracy: false, timeout: 5000 }
       );
+    }
+    } catch (err) {
+      console.error("initMap:", err);
+      showLoadError("Map failed to initialise: " + (err && err.message ? err.message : String(err)));
     }
   }
 
@@ -83,6 +188,80 @@
     }
   }
 
+  /** `#course-id` or `#course=id` deep links (e.g. from challenges / my-times). */
+  function parseCourseHash() {
+    const h = (location.hash || "").replace(/^#/, "");
+    if (h.startsWith("course-")) {
+      const rest = h.slice("course-".length);
+      if (!rest) return null;
+      try {
+        return decodeURIComponent(rest);
+      } catch (e) {
+        return rest;
+      }
+    }
+    const eq = /^course=(.+)$/.exec(h);
+    if (eq && eq[1]) {
+      try {
+        return decodeURIComponent(eq[1].trim());
+      } catch (e) {
+        return eq[1].trim();
+      }
+    }
+    return null;
+  }
+
+  function findCourseById(id) {
+    return courses.find((x) => String(x.id) === String(id));
+  }
+
+  /** After checkAuth / filters: update like button + my times only (course polygons live on courseDetailLayer, not markersLayer). */
+  function refreshOpenCourseDetail() {
+    if (!selectedId || !detailPanel || detailPanel.classList.contains("hidden")) return;
+    const c = findCourseById(selectedId);
+    if (!c) return;
+    const sid = String(selectedId);
+    const liked = userLiked.has(sid);
+    const likeBtn = detailContent && detailContent.querySelector(".like-btn");
+    if (likeBtn) {
+      likeBtn.classList.toggle("liked", liked);
+      likeBtn.textContent = liked ? "♥ Liked" : "♡ Like";
+    }
+    if (isSignedIn) loadDetailCourseTimes(selectedId);
+  }
+
+  function applyCourseHashFromLocation() {
+    const rawId = parseCourseHash();
+    if (!rawId) return;
+    const c = findCourseById(rawId);
+    if (c) {
+      if (
+        String(selectedId) === String(c.id) &&
+        detailPanel &&
+        !detailPanel.classList.contains("hidden")
+      ) {
+        return;
+      }
+      showDetail(c.id);
+    } else if (detailPanel && detailContent) {
+      selectedId = rawId;
+      detailPanel.classList.remove("hidden");
+      detailContent.innerHTML = `<p class="error">Course <code>${escapeHtml(String(rawId))}</code> is not in the list (check filters or index).</p>`;
+    }
+  }
+
+  function onCourseHashChange() {
+    const rawId = parseCourseHash();
+    if (!rawId) {
+      if (detailPanel) detailPanel.classList.add("hidden");
+      selectedId = null;
+      if (courseDetailLayer) courseDetailLayer.clearLayers();
+      renderMarkers(true);
+      return;
+    }
+    applyCourseHashFromLocation();
+  }
+
   function loadCourses() {
     const base = location.origin + (location.pathname.endsWith("/") ? location.pathname : location.pathname.replace(/[^/]+$/, ""));
     function tryLoad(url) {
@@ -95,18 +274,19 @@
           return r.json();
         })
         .then((data) => {
-          courses = Array.isArray(data) ? data : [];
+          courses = Array.isArray(data) ? data : (data?.courses && Array.isArray(data.courses) ? data.courses : []);
           if (API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http")) {
             coursesBase = "https://raw.githubusercontent.com/rownative/courses/main/courses/";
           }
           renderMarkers();
           fillCountryFilter();
+          applyCourseHashFromLocation();
         });
     }
 
     const apiFirst = API_BASE && typeof API_BASE === "string" && API_BASE.startsWith("http");
     const firstTry = apiFirst ? (API_BASE.replace(/\/api\/?$/, "") + "/api/courses") : "./index.json";
-    tryLoad(firstTry)
+    return tryLoad(firstTry)
       .catch(() => {
         if (apiFirst) return tryLoad("./index.json");
         coursesBase = "../courses/";
@@ -230,27 +410,40 @@
   }
 
   function showDetail(id) {
-    selectedId = id;
-    const c = courses.find((x) => x.id === id);
-    if (c) {
-      detailContent.innerHTML = `<p>Loading…</p>`;
-      detailPanel.classList.remove("hidden");
-      fetchCourseDetail(id)
-        .then((full) => renderDetail(full, c))
-        .catch(() => {
-          renderDetail(c, c);
-        });
+    const c = findCourseById(id);
+    if (!c) {
+      selectedId = null;
+      return;
     }
+    selectedId = id;
+    detailContent.innerHTML = `<p>Loading…</p>`;
+    detailPanel.classList.remove("hidden");
+    fetchCourseDetail(id)
+      .then((full) => renderDetail(full, c))
+      .catch(() => {
+        renderDetail(c, c);
+      });
   }
 
   function fetchCourseDetail(id) {
-    return fetch(`${coursesBase}${id}.json`).then((r) => {
-      if (!r.ok) throw new Error(r.statusText);
-      return r.json();
+    const idStr = encodeURIComponent(String(id));
+    const load = (base) =>
+      fetch(`${base}${idStr}.json`).then((r) => {
+        if (!r.ok) throw new Error(String(r.status));
+        return r.json();
+      });
+    return load(coursesBase).catch(() => {
+      if (String(coursesBase).includes("raw.githubusercontent.com")) {
+        return load("./courses/");
+      }
+      throw new Error("Course JSON not found");
     });
   }
 
   function getPolygonOptions() {
+    if (typeof window.rownativeLeafletPolygonStyle === "function") {
+      return window.rownativeLeafletPolygonStyle();
+    }
     return highContrastMode
       ? { color: "#e65c00", fillColor: "#e65c00", fillOpacity: 0.45, weight: 4 }
       : { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
@@ -283,56 +476,38 @@
   }
 
   function renderDetail(full, meta) {
-    const liked = userLiked.has(String(meta.id));
+    if (courseDetailLayer) courseDetailLayer.clearLayers();
+    const idStr = String(meta.id);
+    const idHtml = escapeHtml(idStr);
+    const idPath = encodeURIComponent(idStr);
+    const liked = userLiked.has(idStr);
     const kmlUrl = API_BASE
-      ? `${API_BASE}/courses/${meta.id}`
-      : `${kmlBase}${meta.id}.kml`;
+      ? `${API_BASE}/courses/${idPath}`
+      : `${kmlBase}${idPath}.kml`;
     const likeButtonHtml = isSignedIn
-      ? `<button type="button" class="btn like-btn ${liked ? "liked" : ""}" data-id="${meta.id}">${liked ? "♥ Liked" : "♡ Like"}</button>`
+      ? `<button type="button" class="btn like-btn ${liked ? "liked" : ""}" data-id="${idHtml}">${liked ? "♥ Liked" : "♡ Like"}</button>`
       : "";
     const calculateBtnHtml = isSignedIn
-      ? `<button type="button" class="btn calculate-time-btn" data-id="${meta.id}" data-name="${escapeHtml(meta.name)}">Calculate my time</button>`
+      ? `<button type="button" class="btn calculate-time-btn" data-id="${idHtml}" data-name="${escapeHtml(meta.name)}">Calculate my time</button>`
       : "";
     const courseTimesSection = isSignedIn
       ? `<div class="detail-course-times"><strong>My times</strong><ul id="detail-course-times-list">Loading…</ul></div>`
       : "";
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
-      <p class="course-id"><strong>ID:</strong> <code>${meta.id}</code> — <code>courses/${meta.id}.json</code></p>
+      <p class="course-id"><strong>ID:</strong> <code>${idHtml}</code> — <code>courses/${idHtml}.json</code></p>
       <p><strong>Distance:</strong> ${meta.distance_m || "—"} m</p>
       <p><strong>Country:</strong> ${escapeHtml(meta.country || "—")}</p>
       <p><strong>Status:</strong> <span class="badge ${meta.status}">${meta.status}</span></p>
       ${meta.notes ? `<p class="notes">${escapeHtml(meta.notes)}</p>` : ""}
       <p>
-        <a href="${kmlUrl}" download="${meta.id}.kml" class="btn">Download KML</a>
+        <a href="${kmlUrl}" download="${idHtml}.kml" class="btn">Download KML</a>
         ${likeButtonHtml}
         ${calculateBtnHtml}
-        ${isSignedIn && meta.status === 'provisional' ? `<a href="update.html?id=${meta.id}" class="btn">Update with new KML</a>` : ''}
+        ${isSignedIn && meta.status === 'provisional' ? `<a href="update.html?id=${idPath}" class="btn">Update with new KML</a>` : ''}
       </p>
       ${courseTimesSection}
     `;
-
-    if (full.polygons && full.polygons.length > 0) {
-      const bounds = [];
-      full.polygons.forEach((poly) => {
-        (poly.points || []).forEach((pt) => bounds.push([pt.lat, pt.lon]));
-      });
-      if (bounds.length > 0) {
-        map.fitBounds(bounds, { padding: [20, 20], maxZoom: 16 });
-        markersLayer.clearLayers();
-        full.polygons.forEach((poly, idx) => {
-          const pts = (poly.points || []).map((p) => [p.lat, p.lon]);
-          if (pts.length >= 2) {
-            if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
-              pts.push(pts[0]);
-            }
-            const layer = L.polygon(pts, getPolygonOptions());
-            layer.bindTooltip(poly.name || `Gate ${idx}`);
-            markersLayer.addLayer(layer);
-          }
-        });
-      }
-    }
 
     detailContent.innerHTML = html;
 
@@ -346,24 +521,34 @@
     }
 
     if (isSignedIn) {
-      const listEl = detailContent.querySelector("#detail-course-times-list");
-      if (listEl) {
-        fetch(`${API_BASE}/me/course-times`, { credentials: "include" })
-          .then((r) => (r.ok ? r.json() : Promise.reject()))
-          .then((data) => {
-            const all = data.courseTimes || [];
-            const forCourse = all.filter((t) => String(t.course_id) === String(meta.id));
-            if (forCourse.length === 0) {
-              listEl.innerHTML = '<li class="empty">No saved times yet</li>';
-            } else {
-              listEl.innerHTML = forCourse
-                .map((t) => renderCourseTimeItem(t))
-                .join("");
+      loadDetailCourseTimes(meta.id);
+    }
+
+    if (full.polygons && full.polygons.length > 0 && courseDetailLayer) {
+      const bounds = [];
+      full.polygons.forEach((poly) => {
+        (poly.points || []).forEach((pt) => bounds.push([pt.lat, pt.lon]));
+      });
+      if (bounds.length > 0) {
+        full.polygons.forEach((poly, idx) => {
+          const pts = (poly.points || []).map((p) => [p.lat, p.lon]);
+          if (pts.length >= 2) {
+            if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
+              pts.push(pts[0]);
             }
-          })
-          .catch(() => {
-            if (listEl) listEl.innerHTML = '<li class="empty">Could not load times</li>';
-          });
+            const layer = L.polygon(pts, getPolygonOptions());
+            layer.bindTooltip(poly.name || `Gate ${idx}`);
+            courseDetailLayer.addLayer(layer);
+          }
+        });
+        /** Desktop: map container size often wrong until after layout; devtools device mode masks this. */
+        function fitMapToCourseBounds() {
+          map.invalidateSize();
+          map.fitBounds(bounds, { padding: [20, 20], maxZoom: 16 });
+        }
+        requestAnimationFrame(() => {
+          requestAnimationFrame(fitMapToCourseBounds);
+        });
       }
     }
   }
@@ -398,7 +583,7 @@
     const wasLikedBeforeOptimistic = userLiked.has(String(id));
     // Optimistic UI update when viewing this course
     if (String(selectedId) === String(id)) {
-      const c = courses.find((x) => x.id === id);
+      const c = findCourseById(id);
       if (c) {
         const sid = String(id);
         if (userLiked.has(sid)) {
@@ -569,10 +754,13 @@
     polyline.bindTooltip("Workout track", { permanent: false });
     trackLayer.addLayer(polyline);
     const trackBounds = polyline.getBounds();
-    const existingBounds = markersLayer.getBounds();
-    const combined = existingBounds.isValid()
-      ? trackBounds.extend(existingBounds)
-      : trackBounds;
+    let combined = trackBounds;
+    if (markersLayer && markersLayer.getBounds().isValid()) {
+      combined = combined.extend(markersLayer.getBounds());
+    }
+    if (courseDetailLayer && courseDetailLayer.getBounds().isValid()) {
+      combined = combined.extend(courseDetailLayer.getBounds());
+    }
     if (combined.isValid()) map.fitBounds(combined, { padding: [30, 30], maxZoom: 16 });
   }
 
@@ -601,7 +789,7 @@
         if (!activityId || !calculateModalCourseId) return;
         calcBtn.disabled = true;
         calcBtn.textContent = "Calculating…";
-        const calcUrl = `${API_BASE}/courses/${calculateModalCourseId}/calculate-time${location.search.includes("debug=1") ? "?debug=1" : ""}`;
+        const calcUrl = `${API_BASE}/courses/${calculateModalCourseId}/calculate-time${(location.search.includes("debug=1") || window.ROWNATIVE_DEBUG) ? "?debug=1" : ""}`;
         fetch(calcUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -686,10 +874,13 @@
   }
 
   function checkAuth() {
-    const authUrl = `${location.origin}${API_BASE}/me`;
-    fetch(`${API_BASE}/me`, { credentials: "include" })
+    const meFetchUrl = `${API_BASE}/me`;
+    const displayMeUrl = typeof API_BASE === "string" && API_BASE.startsWith("http")
+      ? `${API_BASE}/me`
+      : `${location.origin}${API_BASE}/me`;
+    fetch(meFetchUrl, { credentials: "include" })
       .then((r) => {
-        if (!r.ok) throw new Error(`/api/me HTTP ${r.status} from ${authUrl}`);
+        if (!r.ok) throw new Error(`/api/me HTTP ${r.status} from ${displayMeUrl}`);
         return r.json();
       })
       .then((data) => {
@@ -722,11 +913,10 @@
         if (authTeaser) authTeaser.classList.toggle("hidden", !!data.athleteId);
         const myTimesLink = document.getElementById("my-times-link");
         if (myTimesLink) myTimesLink.classList.toggle("hidden", !data.athleteId);
-        renderMarkers();
-        if (selectedId) {
-          const c = courses.find((x) => x.id === selectedId);
-          if (c) fetchCourseDetail(selectedId).then((full) => renderDetail(full, c)).catch(() => renderDetail(c, c));
-        }
+        const organiserLink = document.getElementById("organiser-link");
+        if (organiserLink) organiserLink.classList.toggle("hidden", !(data.athleteId && data.isOrganizer));
+        renderMarkers(!!selectedId);
+        refreshOpenCourseDetail();
       })
       .catch((e) => {
         isSignedIn = false;
@@ -776,19 +966,23 @@
       highContrastCheckbox.checked = highContrastMode;
       highContrastCheckbox.addEventListener("change", () => {
         highContrastMode = highContrastCheckbox.checked;
-        localStorage.setItem("rownative-high-contrast", highContrastMode ? "1" : "0");
+        storageSet("rownative-high-contrast", highContrastMode ? "1" : "0");
         const mapEl = document.getElementById("map");
         if (mapEl) mapEl.classList.toggle("high-contrast", highContrastMode);
-        if (selectedId) {
-          const c = courses.find((x) => x.id === selectedId);
-          if (c) fetchCourseDetail(selectedId).then((full) => renderDetail(full, c)).catch(() => renderDetail(c, c));
-        }
+        renderMarkers(true);
+        refreshOpenCourseDetail();
       });
     }
+
+    window.addEventListener("hashchange", onCourseHashChange);
 
     if (detailClose) detailClose.addEventListener("click", () => {
       detailPanel.classList.add("hidden");
       selectedId = null;
+      if (courseDetailLayer) courseDetailLayer.clearLayers();
+      if (location.hash && /^#course[=-]/.test(location.hash)) {
+        history.replaceState(null, "", location.pathname + location.search);
+      }
       renderMarkers(true);  // preserve local zoom when closing course
     });
 
@@ -814,13 +1008,14 @@
 
     initCalculateTimeModal();
     renderLikedCourses();
-    checkAuth();
   }
 
   function main() {
     initMap();
     bindUI();
-    loadCourses();
+    loadCourses().finally(() => {
+      checkAuth();
+    });
   }
 
   if (document.readyState === "loading") {

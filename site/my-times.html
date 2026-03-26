@@ -22,20 +22,32 @@
 </head>
 <body>
   <header>
-    <h1><a href="index.html"><img src="logo.png" alt="" class="logo" /> Rowing Courses</a></h1>
-    <p class="tagline">Your saved course times</p>
-    <div id="auth-status">
-      <a href="privacy.html">Privacy</a>
-      <a href="about.html">About</a>
-      <a href="index.html">Map</a>
-      <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
-      <a href="import.html" id="import-link">Import</a>
-      <a href="submit.html" id="submit-link">Submit</a>
-      <a href="update.html" id="update-link">Update</a>
-      <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
-      <span id="user-info" class="hidden"></span>
-      <a href="/oauth/logout" id="sign-out-link" class="hidden">Sign out</a>
-      <p id="auth-teaser" class="auth-teaser hidden">Sign in to see your saved course times.</p>
+    <div class="header-top">
+      <div class="header-brand">
+        <h1><a href="index.html"><img src="logo.png" alt="" class="logo" /> Rowing Courses</a></h1>
+        <p class="tagline">Your saved course times</p>
+      </div>
+      <button type="button" class="hamburger" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-overlay">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-overlay-backdrop" data-dismiss="nav"></div>
+        <div id="auth-status">
+          <a href="index.html">Map</a>
+          <a href="challenges.html">Challenges</a>
+          <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
+          <a href="organiser.html" id="organiser-link" class="hidden">My challenges</a>
+          <a href="import.html" id="import-link">Import</a>
+          <a href="submit.html" id="submit-link">Submit</a>
+          <a href="update.html" id="update-link">Update</a>
+          <a href="about.html">About</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
+          <span id="user-info" class="hidden"></span>
+          <a href="/oauth/logout" id="sign-out-link" class="hidden">Sign out</a>
+          <p id="auth-teaser" class="auth-teaser hidden">Sign in to see your saved course times.</p>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -62,6 +74,7 @@
     </div>
   </main>
 
+  <script src="api-config.js"></script>
   <script>
     (function () {
       const API_BASE = (typeof window.ROWNATIVE_API !== "undefined" && window.ROWNATIVE_API)
@@ -96,6 +109,8 @@
         return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
       }
 
+      const organiserLink = document.getElementById("organiser-link");
+
       function checkAuth() {
         fetch(API_BASE + "/me", { credentials: "include" })
           .then((r) => r.json())
@@ -104,6 +119,8 @@
               signInLink.classList.add("hidden");
               signOutLink.classList.remove("hidden");
               myTimesLink?.classList.remove("hidden");
+              if (data.isOrganizer) organiserLink?.classList.remove("hidden");
+              else organiserLink?.classList.add("hidden");
               importLink?.classList.remove("hidden");
               submitLink?.classList.remove("hidden");
               updateLink?.classList.remove("hidden");
@@ -115,6 +132,7 @@
               signInLink.classList.remove("hidden");
               signOutLink.classList.add("hidden");
               myTimesLink?.classList.add("hidden");
+              organiserLink?.classList.add("hidden");
               importLink?.classList.add("hidden");
               submitLink?.classList.add("hidden");
               updateLink?.classList.add("hidden");
@@ -130,9 +148,21 @@
       }
 
       function loadCourseTimes() {
-        fetch(API_BASE + "/me/course-times", { credentials: "include" })
-          .then((r) => r.ok ? r.json() : Promise.reject())
+        const coursesPromise = fetch(API_BASE + "/courses", { credentials: "include" })
+          .then((r) => r.ok ? r.json() : { courses: [] })
           .then((data) => {
+            const courses = data.courses || [];
+            const map = {};
+            courses.forEach((c) => { if (c && c.id) map[String(c.id)] = c.name || ""; });
+            return map;
+          })
+          .catch(() => ({}));
+
+        const timesPromise = fetch(API_BASE + "/me/course-times", { credentials: "include" })
+          .then((r) => r.ok ? r.json() : Promise.reject());
+
+        Promise.all([coursesPromise, timesPromise])
+          .then(([courseNames, data]) => {
             const times = data.courseTimes || [];
             if (times.length === 0) {
               noTimesMsg.classList.remove("hidden");
@@ -142,6 +172,9 @@
             noTimesMsg.classList.add("hidden");
             tbody.innerHTML = times
               .map((t) => {
+                const courseId = t.course_id;
+                const courseName = courseNames[courseId] || "";
+                const courseLabel = courseName ? escHtml(courseName) + " (" + escHtml(courseId) + ")" : "Course " + escHtml(courseId);
                 const date = (t.workout_date || t.created_at) ? (t.workout_date || t.created_at).slice(0, 10) : "—";
                 const aid = t.activity_id ? String(t.activity_id).replace(/^i/, "") : "";
                 const workoutLabel = (t.workout_name && String(t.workout_name).trim()) || "View";
@@ -151,7 +184,7 @@
                 const trashSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2\"/><line x1=\"10\" y1=\"11\" x2=\"10\" y2=\"17\"/><line x1=\"14\" y1=\"11\" x2=\"14\" y2=\"17\"/></svg>";
                 return (
                   "<tr>" +
-                  "<td><a href=\"index.html\" data-id=\"" + t.course_id + "\">Course " + t.course_id + "</a></td>" +
+                  "<td><a href=\"index.html\" data-id=\"" + escHtml(courseId) + "\">" + courseLabel + "</a></td>" +
                   "<td class=\"time\">" + fmtTime(t.time_s) + "</td>" +
                   "<td>" + fmtDistance(t.distance_m || 0) + "</td>" +
                   "<td>" + date + "</td>" +
@@ -164,7 +197,8 @@
             tbody.querySelectorAll("a[data-id]").forEach((a) => {
               a.addEventListener("click", (e) => {
                 e.preventDefault();
-                window.location.href = "index.html#course-" + a.dataset.id;
+                var u = "index.html#course-" + a.dataset.id;
+                window.location.href = (window.rownativeAppendToHref && window.rownativeAppendToHref(u)) || u;
               });
             });
             tbody.querySelectorAll(".remove-btn").forEach((btn) => {
@@ -196,5 +230,6 @@
       checkAuth();
     })();
   </script>
+  <script src="nav.js"></script>
 </body>
 </html>

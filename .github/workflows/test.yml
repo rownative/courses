@@ -1,0 +1,39 @@
+name: Python tests
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "scripts/**"
+      - "pytest.ini"
+      - ".github/workflows/test.yml"
+  pull_request:
+    paths:
+      - "scripts/**"
+      - "pytest.ini"
+      - ".github/workflows/test.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run tests with coverage
+        run: |
+          pytest \
+            --cov=validate_course \
+            --cov=generate_kml \
+            --cov-report=term-missing \
+            --cov-fail-under=70

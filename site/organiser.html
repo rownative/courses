@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My challenges | rownative.icu</title>
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .organiser-page { max-width: 56rem; margin: 2rem auto; padding: 0 1rem; }
+    .organiser-page h1 { margin-top: 0; }
+    .organiser-page h2 { font-size: 1.2rem; margin: 2rem 0 1rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
+    .organiser-page .access-denied { padding: 2rem; text-align: center; background: #fce8e8; border-radius: 8px; }
+    .organiser-page .access-denied a { color: #1a3a4a; font-weight: bold; }
+    .organiser-page .form-row { margin: 1rem 0; }
+    .organiser-page label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
+    .organiser-page input, .organiser-page select, .organiser-page textarea { width: 100%; max-width: 24rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .organiser-page textarea { min-height: 4rem; }
+    .organiser-page .btn { padding: 0.5rem 1rem; background: #1a3a4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    .organiser-page .btn:hover { background: #2a4a5a; }
+    .organiser-page .btn-secondary { background: #666; }
+    .organiser-page table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .organiser-page th, .organiser-page td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #ddd; }
+    .organiser-page th { background: #f0f0f0; }
+    .organiser-page .empty { color: #666; font-style: italic; }
+    .organiser-page .moderation-list { margin-top: 1rem; }
+    .organiser-page .moderation-item { padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 0.5rem; }
+    .organiser-page .moderation-item.pending { background: #fff9e6; }
+    .organiser-page .moderation-item.invalid { background: #fce8e8; }
+    .organiser-page .track-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+    .organiser-page .track-modal-content { background: #fff; padding: 1rem; border-radius: 8px; max-width: 90vw; max-height: 90vh; width: 600px; }
+    .organiser-page .track-modal-content h3 { margin-top: 0; }
+    .organiser-page #track-map { height: 400px; border-radius: 4px; margin: 0.5rem 0; }
+    .organiser-page .organiser-upload-form { margin: 1rem 0; padding: 1rem; background: #f9f9f9; border-radius: 8px; }
+    .organiser-page .form-hint { display: block; font-size: 0.8rem; color: #666; margin-top: 0.25rem; }
+    .organiser-page #upload-collection-result { margin-top: 0.5rem; padding: 0.5rem; }
+    .organiser-page #upload-collection-result.error { color: #c00; }
+    .organiser-page .searchable-select { position: relative; max-width: 24rem; }
+    .organiser-page .searchable-select input[type="text"] { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .organiser-page .searchable-select .dropdown { position: absolute; top: 100%; left: 0; right: 0; max-height: 12rem; overflow-y: auto; background: #fff; border: 1px solid #ccc; border-top: none; border-radius: 0 0 4px 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 100; }
+    .organiser-page .searchable-select .dropdown-item { padding: 0.5rem 0.75rem; cursor: pointer; }
+    .organiser-page .searchable-select .dropdown-item:hover, .organiser-page .searchable-select .dropdown-item.selected { background: #e8f4e8; }
+    .organiser-page .searchable-select .dropdown-item.no-results { color: #666; cursor: default; }
+    .hidden { display: none !important; }
+    #auth-status .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <div class="header-brand">
+        <h1><a href="index.html"><img src="logo.png" alt="" class="logo" /> Rowing Courses</a></h1>
+        <p class="tagline">Organiser panel</p>
+      </div>
+      <button type="button" class="hamburger" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-overlay">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-overlay-backdrop" data-dismiss="nav"></div>
+        <div id="auth-status">
+          <a href="index.html">Map</a>
+          <a href="challenges.html">Challenges</a>
+          <a href="my-times.html" id="my-times-link" class="hidden">My times</a>
+          <a href="organiser.html" id="organiser-link" class="hidden">My challenges</a>
+          <a href="import.html" id="import-link">Import</a>
+          <a href="submit.html" id="submit-link">Submit</a>
+          <a href="update.html" id="update-link">Update</a>
+          <a href="about.html">About</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="/oauth/authorize" id="sign-in-link" class="hidden">Sign in with intervals.icu</a>
+          <a href="/oauth/authorize?mock_organizer=1" id="sign-in-organiser-link" class="hidden">Sign in as organiser (mock)</a>
+          <span id="user-info" class="hidden"></span>
+          <a href="/oauth/logout" id="sign-out-link" class="hidden">Sign out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="organiser-page">
+    <div id="access-denied" class="access-denied hidden">
+      <p>You need organiser access to view this page.</p>
+      <p><a id="organiser-request-link" href="https://github.com/rownative/courses/issues/new?title=Request+to+become+challenge+organiser" target="_blank" rel="noopener">Request to become challenge organiser</a></p>
+      <p>For local testing with the mock API, use <a href="/oauth/authorize?mock_organizer=1">Sign in as organiser (mock)</a>.</p>
+    </div>
+
+    <div id="organiser-content" class="hidden">
+      <h1>My challenges</h1>
+
+      <div id="organiser-create-section">
+      <h2>Create challenge</h2>
+      <form id="create-challenge-form">
+        <div class="form-row">
+          <label for="challenge-name">Challenge name *</label>
+          <input type="text" id="challenge-name" required placeholder="e.g. March Speed Order" />
+        </div>
+        <div class="form-row">
+          <label for="challenge-course-search">Course *</label>
+          <div class="searchable-select">
+            <input type="text" id="challenge-course-search" placeholder="Search courses…" autocomplete="off" />
+            <input type="hidden" id="challenge-course" name="courseId" />
+            <div id="challenge-course-dropdown" class="dropdown hidden"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="challenge-row-start">Row window start *</label>
+          <input type="datetime-local" id="challenge-row-start" required />
+        </div>
+        <div class="form-row">
+          <label for="challenge-row-end">Row window end *</label>
+          <input type="datetime-local" id="challenge-row-end" required />
+        </div>
+        <div class="form-row">
+          <label for="challenge-submit-end">Submission deadline *</label>
+          <input type="datetime-local" id="challenge-submit-end" required />
+        </div>
+        <div class="form-row">
+          <label><input type="checkbox" id="challenge-handicap" /> Use handicap scoring</label>
+        </div>
+        <div class="form-row" id="collection-row">
+          <label for="challenge-collection">Standard collection</label>
+          <select id="challenge-collection">
+            <option value="">Loading…</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="challenge-notes">Notes (optional)</label>
+          <textarea id="challenge-notes" placeholder="Instructions for participants..."></textarea>
+        </div>
+        <button type="submit" class="btn">Create challenge</button>
+      </form>
+      <div id="create-result" class="hidden"></div>
+      </div>
+
+      <div id="organiser-collections-section">
+      <h2>Standard collections</h2>
+      <p>Built-in: HOCR, FISA Masters, Charles River. Upload a custom CSV for club-specific handicap tables.</p>
+      <form id="upload-collection-form" class="organiser-upload-form">
+        <div class="form-row">
+          <label for="collection-name">Collection name *</label>
+          <input type="text" id="collection-name" required placeholder="e.g. My Club Masters" />
+        </div>
+        <div class="form-row">
+          <label for="collection-csv">CSV file *</label>
+          <input type="file" id="collection-csv" accept=".csv" required />
+          <small class="form-hint">Format: name, boatclass, boattype, sex, weightclass, agemin, agemax, adaptiveclass, skillclass, coursedistance, coursetime</small>
+        </div>
+        <button type="submit" class="btn">Upload collection</button>
+      </form>
+      <div id="upload-collection-result" class="hidden"></div>
+      <p><strong>Your collections:</strong></p>
+      <div id="collections-list"></div>
+      </div>
+
+      <h2>My challenges</h2>
+      <table id="my-challenges-table">
+        <thead>
+          <tr>
+            <th>Challenge</th>
+            <th>Course</th>
+            <th>Row window</th>
+            <th>Results</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="my-challenges-body">
+        </tbody>
+      </table>
+      <p id="no-challenges-msg" class="empty hidden">No challenges yet. Create one above.</p>
+
+      <h2>Moderate results</h2>
+      <p>Select a challenge to moderate pending results.</p>
+      <select id="moderate-challenge-select">
+        <option value="">— Select challenge —</option>
+      </select>
+      <div id="moderation-results" class="moderation-list hidden"></div>
+
+      <div id="track-modal" class="track-modal hidden">
+        <div class="track-modal-content">
+          <h3>GPS track overlay</h3>
+          <div id="track-map"></div>
+          <button type="button" class="btn" id="track-modal-close">Close</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="api-config.js"></script>
+  <script src="nav.js"></script>
+  <script src="organiser.js"></script>
+</body>
+</html>
