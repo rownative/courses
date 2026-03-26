@@ -43,6 +43,8 @@
 
   let map;
   let markersLayer;
+  /** Course outline polygons when a course is open — not cleared by renderMarkers() (avoids reload loop with checkAuth). */
+  let courseDetailLayer;
   let trackLayer;
   let courses = [];
   let selectedId = null;
@@ -152,6 +154,7 @@
       this.eachLayer((l) => this.removeLayer(l));
     };
     trackLayer = L.featureGroup().addTo(map);
+    courseDetailLayer = L.featureGroup().addTo(map);
 
     if (navigator.geolocation && !parseCourseHash()) {
       navigator.geolocation.getCurrentPosition(
@@ -185,31 +188,46 @@
     }
   }
 
-  /** `#course-id` deep links (e.g. from challenges / my-times). */
+  /** `#course-id` or `#course=id` deep links (e.g. from challenges / my-times). */
   function parseCourseHash() {
     const h = (location.hash || "").replace(/^#/, "");
-    if (!h.startsWith("course-")) return null;
-    const rest = h.slice("course-".length);
-    if (!rest) return null;
-    try {
-      return decodeURIComponent(rest);
-    } catch (e) {
-      return rest;
+    if (h.startsWith("course-")) {
+      const rest = h.slice("course-".length);
+      if (!rest) return null;
+      try {
+        return decodeURIComponent(rest);
+      } catch (e) {
+        return rest;
+      }
     }
+    const eq = /^course=(.+)$/.exec(h);
+    if (eq && eq[1]) {
+      try {
+        return decodeURIComponent(eq[1].trim());
+      } catch (e) {
+        return eq[1].trim();
+      }
+    }
+    return null;
   }
 
   function findCourseById(id) {
     return courses.find((x) => String(x.id) === String(id));
   }
 
-  /** Re-draw polygons + sidebar after renderMarkers() cleared the layer (e.g. checkAuth). */
+  /** After checkAuth / filters: update like button + my times only (course polygons live on courseDetailLayer, not markersLayer). */
   function refreshOpenCourseDetail() {
     if (!selectedId || !detailPanel || detailPanel.classList.contains("hidden")) return;
     const c = findCourseById(selectedId);
     if (!c) return;
-    fetchCourseDetail(selectedId)
-      .then((full) => renderDetail(full, c))
-      .catch(() => renderDetail(c, c));
+    const sid = String(selectedId);
+    const liked = userLiked.has(sid);
+    const likeBtn = detailContent && detailContent.querySelector(".like-btn");
+    if (likeBtn) {
+      likeBtn.classList.toggle("liked", liked);
+      likeBtn.textContent = liked ? "♥ Liked" : "♡ Like";
+    }
+    if (isSignedIn) loadDetailCourseTimes(selectedId);
   }
 
   function applyCourseHashFromLocation() {
@@ -237,6 +255,7 @@
     if (!rawId) {
       if (detailPanel) detailPanel.classList.add("hidden");
       selectedId = null;
+      if (courseDetailLayer) courseDetailLayer.clearLayers();
       renderMarkers(true);
       return;
     }
@@ -457,6 +476,7 @@
   }
 
   function renderDetail(full, meta) {
+    if (courseDetailLayer) courseDetailLayer.clearLayers();
     const idStr = String(meta.id);
     const idHtml = escapeHtml(idStr);
     const idPath = encodeURIComponent(idStr);
@@ -504,13 +524,12 @@
       loadDetailCourseTimes(meta.id);
     }
 
-    if (full.polygons && full.polygons.length > 0) {
+    if (full.polygons && full.polygons.length > 0 && courseDetailLayer) {
       const bounds = [];
       full.polygons.forEach((poly) => {
         (poly.points || []).forEach((pt) => bounds.push([pt.lat, pt.lon]));
       });
       if (bounds.length > 0) {
-        markersLayer.clearLayers();
         full.polygons.forEach((poly, idx) => {
           const pts = (poly.points || []).map((p) => [p.lat, p.lon]);
           if (pts.length >= 2) {
@@ -519,7 +538,7 @@
             }
             const layer = L.polygon(pts, getPolygonOptions());
             layer.bindTooltip(poly.name || `Gate ${idx}`);
-            markersLayer.addLayer(layer);
+            courseDetailLayer.addLayer(layer);
           }
         });
         /** Desktop: map container size often wrong until after layout; devtools device mode masks this. */
@@ -735,10 +754,13 @@
     polyline.bindTooltip("Workout track", { permanent: false });
     trackLayer.addLayer(polyline);
     const trackBounds = polyline.getBounds();
-    const existingBounds = markersLayer.getBounds();
-    const combined = existingBounds.isValid()
-      ? trackBounds.extend(existingBounds)
-      : trackBounds;
+    let combined = trackBounds;
+    if (markersLayer && markersLayer.getBounds().isValid()) {
+      combined = combined.extend(markersLayer.getBounds());
+    }
+    if (courseDetailLayer && courseDetailLayer.getBounds().isValid()) {
+      combined = combined.extend(courseDetailLayer.getBounds());
+    }
     if (combined.isValid()) map.fitBounds(combined, { padding: [30, 30], maxZoom: 16 });
   }
 
@@ -957,7 +979,8 @@
     if (detailClose) detailClose.addEventListener("click", () => {
       detailPanel.classList.add("hidden");
       selectedId = null;
-      if (location.hash && /^#course-/.test(location.hash)) {
+      if (courseDetailLayer) courseDetailLayer.clearLayers();
+      if (location.hash && /^#course[=-]/.test(location.hash)) {
         history.replaceState(null, "", location.pathname + location.search);
       }
       renderMarkers(true);  // preserve local zoom when closing course
