@@ -58,6 +58,19 @@
       word-break: break-word;
     }
     #challenge-debug-panel .debug-label { color: #6a9955; }
+    .organiser-moderate-callout {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem 1rem;
+      margin: 1rem 0;
+      padding: 0.75rem 1rem;
+      background: #e8f4e8;
+      border: 1px solid #b8d4b8;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .organiser-moderate-callout p { margin: 0; color: #2d4a2d; }
   </style>
 </head>
 <body>
@@ -97,6 +110,10 @@
       </div>
       <div id="challenge-debug-panel" class="hidden" aria-label="Debug output"></div>
       <div id="challenge-map"></div>
+      <div id="organiser-moderate-callout" class="organiser-moderate-callout hidden" role="region" aria-label="Organiser tools">
+        <p>You're the organiser of this challenge.</p>
+        <a href="organiser.html" id="organiser-moderate-link" class="btn">Review results</a>
+      </div>
       <div class="leaderboard-section">
         <h3>Leaderboard</h3>
         <div class="leaderboard-filters" id="leaderboard-filters"></div>

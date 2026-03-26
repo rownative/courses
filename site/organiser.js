@@ -23,6 +23,11 @@
   const moderateSelect = document.getElementById("moderate-challenge-select");
   const moderationResults = document.getElementById("moderation-results");
 
+  const moderateFromUrl = (function () {
+    const p = new URLSearchParams(window.location.search);
+    return p.get("moderate") || p.get("challenge");
+  })();
+
   function escapeHtml(s) {
     if (!s) return "";
     const div = document.createElement("div");
@@ -71,12 +76,53 @@
     submitEl.value = toDatetimeLocalString(addDays(today, 14), 0, 0);
   }
 
+  function verifyModerateChallengeOwnership(challengeId, athleteId) {
+    return fetch(API_BASE + "/challenges/" + encodeURIComponent(challengeId), { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : Promise.resolve(null)))
+      .then((ch) => {
+        if (!ch || typeof ch !== "object") return false;
+        const oid = ch.organizerId != null ? String(ch.organizerId) : "";
+        return oid === String(athleteId);
+      })
+      .catch(() => false);
+  }
+
+  function applyModerateDeepLink() {
+    if (!moderateFromUrl || !moderateSelect) return;
+    const has = Array.from(moderateSelect.options).some((o) => o.value === moderateFromUrl);
+    if (!has) return;
+    moderateSelect.value = moderateFromUrl;
+    moderateSelect.dispatchEvent(new Event("change"));
+  }
+
+  /** @param {boolean} challengeModeratorOnly — hide create/collections (challenge organiser without global organiser flag) */
+  function showOrganiserPanel(challengeModeratorOnly) {
+    accessDenied.classList.add("hidden");
+    organiserContent.classList.remove("hidden");
+    const createSection = document.getElementById("organiser-create-section");
+    const collSection = document.getElementById("organiser-collections-section");
+    if (challengeModeratorOnly) {
+      createSection?.classList.add("hidden");
+      collSection?.classList.add("hidden");
+    } else {
+      createSection?.classList.remove("hidden");
+      collSection?.classList.remove("hidden");
+      setDefaultChallengeDatetimes();
+      loadCourses();
+      loadCollections();
+    }
+    return loadMyChallenges().then(() => {
+      applyModerateDeepLink();
+    });
+  }
+
   function checkAuth() {
     return fetch(API_BASE + "/me", { credentials: "include" })
       .then((r) => r.json())
       .then((data) => {
         const signedIn = !!data.athleteId;
         const isOrganizer = !!data.isOrganizer;
+        const athleteId = data.athleteId ? String(data.athleteId) : null;
         const signInLink = document.getElementById("sign-in-link");
         const signInOrganiserLink = document.getElementById("sign-in-organiser-link");
         const signOutLink = document.getElementById("sign-out-link");
@@ -119,17 +165,29 @@
           );
         }
 
-        if (signedIn && isOrganizer) {
-          accessDenied.classList.add("hidden");
-          organiserContent.classList.remove("hidden");
-          setDefaultChallengeDatetimes();
-          loadCourses();
-          loadCollections();
-          loadMyChallenges();
-        } else {
+        if (!signedIn) {
           accessDenied.classList.remove("hidden");
           organiserContent.classList.add("hidden");
+          return { signedIn, isOrganizer };
         }
+
+        if (isOrganizer) {
+          return showOrganiserPanel(false).then(() => ({ signedIn, isOrganizer }));
+        }
+
+        if (moderateFromUrl && athleteId) {
+          return verifyModerateChallengeOwnership(moderateFromUrl, athleteId).then((ok) => {
+            if (ok) {
+              return showOrganiserPanel(true).then(() => ({ signedIn, isOrganizer }));
+            }
+            accessDenied.classList.remove("hidden");
+            organiserContent.classList.add("hidden");
+            return { signedIn, isOrganizer };
+          });
+        }
+
+        accessDenied.classList.remove("hidden");
+        organiserContent.classList.add("hidden");
         return { signedIn, isOrganizer };
       })
       .catch(() => {
@@ -292,7 +350,7 @@
   let myChallenges = [];
 
   function loadMyChallenges() {
-    fetch(API_BASE + "/organiser/challenges", { credentials: "include" })
+    return fetch(API_BASE + "/organiser/challenges", { credentials: "include" })
       .then((r) => r.json())
       .then((data) => {
         myChallenges = data.challenges || [];

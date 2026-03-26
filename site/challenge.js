@@ -25,6 +25,8 @@
   let map = null;
   let coursesBase = "./courses/";
   let sortByRawTime = null;  // null | "asc" | "desc"
+  /** Set in checkAuth — used to show organiser moderation callout */
+  let currentAthleteId = null;
 
   function escapeHtml(s) {
     if (!s) return "";
@@ -83,6 +85,7 @@
         const submitLink = document.getElementById("submit-link");
         const updateLink = document.getElementById("update-link");
         const userInfo = document.getElementById("user-info");
+        currentAthleteId = data.athleteId ? String(data.athleteId) : null;
         if (signedIn) {
           signInLink.classList.add("hidden");
           signOutLink.classList.remove("hidden");
@@ -95,6 +98,7 @@
           userInfo?.classList.remove("hidden");
           userInfo.textContent = "Signed in";
         } else {
+          currentAthleteId = null;
           signInLink.classList.remove("hidden");
           signOutLink.classList.add("hidden");
           myTimesLink?.classList.add("hidden");
@@ -106,7 +110,33 @@
         }
         return signedIn;
       })
-      .catch(() => false);
+      .catch(() => {
+        currentAthleteId = null;
+        return false;
+      });
+  }
+
+  function organiserModerateHref() {
+    const u = "organiser.html?moderate=" + encodeURIComponent(challengeId);
+    return typeof window.rownativeAppendToHref === "function"
+      ? window.rownativeAppendToHref(u)
+      : u;
+  }
+
+  function updateOrganiserModerateCallout() {
+    const el = document.getElementById("organiser-moderate-callout");
+    const link = document.getElementById("organiser-moderate-link");
+    if (!el || !link || !challenge || !currentAthleteId) {
+      if (el) el.classList.add("hidden");
+      return;
+    }
+    const oid = challenge.organizerId != null ? String(challenge.organizerId) : "";
+    if (oid && oid === currentAthleteId) {
+      link.setAttribute("href", organiserModerateHref());
+      el.classList.remove("hidden");
+    } else {
+      el.classList.add("hidden");
+    }
   }
 
   function loadChallenge() {
@@ -122,6 +152,7 @@
         renderSidebar();
         initMap();
         loadCourseForMap(data.courseId);
+        updateOrganiserModerateCallout();
         return data;
       });
   }
