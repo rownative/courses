@@ -1,5 +1,5 @@
 /**
- * API config for local dev: ?debug=1&api=http://localhost:8787/api
+ * API config for local dev: ?debug=1&api=http://localhost:8787/api (port must match wrangler dev, e.g. 8788)
  * Persists api/debug in sessionStorage and rewrites nav/OAuth links so they work across all pages.
  */
 (function () {
