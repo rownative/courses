@@ -53,10 +53,22 @@
     return y + "-" + m + "-" + d + "T" + h + ":" + min;
   }
 
-  function setDefaultChallengeRowStart() {
-    const el = document.getElementById("challenge-row-start");
-    if (!el) return;
-    el.value = toDatetimeLocalString(new Date(), 0, 0);
+  function addDays(date, n) {
+    const d = new Date(date.getTime());
+    d.setDate(d.getDate() + n);
+    return d;
+  }
+
+  /** Defaults for create-challenge: all times local midnight; row end +7d, submit deadline +14d from today. */
+  function setDefaultChallengeDatetimes() {
+    const startEl = document.getElementById("challenge-row-start");
+    const endEl = document.getElementById("challenge-row-end");
+    const submitEl = document.getElementById("challenge-submit-end");
+    if (!startEl || !endEl || !submitEl) return;
+    const today = new Date();
+    startEl.value = toDatetimeLocalString(today, 0, 0);
+    endEl.value = toDatetimeLocalString(addDays(today, 7), 0, 0);
+    submitEl.value = toDatetimeLocalString(addDays(today, 14), 0, 0);
   }
 
   function checkAuth() {
@@ -102,7 +114,7 @@
         if (signedIn && isOrganizer) {
           accessDenied.classList.add("hidden");
           organiserContent.classList.remove("hidden");
-          setDefaultChallengeRowStart();
+          setDefaultChallengeDatetimes();
           loadCourses();
           loadCollections();
           loadMyChallenges();
@@ -366,7 +378,7 @@
         createResult.innerHTML = "Challenge created: <a href='" + escapeHtml(href) + "'>" + escapeHtml(data.challenge?.name || data.id) + "</a>";
         createResult.classList.remove("error");
         createForm.reset();
-        setDefaultChallengeRowStart();
+        setDefaultChallengeDatetimes();
         challengeCourseSearch.value = "";
         challengeCourse.value = "";
         challengeCourseSearch.placeholder = "Search courses…";

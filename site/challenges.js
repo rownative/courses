@@ -81,6 +81,7 @@
   }
 
   const miniMaps = [];
+  let challengesLoadSeq = 0;
 
   function destroyMiniMaps() {
     miniMaps.forEach((m) => {
@@ -93,11 +94,19 @@
     miniMaps.length = 0;
   }
 
-  function initMiniMaps(challenges) {
+  function initMiniMaps(challenges, loadSeq) {
     if (typeof L === "undefined") return;
+    const defaultPolyStyle = { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
     challenges.forEach((c) => {
       const el = document.getElementById("challenge-mini-map-" + safeMapId(c.id));
       if (!el) return;
+      if (typeof window.rownativeMapHighContrastEnabled === "function" && window.rownativeMapHighContrastEnabled()) {
+        el.classList.add("map-high-contrast");
+      }
+      const polyStyle =
+        typeof window.rownativeLeafletPolygonStyle === "function"
+          ? window.rownativeLeafletPolygonStyle()
+          : defaultPolyStyle;
       const center =
         c.center_lat != null && c.center_lon != null ? [c.center_lat, c.center_lon] : [20, 0];
       const map = L.map(el, { scrollWheelZoom: false });
@@ -115,6 +124,7 @@
       fetch("./courses/" + encodeURIComponent(courseId) + ".json")
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .then((data) => {
+          if (loadSeq !== challengesLoadSeq) return;
           if (!data.polygons || data.polygons.length === 0) return;
           const bounds = [];
           data.polygons.forEach((poly) => {
@@ -123,12 +133,7 @@
               if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
                 pts.push(pts[0]);
               }
-              L.polygon(pts, {
-                color: "#1a7a9e",
-                fillColor: "#1a7a9e",
-                fillOpacity: 0.22,
-                weight: 2,
-              }).addTo(map);
+              L.polygon(pts, polyStyle).addTo(map);
               pts.forEach((p) => bounds.push(p));
             }
           });
@@ -138,6 +143,7 @@
         })
         .catch(() => {})
         .finally(() => {
+          if (loadSeq !== challengesLoadSeq) return;
           setTimeout(() => map.invalidateSize(), 0);
         });
     });
@@ -187,6 +193,7 @@
 
   function loadChallenges(status) {
     currentStatus = status;
+    const loadSeq = ++challengesLoadSeq;
     destroyMiniMaps();
     listEl.innerHTML = "<p>Loading…</p>";
     emptyState.classList.add("hidden");
@@ -220,6 +227,8 @@
                 : '<span class="badge raw">Raw times only</span>';
               return (
                 '<div class="challenge-card">' +
+                '<div class="challenge-card-inner">' +
+                '<div class="challenge-card-main">' +
                 '<h3 class="challenge-title">' +
                 '<a href="' +
                 escapeAttr(leaderboardHref(c.id)) +
@@ -234,9 +243,6 @@
                 "</a>" +
                 distHtml +
                 "</div>" +
-                '<div class="challenge-mini-map" id="challenge-mini-map-' +
-                safeMapId(c.id) +
-                '" role="img" aria-label="Course map"></div>' +
                 '<div class="meta">' +
                 "Row between " +
                 fmtDateRange(c.rowStart, c.rowEnd) +
@@ -250,11 +256,17 @@
                 '<div class="meta">' +
                 badge +
                 "</div>" +
-                "</div>"
+                "</div>" +
+                '<div class="challenge-card-map-wrap">' +
+                '<div class="challenge-square-map">' +
+                '<div class="challenge-mini-map" id="challenge-mini-map-' +
+                safeMapId(c.id) +
+                '" role="img" aria-label="Course map"></div>' +
+                "</div></div></div></div>"
               );
             })
             .join("");
-          requestAnimationFrame(() => initMiniMaps(challenges));
+          requestAnimationFrame(() => initMiniMaps(challenges, loadSeq));
         }
 
         if (isSignedIn) {

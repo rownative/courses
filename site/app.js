@@ -251,6 +251,9 @@
   }
 
   function getPolygonOptions() {
+    if (typeof window.rownativeLeafletPolygonStyle === "function") {
+      return window.rownativeLeafletPolygonStyle();
+    }
     return highContrastMode
       ? { color: "#e65c00", fillColor: "#e65c00", fillOpacity: 0.45, weight: 4 }
       : { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
@@ -769,6 +772,7 @@
         localStorage.setItem("rownative-high-contrast", highContrastMode ? "1" : "0");
         const mapEl = document.getElementById("map");
         if (mapEl) mapEl.classList.toggle("high-contrast", highContrastMode);
+        renderMarkers(true);
         if (selectedId) {
           const c = courses.find((x) => x.id === selectedId);
           if (c) fetchCourseDetail(selectedId).then((full) => renderDetail(full, c)).catch(() => renderDetail(c, c));

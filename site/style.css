@@ -320,8 +320,9 @@ aside#sidebar {
   cursor: pointer;
 }
 
-/* Mute base map when high contrast is on */
-#map.high-contrast .leaflet-tile-pane {
+/* Mute base map when high contrast is on (main map + challenge list / leaderboard) */
+#map.high-contrast .leaflet-tile-pane,
+.map-high-contrast .leaflet-tile-pane {
   filter: grayscale(0.6) contrast(0.9);
 }
 

@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .challenges-page { max-width: 48rem; margin: 2rem auto; padding: 0 1rem; }
+    .challenges-page { max-width: 54rem; margin: 2rem auto; padding: 0 1rem; }
     .challenges-page h1 { margin-top: 0; }
     .challenges-page .intro { margin-bottom: 1.5rem; color: #555; }
     .challenges-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
@@ -16,6 +16,44 @@
     .challenges-tabs button.active { background: #1a3a4a; color: #fff; border-color: #1a3a4a; }
     .challenges-tabs button:hover:not(.active) { background: #f0f0f0; }
     .challenge-card { padding: 1rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; background: #fff; }
+    .challenge-card-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(140px, 11.5rem);
+      gap: 1rem 1.25rem;
+      align-items: start;
+    }
+    @media (max-width: 640px) {
+      .challenge-card-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+    .challenge-card-map-wrap {
+      min-width: 0;
+    }
+    .challenge-square-map {
+      position: relative;
+      width: 100%;
+      max-width: 11.5rem;
+      margin-left: auto;
+      padding-bottom: 100%;
+      height: 0;
+    }
+    @media (max-width: 640px) {
+      .challenge-square-map {
+        max-width: 100%;
+        margin-left: 0;
+      }
+    }
+    .challenge-square-map .challenge-mini-map {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
     .challenge-card h3 { margin: 0 0 0.35rem; font-size: 1.2rem; font-weight: 600; line-height: 1.3; }
     .challenge-card h3 a { color: #1a3a4a; text-decoration: none; }
     .challenge-card h3 a:hover { text-decoration: underline; }
@@ -23,7 +61,7 @@
     .challenge-card .challenge-course-line a { color: #3d6a7d; font-weight: 500; }
     .challenge-card .challenge-course-line a:hover { text-decoration: underline; }
     .challenge-card .challenge-distance { color: #666; font-weight: 400; }
-    .challenge-card .challenge-mini-map { height: 120px; border-radius: 6px; margin: 0.35rem 0 0.65rem; border: 1px solid #e0e0e0; background: #f5f8fa; }
+    .challenge-card .challenge-mini-map { border-radius: 6px; border: 1px solid #e0e0e0; background: #f5f8fa; }
     .challenge-card .challenge-mini-map .leaflet-container { font-family: inherit; border-radius: 6px; }
     .challenge-card .meta { font-size: 0.9rem; color: #666; margin: 0.5rem 0; }
     .challenge-card .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-right: 0.5rem; }

@@ -90,4 +90,20 @@
   }
 
   window.rownativeAppendToHref = api ? appendDevParams : function (h) { return h; };
+
+  /** Same preference as the main map "High contrast" checkbox (style.css + app.js). */
+  window.rownativeMapHighContrastEnabled = function () {
+    try {
+      return localStorage.getItem("rownative-high-contrast") === "1";
+    } catch (e) {
+      return false;
+    }
+  };
+
+  /** Leaflet polygon style matching app.js getPolygonOptions (cyan vs orange). */
+  window.rownativeLeafletPolygonStyle = function () {
+    return window.rownativeMapHighContrastEnabled()
+      ? { color: "#e65c00", fillColor: "#e65c00", fillOpacity: 0.45, weight: 4 }
+      : { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
+  };
 })();

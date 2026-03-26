@@ -575,6 +575,7 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             "collectionId": data.get("collectionId"),
             "hasHandicap": bool(data.get("hasHandicap")),
             "organizerId": "mock-123",
+            "organizerName": "Mock Organiser",
             "resultsCount": 0,
             "isPublic": data.get("isPublic", True),
         }

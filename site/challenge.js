@@ -148,6 +148,10 @@
   function initMap() {
     const c = challenge;
     const center = (c && c.center_lat != null) ? [c.center_lat, c.center_lon] : [42, -71];
+    const mapEl = document.getElementById("challenge-map");
+    if (mapEl && typeof window.rownativeMapHighContrastEnabled === "function" && window.rownativeMapHighContrastEnabled()) {
+      mapEl.classList.add("map-high-contrast");
+    }
     map = L.map("challenge-map").setView(center, 4);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap",
@@ -156,6 +160,11 @@
 
   function loadCourseForMap(courseId) {
     if (!courseId || !map) return;
+    const defaultPolyStyle = { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
+    const polyStyle =
+      typeof window.rownativeLeafletPolygonStyle === "function"
+        ? window.rownativeLeafletPolygonStyle()
+        : defaultPolyStyle;
     const url = coursesBase + courseId + ".json";
     fetch(url)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
@@ -168,7 +177,7 @@
               if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
                 pts.push(pts[0]);
               }
-              const layer = L.polygon(pts, { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 });
+              const layer = L.polygon(pts, polyStyle);
               layer.bindTooltip(poly.name || "");
               layer.addTo(map);
               pts.forEach((p) => bounds.push(p));
