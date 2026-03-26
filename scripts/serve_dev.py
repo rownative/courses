@@ -9,6 +9,8 @@ enabling full GUI testing without the Cloudflare Worker backend.
 
 Live reload (default): watches site/, courses/, kml/, and generator scripts;
 rebuilds the _site copy and bumps a sequence so pages with dev-reload.js refresh.
+Generated files (courses/index.json from generate_index, kml/*.kml from generate_kml) are
+not watched — otherwise each rebuild rewrites them and retriggers an endless reload loop.
 Use --no-reload to disable watching and browser refresh.
 """
 
@@ -86,6 +88,27 @@ def sync_build(run_generators: bool) -> None:
         patch_index_html_for_reload(BUILD_DIR / "index.html")
 
 
+def _is_generated_artifact(p: Path) -> bool:
+    """Skip watching outputs that sync_build regenerates (otherwise rebuild → rewrite → watch fires → loop)."""
+    try:
+        r = p.resolve()
+    except OSError:
+        return False
+    try:
+        if r.name == "index.json" and r.parent == COURSES_DIR.resolve():
+            return True
+    except OSError:
+        pass
+    if r.suffix.lower() != ".kml":
+        return False
+    if not KML_DIR.exists():
+        return False
+    try:
+        return r.parent == KML_DIR.resolve()
+    except OSError:
+        return False
+
+
 def _collect_watch_paths():
     """Files that should trigger a rebuild when their mtime changes."""
     paths = []
@@ -96,6 +119,8 @@ def _collect_watch_paths():
             if not p.is_file():
                 continue
             if "__pycache__" in p.parts or p.name.startswith("."):
+                continue
+            if _is_generated_artifact(p):
                 continue
             paths.append(p)
     for name in ("generate_index.py", "generate_kml.py"):
