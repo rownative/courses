@@ -328,11 +328,11 @@
     const modal = document.getElementById("submit-modal");
     const activitySelect = document.getElementById("submit-activity");
     const displayNameInput = document.getElementById("submit-display-name");
-    const categoryRow = document.getElementById("submit-category-row");
+    const handicapRow = document.getElementById("submit-handicap-row");
     const resultMsg = document.getElementById("submit-result-msg");
     const c = challenge;
 
-    categoryRow.classList.toggle("hidden", !(c && c.hasHandicap));
+    handicapRow.classList.toggle("hidden", !(c && c.hasHandicap));
     resultMsg.classList.add("hidden");
     resultMsg.innerHTML = "";
     displayNameInput.value = "";
@@ -404,7 +404,7 @@
     const body = {
       activityId: activityId,
       displayName: displayNameInput.value.trim() || undefined,
-      boatType: challenge && challenge.hasHandicap ? boatTypeSelect.value : undefined,
+      boatType: boatTypeSelect && boatTypeSelect.value ? boatTypeSelect.value : undefined,
       sex: challenge && challenge.hasHandicap ? sexSelect.value : undefined,
       weightClass: challenge && challenge.hasHandicap && weightClassSelect ? weightClassSelect.value : undefined,
       crewAvgAge: crewAvgAge,

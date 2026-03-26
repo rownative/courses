@@ -125,12 +125,7 @@
           </select>
         </div>
         <div class="form-row">
-          <label for="submit-display-name">Name or crew</label>
-          <input type="text" id="submit-display-name" placeholder="e.g. Charles River Four" />
-          <small class="form-hint">Your name or your crew/boat name — this is shown on the leaderboard.</small>
-        </div>
-        <div id="submit-category-row" class="form-row hidden">
-          <label>Category (handicap)</label>
+          <label for="submit-boat-type">Boat type</label>
           <select id="submit-boat-type">
             <option value="1x">1x</option>
             <option value="2x">2x</option>
@@ -140,7 +135,16 @@
             <option value="4+">4+</option>
             <option value="8+">8+</option>
           </select>
-          <select id="submit-sex" style="margin-top: 0.5rem;">
+          <small class="form-hint">Your boat class — shown on the leaderboard and used for handicap scoring when this challenge has a handicap.</small>
+        </div>
+        <div class="form-row">
+          <label for="submit-display-name">Name or crew</label>
+          <input type="text" id="submit-display-name" placeholder="e.g. Charles River Four" />
+          <small class="form-hint">Your name or your crew/boat name — this is shown on the leaderboard. Leave blank to use your intervals.icu name.</small>
+        </div>
+        <div id="submit-handicap-row" class="form-row hidden">
+          <label>Category (handicap)</label>
+          <select id="submit-sex" style="margin-top: 0.25rem;">
             <option value="M">Male</option>
             <option value="F">Female</option>
             <option value="X">Mixed</option>
