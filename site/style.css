@@ -48,6 +48,17 @@ header h1 {
   gap: 0.5rem;
 }
 
+/* Site title link — avoid browser :visited purple on dark header */
+header h1 a:link,
+header h1 a:visited {
+  color: #fff;
+  text-decoration: none;
+}
+
+header h1 a:hover {
+  text-decoration: underline;
+}
+
 header .logo {
   height: 1.75em;
   width: auto;
@@ -105,7 +116,8 @@ header .logo {
   gap: 0.5rem 1rem;
 }
 
-#auth-status a {
+#auth-status a:link,
+#auth-status a:visited {
   color: #7dd;
 }
 
