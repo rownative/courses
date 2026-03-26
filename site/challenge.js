@@ -9,10 +9,6 @@
     : "/api";
 
   const params = new URLSearchParams(window.location.search);
-  const DEBUG =
-    params.get("debug") === "1" ||
-    params.get("debug") === "true" ||
-    (typeof window.ROWNATIVE_DEBUG !== "undefined" && window.ROWNATIVE_DEBUG);
   const challengeId = params.get("id");
   if (!challengeId) {
     document.getElementById("challenge-header").innerHTML = "<p class='error'>No challenge specified. <a href='challenges.html'>Browse challenges</a></p>";
@@ -48,18 +44,6 @@
     return (iso + "").slice(0, 10);
   }
 
-  function debugLog(title, obj) {
-    if (!DEBUG) return;
-    const panel = document.getElementById("challenge-debug-panel");
-    const line = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
-    const msg = "[" + new Date().toISOString() + "] " + title + "\n" + line + "\n\n";
-    console.log("[challenge debug]", title, obj);
-    if (panel) {
-      panel.classList.remove("hidden");
-      panel.textContent += msg;
-    }
-  }
-
   function getStatusBadge(rowStart, rowEnd, submitEnd) {
     const now = new Date();
     const rs = new Date(rowStart || 0);
@@ -71,11 +55,10 @@
   }
 
   function checkAuth() {
-    const meUrl = API_BASE + "/me" + (DEBUG ? "?debug=1" : "");
+    const meUrl = API_BASE + "/me";
     return fetch(meUrl, { credentials: "include" })
       .then((r) => r.json())
       .then((data) => {
-        debugLog("GET " + meUrl, data);
         const signedIn = !!data.athleteId;
         const signInLink = document.getElementById("sign-in-link");
         const signOutLink = document.getElementById("sign-out-link");
@@ -146,7 +129,6 @@
         return r.json();
       })
       .then((data) => {
-        debugLog("GET /challenges/" + challengeId, { hasHandicap: data.hasHandicap, courseId: data.courseId, name: data.name });
         challenge = data;
         renderHeader();
         renderSidebar();
@@ -386,10 +368,9 @@
     resultMsg.classList.add("hidden");
     resultMsg.innerHTML = "";
     displayNameInput.value = "";
-    fetch(API_BASE + "/me" + (DEBUG ? "?debug=1" : ""), { credentials: "include" })
+    fetch(API_BASE + "/me", { credentials: "include" })
       .then((r) => r.ok ? r.json() : {})
       .then((me) => {
-        debugLog("GET /me (modal prefill)", me);
         displayNameInput.value = me.athleteDisplayName || "";
       })
       .catch(() => {});
@@ -398,7 +379,6 @@
     fetch(API_BASE + "/me/activities", { credentials: "include" })
       .then((r) => r.json())
       .then((data) => {
-        debugLog("GET /me/activities", { count: (data.activities || []).length, sample: data });
         const acts = data.activities || [];
         const rowStart = c?.rowStart ? String(c.rowStart).slice(0, 10) : null;
         const rowEnd = c?.rowEnd ? String(c.rowEnd).slice(0, 10) : null;
@@ -462,8 +442,7 @@
       crewAvgAge: crewAvgAge,
     };
 
-    const submitPath = API_BASE + "/challenges/" + encodeURIComponent(challengeId) + "/submit" + (DEBUG ? "?debug=1" : "");
-    debugLog("POST submit request", { url: submitPath, body: body });
+    const submitPath = API_BASE + "/challenges/" + encodeURIComponent(challengeId) + "/submit";
 
     submitBtn.disabled = true;
     fetch(submitPath, {
@@ -474,7 +453,6 @@
     })
       .then((r) => r.json())
       .then((data) => {
-        debugLog("POST submit response", data);
         if (data.error) {
           resultMsg.textContent = data.validationNote ? data.error + ": " + data.validationNote : data.error;
           resultMsg.classList.add("error");
@@ -516,16 +494,6 @@
       stopStatusRefresh();
     }
   });
-
-  if (DEBUG) {
-    const panel = document.getElementById("challenge-debug-panel");
-    if (panel) {
-      panel.classList.remove("hidden");
-      panel.textContent =
-        "debug=1 — challenge API traces (Worker: _debug.intervalsAthleteSelf shows intervals.icu GET /athlete/self). " +
-        "serve_dev mock does not call intervals.\n\n";
-    }
-  }
 
   checkAuth()
     .then((signedIn) => {

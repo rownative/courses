@@ -409,6 +409,34 @@
       return;
     }
 
+    function parseChallengeInstant(value) {
+      const d = new Date(value);
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+    const dRowStart = parseChallengeInstant(rowStart);
+    const dRowEnd = parseChallengeInstant(rowEnd);
+    const dSubmitEnd = parseChallengeInstant(submitEnd);
+    if (!dRowStart || !dRowEnd || !dSubmitEnd) {
+      createResult.textContent = "One or more dates are not valid. Check the row window and submission deadline.";
+      createResult.classList.remove("hidden");
+      createResult.classList.add("error");
+      return;
+    }
+    if (dRowEnd <= dRowStart) {
+      createResult.textContent =
+        "Row window end must be after the row window start.";
+      createResult.classList.remove("hidden");
+      createResult.classList.add("error");
+      return;
+    }
+    if (dSubmitEnd < dRowEnd) {
+      createResult.textContent =
+        "Submission deadline must be on or after the row window end.";
+      createResult.classList.remove("hidden");
+      createResult.classList.add("error");
+      return;
+    }
+
     const rowStartISO = rowStart ? new Date(rowStart).toISOString().slice(0, 19) : null;
     const rowEndISO = rowEnd ? new Date(rowEnd).toISOString().slice(0, 19) : null;
     const submitEndISO = submitEnd ? new Date(submitEnd).toISOString().slice(0, 19) : null;
