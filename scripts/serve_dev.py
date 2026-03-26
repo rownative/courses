@@ -6,6 +6,10 @@ so index.json, courses/, and kml/ are at the expected paths.
 
 With mock API: intercepts /api/* and /oauth/* to return mock responses,
 enabling full GUI testing without the Cloudflare Worker backend.
+
+Live reload (default): watches site/, courses/, kml/, and generator scripts;
+rebuilds the _site copy and bumps a sequence so pages with dev-reload.js refresh.
+Use --no-reload to disable watching and browser refresh.
 """
 
 from __future__ import annotations
@@ -13,6 +17,8 @@ from __future__ import annotations
 import argparse
 import errno
 import json
+import threading
+import time
 from urllib.parse import parse_qs, urlparse
 import http.server
 import os
@@ -28,6 +34,100 @@ SITE_DIR = ROOT / "site"
 COURSES_DIR = ROOT / "courses"
 KML_DIR = ROOT / "kml"
 BUILD_DIR = ROOT / "_site"
+
+# Live reload (browser refresh after watch rebuild): incremented when sources change
+_reload_seq = 0
+_reload_lock = threading.Lock()
+RELOAD_BROWSER = False
+
+
+def patch_index_html_for_reload(index_path: Path) -> None:
+    """Inject dev-reload.js before </body> in the built index (dev server only)."""
+    if not RELOAD_BROWSER or not index_path.exists():
+        return
+    try:
+        text = index_path.read_text(encoding="utf-8")
+    except OSError:
+        return
+    if "dev-reload.js" in text:
+        return
+    if "</body>" not in text:
+        return
+    text = text.replace("</body>", '  <script src="dev-reload.js" defer></script>\n</body>', 1)
+    index_path.write_text(text, encoding="utf-8")
+
+
+def sync_build(run_generators: bool) -> None:
+    """Regenerate index/KML (optional), copy site + data into BUILD_DIR."""
+    if run_generators:
+        for name in ["generate_index.py", "generate_kml.py"]:
+            script = ROOT / "scripts" / name
+            if script.exists():
+                subprocess.run([sys.executable, str(script)], cwd=str(ROOT), check=True)
+
+    BUILD_DIR.mkdir(parents=True, exist_ok=True)
+    for f in SITE_DIR.iterdir():
+        if f.is_file():
+            shutil.copy2(f, BUILD_DIR / f.name)
+    if (COURSES_DIR / "index.json").exists():
+        shutil.copy2(COURSES_DIR / "index.json", BUILD_DIR / "index.json")
+    if KML_DIR.exists():
+        dst = BUILD_DIR / "kml"
+        dst.mkdir(exist_ok=True)
+        for f in KML_DIR.glob("*.kml"):
+            shutil.copy2(f, dst / f.name)
+    if COURSES_DIR.exists():
+        dst = BUILD_DIR / "courses"
+        dst.mkdir(exist_ok=True)
+        for f in COURSES_DIR.glob("*.json"):
+            shutil.copy2(f, dst / f.name)
+
+    if RELOAD_BROWSER:
+        patch_index_html_for_reload(BUILD_DIR / "index.html")
+
+
+def _collect_watch_paths():
+    """Files that should trigger a rebuild when their mtime changes."""
+    paths = []
+    for d in (SITE_DIR, COURSES_DIR, KML_DIR):
+        if not d.exists():
+            continue
+        for p in d.rglob("*"):
+            if not p.is_file():
+                continue
+            if "__pycache__" in p.parts or p.name.startswith("."):
+                continue
+            paths.append(p)
+    for name in ("generate_index.py", "generate_kml.py"):
+        p = ROOT / "scripts" / name
+        if p.exists():
+            paths.append(p)
+    return paths
+
+
+def _watch_and_rebuild_loop(run_generators: bool) -> None:
+    """Background: poll mtimes; on change, sync_build and bump _reload_seq so browsers poll-reload."""
+    global _reload_seq
+    prev = {}
+    while True:
+        time.sleep(0.75)
+        cur = {}
+        for p in _collect_watch_paths():
+            try:
+                cur[str(p)] = p.stat().st_mtime
+            except OSError:
+                pass
+        if cur != prev:
+            if prev:
+                try:
+                    print("Files changed; rebuilding site...")
+                    sync_build(run_generators=run_generators)
+                    with _reload_lock:
+                        _reload_seq += 1
+                    print("  Live reload signal sent (refresh open browser tabs).")
+                except subprocess.CalledProcessError as e:
+                    print(f"  Rebuild failed: {e}", file=sys.stderr)
+            prev = cur
 
 
 def _is_client_disconnect_oserror(exc: OSError) -> bool:
@@ -868,7 +968,20 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         return False
 
+    def _handle_dev_reload_poll(self) -> None:
+        with _reload_lock:
+            seq = _reload_seq
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(json.dumps({"seq": seq}).encode("utf-8"))
+
     def do_GET(self) -> None:
+        path = self.path.split("?", 1)[0].rstrip("/")
+        if path == "/__dev/reload":
+            self._handle_dev_reload_poll()
+            return
         if self._try_handle_mock():
             return
         super().do_GET()
@@ -891,36 +1004,29 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 
 def main() -> None:
+    global RELOAD_BROWSER
     parser = argparse.ArgumentParser(description="Serve rownative courses site locally")
     parser.add_argument("-p", "--port", type=int, default=8080, help="Port (default: 8080)")
     parser.add_argument("--no-build", action="store_true", help="Skip regenerating index and KML")
+    parser.add_argument(
+        "--no-reload",
+        action="store_true",
+        help="Disable file watching and live browser reload (dev-reload.js + /__dev/reload)",
+    )
     args = parser.parse_args()
+
+    RELOAD_BROWSER = not args.no_reload
 
     if not args.no_build:
         print("Regenerating index and KML...")
-        for name in ["generate_index.py", "generate_kml.py"]:
-            script = ROOT / "scripts" / name
-            if script.exists():
-                subprocess.run([sys.executable, str(script)], cwd=str(ROOT), check=True)
+    sync_build(run_generators=not args.no_build)
 
-    BUILD_DIR.mkdir(parents=True, exist_ok=True)
-    # Copy site files
-    for f in SITE_DIR.iterdir():
-        if f.is_file():
-            shutil.copy2(f, BUILD_DIR / f.name)
-    # Copy index and data
-    if (COURSES_DIR / "index.json").exists():
-        shutil.copy2(COURSES_DIR / "index.json", BUILD_DIR / "index.json")
-    if KML_DIR.exists():
-        dst = BUILD_DIR / "kml"
-        dst.mkdir(exist_ok=True)
-        for f in KML_DIR.glob("*.kml"):
-            shutil.copy2(f, dst / f.name)
-    if COURSES_DIR.exists():
-        dst = BUILD_DIR / "courses"
-        dst.mkdir(exist_ok=True)
-        for f in COURSES_DIR.glob("*.json"):
-            shutil.copy2(f, dst / f.name)
+    if RELOAD_BROWSER:
+        threading.Thread(
+            target=_watch_and_rebuild_loop,
+            args=(not args.no_build,),
+            daemon=True,
+        ).start()
 
     os.chdir(BUILD_DIR)
     port = args.port
@@ -933,6 +1039,8 @@ def main() -> None:
                 print("Mock API enabled: /api/* and /oauth/* return mock data for GUI testing.")
                 print("  Sign in: click 'Sign in with intervals.icu' (no real OAuth)")
                 print("  Sign in as organiser: /oauth/authorize?mock_organizer=1")
+                if RELOAD_BROWSER:
+                    print("Live reload: enabled — edit site/, courses/, or kml/; open tabs refresh after rebuild.")
                 print("Press Ctrl+C to stop")
                 try:
                     httpd.serve_forever()

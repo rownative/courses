@@ -59,6 +59,22 @@
   let baseLayerSatellite;
   let seaMarksLayer;
 
+  /** High contrast toggle lives in the Leaflet layers panel (same box as base map / seamarks). */
+  function appendHighContrastToLayersControl(layersCtrl) {
+    const container = layersCtrl.getContainer();
+    const section = container.querySelector("section.leaflet-control-layers-list");
+    if (!section) return;
+    const label = document.createElement("label");
+    label.className = "leaflet-control-layers-high-contrast";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.id = "high-contrast";
+    input.setAttribute("aria-label", "High contrast mode for course polygons");
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(" High contrast"));
+    section.appendChild(label);
+  }
+
   function initMap() {
     if (typeof L === "undefined" || typeof L.map !== "function") {
       showLoadError("Map library (Leaflet) did not load. Check the network tab or disable ad blockers for this site.");
@@ -100,6 +116,29 @@
     if (storageGet("rownative-map-seamarks") === "1") {
       seaMarksLayer.addTo(map);
     }
+
+    const layersCtrl = L.control
+      .layers(
+        { Map: baseLayerOsm, Satellite: baseLayerSatellite },
+        { "Sea marks (OpenSeaMap)": seaMarksLayer },
+        { collapsed: false, position: "bottomleft" }
+      )
+      .addTo(map);
+    appendHighContrastToLayersControl(layersCtrl);
+
+    map.on("baselayerchange", function (e) {
+      storageSet("rownative-map-base", e.name === "Satellite" ? "satellite" : "osm");
+    });
+    map.on("overlayadd", function (e) {
+      if (e.name === "Sea marks (OpenSeaMap)") {
+        storageSet("rownative-map-seamarks", "1");
+      }
+    });
+    map.on("overlayremove", function (e) {
+      if (e.name === "Sea marks (OpenSeaMap)") {
+        storageSet("rownative-map-seamarks", "0");
+      }
+    });
 
     highContrastMode = storageGet("rownative-high-contrast") === "1";
     const mapEl = document.getElementById("map");
@@ -908,41 +947,6 @@
         if (mapEl) mapEl.classList.toggle("high-contrast", highContrastMode);
         renderMarkers(true);
         refreshOpenCourseDetail();
-      });
-    }
-
-    if (map && baseLayerOsm && baseLayerSatellite && seaMarksLayer) {
-      const baseRadios = document.querySelectorAll('input[name="rownative-map-base-ui"]');
-      const seamarksEl = document.getElementById("map-seamarks");
-      const satOn = map.hasLayer(baseLayerSatellite);
-      baseRadios.forEach((r) => {
-        r.checked = satOn ? r.value === "satellite" : r.value === "osm";
-      });
-      if (seamarksEl) {
-        seamarksEl.checked = map.hasLayer(seaMarksLayer);
-        seamarksEl.addEventListener("change", () => {
-          if (seamarksEl.checked) {
-            seaMarksLayer.addTo(map);
-            storageSet("rownative-map-seamarks", "1");
-          } else {
-            map.removeLayer(seaMarksLayer);
-            storageSet("rownative-map-seamarks", "0");
-          }
-        });
-      }
-      baseRadios.forEach((r) => {
-        r.addEventListener("change", () => {
-          if (!r.checked) return;
-          if (r.value === "satellite") {
-            map.removeLayer(baseLayerOsm);
-            baseLayerSatellite.addTo(map);
-            storageSet("rownative-map-base", "satellite");
-          } else {
-            map.removeLayer(baseLayerSatellite);
-            baseLayerOsm.addTo(map);
-            storageSet("rownative-map-base", "osm");
-          }
-        });
       });
     }
 
