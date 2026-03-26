@@ -316,15 +316,34 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         cookie_header = self.headers.get("Cookie")
         signed_in = _is_mock_signed_in(cookie_header)
         is_organizer = _is_mock_organizer(cookie_header)
+        qs = self.path.split("?", 1)[1] if "?" in self.path else ""
+        debug_me = "debug=1" in qs
         if signed_in:
-            self._send_json({
+            payload = {
                 "athleteId": "mock-123",
                 "liked": list(MOCK_LIKED),
                 "isOrganizer": is_organizer,
                 "athleteDisplayName": "Mock Athlete",
-            })
+            }
+            if debug_me:
+                payload["_debug"] = {
+                    "source": "serve_dev mock",
+                    "intervalsAthleteSelf": {
+                        "httpStatus": 200,
+                        "ok": True,
+                        "topLevelKeys": ["id", "name", "athleteDisplayName (mock)"],
+                        "usedNestedAthlete": False,
+                    },
+                    "profile": {
+                        "id": "mock-123",
+                        "hasName": True,
+                        "hasFirst": True,
+                        "hasLast": True,
+                    },
+                }
+            self._send_json(payload)
         else:
-            self._send_json({"athleteId": None, "liked": [], "isOrganizer": False})
+            self._send_json({"athleteId": None, "liked": [], "isOrganizer": False, "athleteDisplayName": None})
         return True
 
     def _handle_api_me_course_times(self) -> bool:
@@ -674,7 +693,9 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         MOCK_CHALLENGE_RESULTS.append(new_result)
         results_for_challenge = [r for r in MOCK_CHALLENGE_RESULTS if r.get("challengeId") == challenge_id]
         rank = len(results_for_challenge)
-        self._send_json({
+        qs = self.path.split("?", 1)[1] if "?" in self.path else ""
+        debug_submit = "debug=1" in qs
+        out = {
             "success": True,
             "resultId": result_id,
             "rank": rank,
@@ -682,7 +703,15 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             "correctedTimeS": new_result["correctedTimeS"],
             "points": new_result["points"],
             "validationNote": "",
-        })
+        }
+        if debug_submit:
+            out["_debug"] = {
+                "source": "serve_dev mock",
+                "displayNameStored": new_result.get("displayName"),
+                "bodyDisplayName": data.get("displayName"),
+                "note": "Real Worker returns intervalsAthleteSelf from intervals.icu; mock does not call intervals.",
+            }
+        self._send_json(out)
         return True
 
     def _handle_api_organiser_challenges_list(self) -> bool:
