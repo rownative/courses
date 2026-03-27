@@ -121,8 +121,9 @@ header .logo {
   color: #7dd;
 }
 
-#auth-status .hidden {
-  display: none;
+/* Toggled visibility site-wide. !important beats #auth-status a (otherwise links stay visible). */
+.hidden {
+  display: none !important;
 }
 
 /* Nav overlay — slide-out on mobile */
