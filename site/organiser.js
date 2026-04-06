@@ -28,6 +28,11 @@
     return p.get("moderate") || p.get("challenge");
   })();
 
+  const courseFromUrl = (function () {
+    const p = new URLSearchParams(window.location.search);
+    return p.get("course");
+  })();
+
   (function hideDevMockOrganiserHint() {
     const el = document.getElementById("dev-mock-organiser-hint");
     if (el && (!window.rownativeIsLocalDevHost || !window.rownativeIsLocalDevHost())) {
@@ -266,6 +271,17 @@
         challengeCourseSearch.placeholder = "Search courses…";
         challengeCourseSearch.value = "";
         renderCourseDropdown(filterCourseOptions(""));
+        
+        if (courseFromUrl) {
+          const course = allCourses.find((c) => String(c.id) === String(courseFromUrl));
+          if (course) {
+            const name = (course.name || "Course " + course.id).slice(0, 80);
+            challengeCourse.value = String(course.id);
+            challengeCourseSearch.value = name;
+            challengeCourseSearch.placeholder = name;
+            challengeCourseDropdown.classList.add("hidden");
+          }
+        }
       })
       .catch(() => {
         challengeCourseSearch.placeholder = "Failed to load";
