@@ -1047,10 +1047,10 @@
     "id": "273",
     "name": "Twentekanaal 1km",
     "country": "Unknown",
-    "center_lat": 52.235179472370284,
-    "center_lon": 6.835660303365065,
-    "distance_m": 1020,
-    "status": "provisional"
+    "center_lat": 52.236474546709815,
+    "center_lon": 6.833510163159142,
+    "distance_m": 1044,
+    "status": "established"
   },
   {
     "id": "274",
@@ -1060,6 +1060,24 @@
     "center_lon": 6.838097258842331,
     "distance_m": 525,
     "status": "provisional"
+  },
+  {
+    "id": "275",
+    "name": "2026 RCRC Gold Skiff",
+    "country": "Unknown",
+    "center_lat": 38.53843598265172,
+    "center_lon": -121.5823175097457,
+    "distance_m": 10987,
+    "status": "provisional"
+  },
+  {
+    "id": "276",
+    "name": "2026 RCRC Gold Skiff V2",
+    "country": "Unknown",
+    "center_lat": 38.53843565846174,
+    "center_lon": -121.58226360368042,
+    "distance_m": 10974,
+    "status": "established"
   },
   {
     "id": "28",
