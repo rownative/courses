@@ -51,6 +51,7 @@
   let userLiked = new Set();
   let isSignedIn = false;
   let athleteId = null;
+  let isOrganizer = false;
   let highContrastMode = false;
 
   // Elements
@@ -490,6 +491,9 @@
     const calculateBtnHtml = isSignedIn
       ? `<button type="button" class="btn calculate-time-btn" data-id="${idHtml}" data-name="${escapeHtml(meta.name)}">Calculate my time</button>`
       : "";
+    const createChallengeHtml = isOrganizer
+      ? `<a href="organiser.html?course=${idPath}" class="btn">Create challenge</a>`
+      : "";
     const courseTimesSection = isSignedIn
       ? `<div class="detail-course-times"><strong>My times</strong><ul id="detail-course-times-list">Loading…</ul></div>`
       : "";
@@ -504,6 +508,7 @@
         <a href="${kmlUrl}" download="${idHtml}.kml" class="btn">Download KML</a>
         ${likeButtonHtml}
         ${calculateBtnHtml}
+        ${createChallengeHtml}
         ${isSignedIn && meta.status === 'provisional' ? `<a href="update.html?id=${idPath}" class="btn">Update with new KML</a>` : ''}
       </p>
       ${courseTimesSection}
@@ -886,6 +891,7 @@
       .then((data) => {
         isSignedIn = !!data.athleteId;
         athleteId = data.athleteId || null;
+        isOrganizer = !!(data.athleteId && data.isOrganizer);
         const raw = data.liked || [];
         const ids = Array.isArray(raw)
           ? raw.map((x) => (typeof x === "object" && x != null && "id" in x ? x.id : String(x)))
@@ -921,6 +927,7 @@
       .catch((e) => {
         isSignedIn = false;
         athleteId = null;
+        isOrganizer = false;
         showAuthError(e.message || "fetch failed");
         const legendLiked = document.getElementById("legend-liked");
         if (legendLiked) legendLiked.classList.add("hidden");
