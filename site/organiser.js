@@ -546,16 +546,24 @@
         } else {
           moderationResults.innerHTML = toShow
             .map(
-              (r) =>
-                "<div class='moderation-item " + (r.validationStatus || "") + "'>" +
-                "<strong>" + escapeHtml(r.displayName || "Anonymous") + "</strong> — " +
-                fmtTime(r.rawTimeS) +
-                (r.validationNote ? "<br><em>" + escapeHtml(r.validationNote) + "</em>" : "") +
-                "<br>" +
-                (needsModeration.includes(r) ? "<button type='button' class='btn approve-btn' data-result-id='" + escapeHtml(r.id) + "'>Approve</button> " : "") +
-                "<button type='button' class='btn btn-secondary dq-btn' data-result-id='" + escapeHtml(r.id) + "'>Disqualify</button> " +
-                "<button type='button' class='btn btn-secondary view-track-btn' data-result-id='" + escapeHtml(r.id) + "'>View track</button>" +
-                "</div>"
+              (r) => {
+                let passageTimesHtml = "";
+                if (r.validationLog && Array.isArray(r.validationLog) && r.validationLog.length > 0) {
+                  passageTimesHtml = "<div class='passage-times'><strong>Passage times:</strong><ul>" +
+                    r.validationLog.map(log => "<li>" + escapeHtml(log) + "</li>").join("") +
+                    "</ul></div>";
+                }
+                return "<div class='moderation-item " + (r.validationStatus || "") + "'>" +
+                  "<strong>" + escapeHtml(r.displayName || "Anonymous") + "</strong> — " +
+                  fmtTime(r.rawTimeS) +
+                  (r.validationNote ? "<br><em>" + escapeHtml(r.validationNote) + "</em>" : "") +
+                  passageTimesHtml +
+                  "<br>" +
+                  (needsModeration.includes(r) ? "<button type='button' class='btn approve-btn' data-result-id='" + escapeHtml(r.id) + "'>Approve</button> " : "") +
+                  "<button type='button' class='btn btn-secondary dq-btn' data-result-id='" + escapeHtml(r.id) + "'>Disqualify</button> " +
+                  "<button type='button' class='btn btn-secondary view-track-btn' data-result-id='" + escapeHtml(r.id) + "'>View track</button>" +
+                  "</div>";
+              }
             )
             .join("");
           moderationResults.querySelectorAll(".approve-btn").forEach((btn) => {
