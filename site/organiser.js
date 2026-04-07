@@ -400,10 +400,19 @@
                 "<td>" + (c.resultsCount || 0) + "</td>" +
                 "<td>" +
                 "<a href='challenge.html?id=" + encodeURIComponent(c.id) + "' class='btn'>View</a> " +
+                "<button type='button' class='btn btn-secondary delete-challenge-btn' data-challenge-id='" + escapeHtml(c.id) + "' data-challenge-name='" + escapeHtml(c.name) + "' data-results-count='" + (c.resultsCount || 0) + "'>Delete</button>" +
                 "</td>" +
                 "</tr>"
             )
             .join("");
+          myChallengesBody.querySelectorAll(".delete-challenge-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const challengeId = btn.dataset.challengeId;
+              const challengeName = btn.dataset.challengeName;
+              const resultsCount = parseInt(btn.dataset.resultsCount, 10);
+              deleteChallenge(challengeId, challengeName, resultsCount);
+            });
+          });
           moderateSelect.innerHTML = "<option value=''>— Select challenge —</option>";
           myChallenges.forEach((c) => {
             moderateSelect.innerHTML += "<option value='" + escapeHtml(c.id) + "'>" + escapeHtml(c.name) + "</option>";
@@ -618,6 +627,62 @@
         moderateSelect.dispatchEvent(new Event("change"));
       })
       .catch(() => alert("Override failed"));
+  }
+
+  function deleteChallenge(challengeId, challengeName, resultsCount) {
+    let mergeInto = null;
+
+    if (resultsCount > 0) {
+      const eligibleChallenges = myChallenges.filter((c) => c.id !== challengeId);
+      if (eligibleChallenges.length > 0) {
+        const mergePrompt = confirm(
+          "This challenge has " + resultsCount + " result(s).\n\n" +
+          "Do you want to merge them into another challenge?\n\n" +
+          "Click OK to select a challenge, or Cancel to just remove this challenge (results will be hidden)."
+        );
+        if (mergePrompt) {
+          const options = eligibleChallenges.map((c, i) => {
+            const dateRange = fmtDateRange(c.rowStart, c.rowEnd);
+            const shortId = (c.id || "").slice(0, 8);
+            return (i + 1) + ". " + c.name + " — " + dateRange + " (" + (c.resultsCount || 0) + " results, id: " + shortId + ")";
+          }).join("\n");
+          const selection = prompt(
+            "Select a challenge to merge results into (enter number):\n\n" + options
+          );
+          if (selection === null) return;
+          const idx = parseInt(selection, 10) - 1;
+          if (idx >= 0 && idx < eligibleChallenges.length) {
+            mergeInto = eligibleChallenges[idx].id;
+          } else {
+            alert("Invalid selection. Canceling delete.");
+            return;
+          }
+        }
+      }
+    }
+
+    const confirmMsg = mergeInto
+      ? "Delete challenge '" + challengeName + "' and merge results into the selected challenge?"
+      : "Delete challenge '" + challengeName + "'?" + (resultsCount > 0 ? " (results will be hidden but not deleted)" : "");
+    if (!confirm(confirmMsg)) return;
+
+    const url = API_BASE + "/organiser/challenges/" + encodeURIComponent(challengeId) + (mergeInto ? "?mergeInto=" + encodeURIComponent(mergeInto) : "");
+    fetch(url, {
+      method: "DELETE",
+      credentials: "include",
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.error) {
+          alert("Failed to delete challenge: " + data.error);
+        } else {
+          alert("Challenge deleted successfully." + (data.issue ? "\n\nIssue created: " + data.issue : ""));
+          loadMyChallenges();
+        }
+      })
+      .catch((err) => {
+        alert("Failed to delete challenge: " + (err.message || "Unknown error"));
+      });
   }
 
   checkAuth();
