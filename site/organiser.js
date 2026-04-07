@@ -641,7 +641,11 @@
           "Click OK to select a challenge, or Cancel to just remove this challenge (results will be hidden)."
         );
         if (mergePrompt) {
-          const options = eligibleChallenges.map((c, i) => (i + 1) + ". " + c.name + " (" + c.courseId + ")").join("\n");
+          const options = eligibleChallenges.map((c, i) => {
+            const dateRange = fmtDateRange(c.rowStart, c.rowEnd);
+            const shortId = (c.id || "").slice(0, 8);
+            return (i + 1) + ". " + c.name + " — " + dateRange + " (" + (c.resultsCount || 0) + " results, id: " + shortId + ")";
+          }).join("\n");
           const selection = prompt(
             "Select a challenge to merge results into (enter number):\n\n" + options
           );
