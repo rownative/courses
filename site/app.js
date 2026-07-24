@@ -88,6 +88,9 @@
     try {
     map = L.map("map").setView([30, 0], 2);
 
+    map.createPane('seamarksPane');
+    map.getPane('seamarksPane').style.zIndex = 450;
+
     baseLayerOsm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '© <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>',
@@ -108,6 +111,7 @@
       opacity: 0.95,
       minZoom: 9,
       maxZoom: 18,
+      pane: 'seamarksPane',
     });
 
     const basePref = storageGet("rownative-map-base");
