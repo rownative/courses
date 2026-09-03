@@ -42,7 +42,9 @@ jobs:
         id: validate
         run: |
           FILES="${{ steps.changed.outputs.files }}"
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
           FAILED=0
+          PREEXISTING=0
           OUTPUT=""
           if [ -z "$FILES" ]; then
             echo "No course files changed."
@@ -57,8 +59,16 @@ jobs:
                 OUTPUT="${OUTPUT}\n- \`$f\`: OK"
               else
                 ERR=$(echo "$LOG" | grep -v 'warning:' | head -n 1 | sed "s|^$f: ||")
-                OUTPUT="${OUTPUT}\n- \`$f\`: FAILED — ${ERR}"
-                FAILED=1
+                # A file that already failed on the base branch is reported but does not
+                # fail the job, so legacy geometry problems do not block unrelated edits.
+                if [ -n "$BASE_SHA" ] && git show "$BASE_SHA:$f" > /tmp/base_course.json 2>/dev/null \
+                   && ! python scripts/validate_course.py /tmp/base_course.json > /dev/null 2>&1; then
+                  OUTPUT="${OUTPUT}\n- \`$f\`: ⚠️ FAILED, but already failing on base (not counted) — ${ERR}"
+                  PREEXISTING=1
+                else
+                  OUTPUT="${OUTPUT}\n- \`$f\`: ❌ FAILED — ${ERR}"
+                  FAILED=1
+                fi
               fi
               echo "$LOG" | tee -a /tmp/validate.log
               while IFS= read -r w; do
@@ -66,6 +76,9 @@ jobs:
               done <<< "$(echo "$LOG" | grep 'warning:' || true)"
             fi
           done
+          if [ $PREEXISTING -ne 0 ]; then
+            OUTPUT="${OUTPUT}\n\nSome files fail for reasons already present on the base branch; run \`python scripts/audit_courses.py\` for the full list."
+          fi
           echo "output<<EOF" >> $GITHUB_OUTPUT
           echo -e "$OUTPUT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT

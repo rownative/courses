@@ -93,7 +93,7 @@ Validation checks:
 - No polygon overlap within the course
 - If a `path` is present: at least two points, and it passes every gate
 
-Validation also prints non-fatal **warnings** (a gate wider than 500 m, a polygon that looks like a traced route, `distance_m` far from the polygon chain, odd polygon ordering). They appear in the PR comment so a reviewer can take a look; they do not block a merge.
+Validation also prints non-fatal **warnings** (a gate wider than 500 m, a polygon that looks like a traced route, `distance_m` far from the polygon chain, odd polygon ordering). They appear in the PR comment so a reviewer can take a look; they do not block a merge. A course that already failed validation on the base branch is reported as pre-existing rather than failing the check, so a rename or status change on a legacy course is not blocked by old geometry problems.
 
 To audit the whole library at once:
 
