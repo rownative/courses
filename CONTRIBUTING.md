@@ -93,6 +93,15 @@ Validation checks:
 - No polygon overlap within the course
 - If a `path` is present: at least two points, and it passes every gate
 
+Validation also prints non-fatal **warnings** (a gate wider than 500 m, a polygon that looks like a traced route, `distance_m` far from the polygon chain, odd polygon ordering). They appear in the PR comment so a reviewer can take a look; they do not block a merge.
+
+To audit the whole library at once:
+
+```bash
+python scripts/audit_courses.py            # text report
+python scripts/audit_courses.py --json     # machine-readable
+```
+
 ## Contributing code or scripts
 
 - **Bug fixes and improvements** — Open an issue first to discuss, or open a PR directly for small changes

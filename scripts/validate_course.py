@@ -24,6 +24,16 @@ MAX_CONSECUTIVE_GAP_M = 25_000
 PATH_GATE_TOLERANCE_M = 250
 MIN_PATH_POINTS = 2
 
+# Non-fatal data-quality warnings (reported alongside OK; never fail validation).
+# Gate extents in the library: median ~100 m, 99th percentile ~420 m.
+POLYGON_EXTENT_WARN_M = 500
+# A polygon this large with this many vertices is almost certainly a traced route, not a gate.
+PATH_LIKE_MIN_VERTICES = 12
+PATH_LIKE_MIN_EXTENT_M = 1000
+# distance_m is warned about when it disagrees with the polygon chain by more than both of these.
+DISTANCE_MISMATCH_WARN_FRACTION = 0.10
+DISTANCE_MISMATCH_WARN_MIN_M = 50
+
 
 def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """Distance in meters between two WGS84 points."""
@@ -140,13 +150,68 @@ def segments_intersect(a1: dict, a2: dict, b1: dict, b2: dict) -> bool:
 
 
 def strip_duplicate_closing_vertex(points: list[dict]) -> list[dict]:
-    """If first and last vertices coincide (KML closed ring), drop the duplicate for geometry."""
-    if len(points) < 4:
-        return points
-    a, b = points[0], points[-1]
-    if a["lat"] == b["lat"] and a["lon"] == b["lon"]:
-        return points[:-1]
-    return points
+    """
+    Normalise a ring for geometry checks.
+
+    Drops consecutive duplicate vertices (zero-length edges, common in KML exports, which
+    otherwise trip the self-intersection check) and, if the first and last vertices then
+    coincide (KML closed ring), drops the closing duplicate.
+    """
+    out: list[dict] = []
+    for p in points:
+        if out and out[-1]["lat"] == p["lat"] and out[-1]["lon"] == p["lon"]:
+            continue
+        out.append(p)
+    if len(out) >= 4 and out[0]["lat"] == out[-1]["lat"] and out[0]["lon"] == out[-1]["lon"]:
+        out = out[:-1]
+    return out
+
+
+def polygon_chain_length_m(polygons: list[dict]) -> float:
+    """Sum of centroid-to-centroid distances along polygons (assumed sorted by order)."""
+    centroids = [polygon_centroid(strip_duplicate_closing_vertex(p["points"])) for p in polygons]
+    return sum(
+        haversine_m(centroids[i][0], centroids[i][1], centroids[i + 1][0], centroids[i + 1][1])
+        for i in range(len(centroids) - 1)
+    )
+
+
+def course_warnings(data: dict) -> list[str]:
+    """
+    Non-fatal data-quality warnings for a structurally valid course dict.
+    These do not fail validation; they are surfaced so a reviewer can look.
+    """
+    warnings: list[str] = []
+    polygons = sorted(data.get("polygons") or [], key=lambda p: p.get("order", 0))
+
+    for i, poly in enumerate(polygons):
+        pts = strip_duplicate_closing_vertex(poly["points"])
+        extent = polygon_extent_m(pts)
+        if len(pts) >= PATH_LIKE_MIN_VERTICES and extent >= PATH_LIKE_MIN_EXTENT_M:
+            warnings.append(
+                f"polygon {i} ({poly['name']}) looks like a traced route "
+                f"({len(pts)} vertices, {extent:.0f}m across); store it in `path` instead"
+            )
+        elif extent > POLYGON_EXTENT_WARN_M:
+            warnings.append(
+                f"polygon {i} ({poly['name']}) is {extent:.0f}m across "
+                f"(> {POLYGON_EXTENT_WARN_M}m); check for a stray vertex"
+            )
+
+    orders = [p.get("order") for p in polygons]
+    if polygons and orders != list(range(len(polygons))):
+        warnings.append(f"polygon orders are {orders}; expected 0..{len(polygons) - 1}")
+
+    declared = data.get("distance_m")
+    if len(polygons) >= 2 and isinstance(declared, (int, float)) and not isinstance(declared, bool):
+        chain = polygon_chain_length_m(polygons)
+        diff = abs(declared - chain)
+        if chain > 0 and diff > DISTANCE_MISMATCH_WARN_MIN_M and diff / chain > DISTANCE_MISMATCH_WARN_FRACTION:
+            warnings.append(
+                f"distance_m is {declared:.0f} but the polygon chain measures {chain:.0f}m"
+            )
+
+    return warnings
 
 
 def polygon_self_intersects(points: list[dict]) -> bool:
@@ -343,6 +408,16 @@ def validate_course(path: Path) -> tuple[bool, str]:
     return True, "OK"
 
 
+def validate_course_detailed(path: Path) -> tuple[bool, str, list[str]]:
+    """Like validate_course, plus the non-fatal warnings for a course that passed."""
+    ok, msg = validate_course(path)
+    warnings: list[str] = []
+    if ok:
+        with open(path, encoding="utf-8") as f:
+            warnings = course_warnings(json.load(f))
+    return ok, msg, warnings
+
+
 def main() -> None:
     if len(sys.argv) < 2:
         print("Usage: validate_course.py <course.json> [course2.json ...]", file=sys.stderr)
@@ -355,9 +430,11 @@ def main() -> None:
             print(f"{path}: file not found", file=sys.stderr)
             all_ok = False
             continue
-        ok, msg = validate_course(path)
+        ok, msg, warnings = validate_course_detailed(path)
         if ok:
             print(f"{path}: OK")
+            for w in warnings:
+                print(f"{path}: warning: {w}")
         else:
             print(f"{path}: {msg}", file=sys.stderr)
             all_ok = False

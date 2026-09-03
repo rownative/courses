@@ -14,6 +14,11 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from validate_course import (
     PATH_GATE_TOLERANCE_M,
+    POLYGON_EXTENT_WARN_M,
+    course_warnings,
+    polygon_chain_length_m,
+    strip_duplicate_closing_vertex,
+    validate_course_detailed,
     haversine_m,
     path_length_m,
     path_min_distance_m,
@@ -185,6 +190,71 @@ class TestSegmentsIntersect:
         a1, a2 = {"lat": 0, "lon": 0}, {"lat": 0, "lon": 1}
         b1, b2 = {"lat": 0, "lon": 2}, {"lat": 0, "lon": 3}
         assert segments_intersect(a1, a2, b1, b2) is False
+
+
+class TestStripDuplicateClosingVertex:
+    TRI = [{"lat": 0, "lon": 0}, {"lat": 1, "lon": 0}, {"lat": 0.5, "lon": 1}]
+
+    def test_open_ring_unchanged(self):
+        assert strip_duplicate_closing_vertex(self.TRI) == self.TRI
+
+    def test_closing_vertex_dropped(self):
+        assert strip_duplicate_closing_vertex(self.TRI + [dict(self.TRI[0])]) == self.TRI
+
+    def test_consecutive_duplicates_dropped(self):
+        ring = [self.TRI[0], dict(self.TRI[0]), self.TRI[1], self.TRI[2], dict(self.TRI[2])]
+        assert strip_duplicate_closing_vertex(ring) == self.TRI
+
+    def test_duplicates_then_closing_vertex(self):
+        ring = [self.TRI[0], self.TRI[1], dict(self.TRI[1]), self.TRI[2], dict(self.TRI[0])]
+        assert strip_duplicate_closing_vertex(ring) == self.TRI
+
+    def test_non_consecutive_repeat_kept(self):
+        # A genuine revisit of a vertex is geometry, not a KML artefact
+        ring = [self.TRI[0], self.TRI[1], self.TRI[2], {"lat": 0.2, "lon": 0.2}, dict(self.TRI[1])]
+        assert len(strip_duplicate_closing_vertex(ring)) == 5
+
+
+class TestCourseWarnings:
+    def test_clean_course_has_no_warnings(self):
+        assert course_warnings(VALID_COURSE) == []
+
+    def test_oversized_polygon_warned(self):
+        data = copy.deepcopy(VALID_COURSE)
+        data["polygons"][1]["points"] = [
+            {"lat": 52.3520, "lon": 4.9300},
+            {"lat": 52.3520, "lon": 4.9400},  # ~680 m east
+            {"lat": 52.3515, "lon": 4.9350},
+        ]
+        data["distance_m"] = round(polygon_chain_length_m(data["polygons"]))
+        ws = course_warnings(data)
+        assert len(ws) == 1
+        assert "Finish" in ws[0] and f"> {POLYGON_EXTENT_WARN_M}m" in ws[0]
+
+    def test_path_like_polygon_warned(self):
+        data = copy.deepcopy(VALID_COURSE)
+        # 14 vertices spread over ~2 km: a traced route, not a gate
+        data["polygons"][1]["points"] = [{"lat": 52.352 + i * 0.0015, "lon": 4.93 + (i % 2) * 0.0003} for i in range(14)]
+        data["distance_m"] = round(polygon_chain_length_m(data["polygons"]))
+        ws = course_warnings(data)
+        assert any("traced route" in w and "`path`" in w for w in ws)
+
+    def test_order_anomaly_warned(self):
+        data = copy.deepcopy(VALID_COURSE)
+        data["polygons"][1]["order"] = 5
+        ws = course_warnings(data)
+        assert any("polygon orders" in w for w in ws)
+
+    def test_distance_mismatch_warned(self):
+        data = copy.deepcopy(VALID_COURSE)
+        data["distance_m"] = 5000  # chain is ~300 m
+        ws = course_warnings(data)
+        assert any("distance_m is 5000" in w for w in ws)
+
+    def test_small_distance_difference_tolerated(self):
+        data = copy.deepcopy(VALID_COURSE)
+        data["distance_m"] = round(polygon_chain_length_m(data["polygons"])) + 20
+        assert course_warnings(data) == []
 
 
 class TestPolygonExtent:
@@ -408,6 +478,33 @@ class TestValidateCourse:
         ok, msg = validate_course(path)
         assert ok is False
         assert "passes" in msg
+
+    def test_consecutive_duplicate_vertices_accepted(self, tmp_path):
+        """KML exports often repeat a vertex; the zero-length edge must not read as self-intersection."""
+        data = copy.deepcopy(VALID_COURSE)
+        pts = data["polygons"][0]["points"]
+        data["polygons"][0]["points"] = [pts[0], dict(pts[0]), pts[1], pts[2], dict(pts[2])]
+        path = tmp_path / "course.json"
+        write_course(path, data)
+        ok, msg = validate_course(path)
+        assert ok is True, msg
+
+    def test_detailed_returns_warnings_for_valid_course(self, tmp_path):
+        data = copy.deepcopy(VALID_COURSE)
+        data["distance_m"] = 5000
+        path = tmp_path / "course.json"
+        write_course(path, data)
+        ok, msg, warnings = validate_course_detailed(path)
+        assert ok is True and msg == "OK"
+        assert len(warnings) == 1 and "distance_m" in warnings[0]
+
+    def test_detailed_returns_no_warnings_for_invalid_course(self, tmp_path):
+        data = copy.deepcopy(VALID_COURSE)
+        data["status"] = "bogus"
+        path = tmp_path / "course.json"
+        write_course(path, data)
+        ok, msg, warnings = validate_course_detailed(path)
+        assert ok is False and warnings == []
 
     def test_nonexistent_file(self, tmp_path):
         path = tmp_path / "nonexistent.json"

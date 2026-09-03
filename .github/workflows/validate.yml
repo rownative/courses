@@ -51,12 +51,19 @@ jobs:
           fi
           for f in $FILES; do
             if [ -f "$f" ]; then
-              if python scripts/validate_course.py "$f" 2>&1 | tee -a /tmp/validate.log; then
+              # Capture into a variable rather than piping through tee: a pipeline's exit
+              # status is tee's, so the old form could never fail.
+              if LOG=$(python scripts/validate_course.py "$f" 2>&1); then
                 OUTPUT="${OUTPUT}\n- \`$f\`: OK"
               else
-                OUTPUT="${OUTPUT}\n- \`$f\`: FAILED"
+                ERR=$(echo "$LOG" | grep -v 'warning:' | head -n 1 | sed "s|^$f: ||")
+                OUTPUT="${OUTPUT}\n- \`$f\`: FAILED — ${ERR}"
                 FAILED=1
               fi
+              echo "$LOG" | tee -a /tmp/validate.log
+              while IFS= read -r w; do
+                [ -n "$w" ] && OUTPUT="${OUTPUT}\n  - ⚠️ ${w#*warning: }"
+              done <<< "$(echo "$LOG" | grep 'warning:' || true)"
             fi
           done
           echo "output<<EOF" >> $GITHUB_OUTPUT

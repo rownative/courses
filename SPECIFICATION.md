@@ -70,6 +70,8 @@ Each course is stored as `courses/{id}.json`:
 - **Structural:** Valid JSON; ≥2 polygons; ≥3 points per polygon; non-zero area (shoelace); no self-intersecting edges
 - **Distance:** Centroid-to-centroid chain 100 m–25 km; max consecutive gap 25 km; no polygon overlap
 - **Path (optional):** ≥2 numeric `{lat, lon}` points; no gap over 25 km; passes within 250 m (or the gate's own extent) of every polygon centroid
+- **Ring normalisation:** consecutive duplicate vertices and the KML closing vertex are dropped before geometry checks
+- **Warnings (non-fatal, shown in the PR comment):** polygon wider than 500 m; polygon that looks like a traced route (≥12 vertices and ≥1 km across); `distance_m` off the polygon chain by >10 %; non-contiguous polygon `order`
 - Uses only stdlib (json, math, itertools); no external APIs
 - Exit non-zero with human-readable error on failure
 
@@ -88,6 +90,7 @@ Each course is stored as `courses/{id}.json`:
 | `scripts/generate_index.py` | Regenerates `courses/index.json` |
 | `scripts/generate_kml.py` | Regenerates `kml/*.kml` (CCW sort, CrewNerd naming, cyan styles, `path` as LineString) |
 | `scripts/fix_countries.py` | Geocode missing country; normalize names (USA→United States, etc.) |
+| `scripts/audit_courses.py` | Library-wide data-quality report: oversized gates, routes stored as polygons, `distance_m` mismatches, order anomalies, validation failures |
 | `scripts/serve_dev.py` | Local dev: build `_site`, serve on :8000 |
 
 ### 1.5 Course Map Browser (GitHub Pages) — Implemented
