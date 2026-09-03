@@ -59,6 +59,8 @@ Each course is stored as `courses/{id}.json`:
 
 **Status values:** `provisional` | `established`
 
+**Optional `path`:** traced course centreline as ordered `{lat, lon}` points, for consumers that draw a course. Advisory; `polygons` remain authoritative for timing and `distance_m` stays the polygon chain.
+
 **Schema documentation:** `courses/SCHEMA.md`
 
 ### 1.2 Course Validation — Implemented
@@ -67,6 +69,7 @@ Each course is stored as `courses/{id}.json`:
 
 - **Structural:** Valid JSON; ≥2 polygons; ≥3 points per polygon; non-zero area (shoelace); no self-intersecting edges
 - **Distance:** Centroid-to-centroid chain 100 m–25 km; max consecutive gap 25 km; no polygon overlap
+- **Path (optional):** ≥2 numeric `{lat, lon}` points; no gap over 25 km; passes within 250 m (or the gate's own extent) of every polygon centroid
 - Uses only stdlib (json, math, itertools); no external APIs
 - Exit non-zero with human-readable error on failure
 
@@ -83,7 +86,7 @@ Each course is stored as `courses/{id}.json`:
 |--------|---------|
 | `scripts/validate_course.py` | Structural + distance validation |
 | `scripts/generate_index.py` | Regenerates `courses/index.json` |
-| `scripts/generate_kml.py` | Regenerates `kml/*.kml` (CCW sort, CrewNerd naming, cyan styles) |
+| `scripts/generate_kml.py` | Regenerates `kml/*.kml` (CCW sort, CrewNerd naming, cyan styles, `path` as LineString) |
 | `scripts/fix_countries.py` | Geocode missing country; normalize names (USA→United States, etc.) |
 | `scripts/serve_dev.py` | Local dev: build `_site`, serve on :8000 |
 
