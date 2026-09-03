@@ -342,6 +342,70 @@
     });
   }
 
+  // --- search helpers ---
+  /** Lower-case and strip diacritics so "Uherské" matches "uherske". */
+  function foldText(s) {
+    return String(s || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+  }
+
+  /** Damerau-Levenshtein (optimal string alignment) distance, capped: returns max + 1 once it cannot be <= max. */
+  function editDistance(a, b, max) {
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    const rows = a.length + 1;
+    const cols = b.length + 1;
+    const d = Array.from({ length: rows }, () => new Array(cols).fill(0));
+    for (let i = 0; i < rows; i++) d[i][0] = i;
+    for (let j = 0; j < cols; j++) d[0][j] = j;
+    for (let i = 1; i < rows; i++) {
+      let rowMin = Infinity;
+      for (let j = 1; j < cols; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        let v = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+          v = Math.min(v, d[i - 2][j - 2] + 1);
+        }
+        d[i][j] = v;
+        if (v < rowMin) rowMin = v;
+      }
+      if (rowMin > max) return max + 1;
+    }
+    return d[a.length][b.length];
+  }
+
+  /** Allowed typos for a query word: none under 5 letters, one up to 7, two from 8. */
+  function maxEditsFor(token) {
+    if (token.length >= 8) return 2;
+    if (token.length >= 5) return 1;
+    return 0;
+  }
+
+  /** True if a query word matches any word in the text: as a prefix, or within a few edits. */
+  function tokenMatches(token, words) {
+    const max = maxEditsFor(token);
+    return words.some((w) => {
+      if (w.startsWith(token)) return true;
+      if (!max) return false;
+      // Compare against the word's leading letters too, so "quinsigamund" finds "quinsigamond"
+      // and "schuykill" finds "schuylkill" even when the word carries a suffix.
+      return editDistance(token, w, max) <= max || (w.length > token.length && editDistance(token, w.slice(0, token.length + max), max) <= max);
+    });
+  }
+
+  /** Match a course against a free-text query over its name, notes and ID. */
+  function courseMatchesSearch(course, query) {
+    const q = foldText(query).trim();
+    if (!q) return true;
+    const haystack = foldText(`${course.name || ""} ${course.notes || ""} ${course.id || ""}`);
+    if (haystack.includes(q)) return true;
+    const words = haystack.split(/[^a-z0-9]+/).filter(Boolean);
+    const tokens = q.split(/\s+/).filter(Boolean);
+    return tokens.every((t) => tokenMatches(t, words));
+  }
+  // --- end search helpers ---
+
   function fillCountryFilter() {
     const countries = [...new Set(courses.map((c) => c.country).filter(Boolean))].sort();
     countryFilter.innerHTML = '<option value="">All countries</option>';
@@ -354,7 +418,7 @@
   }
 
   function applyFilters() {
-    const search = (searchEl?.value || "").toLowerCase();
+    const search = searchEl?.value || "";
     const country = countryFilter?.value || "";
     const rangeVal = distanceRange?.value || "0-25";
     const [minKm, maxKm] = rangeVal.split("-").map((s) => parseFloat(s) || 0);
@@ -364,7 +428,7 @@
     const showEstablished = filterEstablished?.checked !== false;
 
     return courses.filter((c) => {
-      if (search && !(c.name || "").toLowerCase().includes(search)) return false;
+      if (search && !courseMatchesSearch(c, search)) return false;
       if (country && c.country !== country) return false;
       const d = c.distance_m || 0;
       if (d < dMin || d > dMax) return false;

@@ -92,6 +92,18 @@ polygons.
 }
 ```
 
+## Index (`courses/index.json`)
+
+`scripts/generate_index.py` builds `courses/index.json`, a flat array with one entry per course.
+It is what the map browser and third-party consumers fetch instead of all the course files, so it
+carries everything needed to search and filter without a second request.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id`, `name`, `country`, `center_lat`, `center_lon`, `distance_m`, `status` | | Copied from the course file. |
+| `notes` | string | The course's `notes`, trimmed; `""` when absent. Free-text search should cover `name` and `notes`. |
+| `has_path` | boolean | `true` when the course file carries a usable `path` (two or more points). |
+
 ## Status values
 
 | Value | Meaning |

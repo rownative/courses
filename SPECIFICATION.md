@@ -87,7 +87,8 @@ Each course is stored as `courses/{id}.json`:
 | Script | Purpose |
 |--------|---------|
 | `scripts/validate_course.py` | Structural + distance validation |
-| `scripts/generate_index.py` | Regenerates `courses/index.json` |
+| `scripts/generate_index.py` | Regenerates `courses/index.json` (summary fields plus `notes` and `has_path`) |
+| `scripts/tidy_names.py` | Collapses migrated "X - X" course names |
 | `scripts/generate_kml.py` | Regenerates `kml/*.kml` (CCW sort, CrewNerd naming, cyan styles, `path` as LineString) |
 | `scripts/fix_countries.py` | Geocode missing country; normalize names (USA→United States, etc.) |
 | `scripts/audit_courses.py` | Library-wide data-quality report: oversized gates, routes stored as polygons, `distance_m` mismatches, order anomalies, validation failures |
@@ -100,7 +101,7 @@ Each course is stored as `courses/{id}.json`:
 **Static features:**
 - Map centred on geolocation or world view
 - Loads `index.json`; marker per course (green=established, orange=provisional)
-- Filter by country, distance (km), status; search by name
+- Filter by country, distance (km), status; search across name, notes and ID with diacritic folding and fuzzy (typo-tolerant) word matching
 - High-contrast map toggle (desaturates tiles, stronger polygon styling; persisted in localStorage)
 - Map zooms to fit filtered markers (e.g. select USA → zoom to all US courses)
 - Click marker → detail panel with polygon chain, KML download
