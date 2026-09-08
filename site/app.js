@@ -773,6 +773,45 @@
     if (combined.isValid()) map.fitBounds(combined, { padding: [30, 30], maxZoom: 16 });
   }
 
+  function showCourseValidation(data) {
+    const diagnostics = data.gateDiagnostics;
+    if (!diagnostics || diagnostics.reason === "no_gates") return;
+    const dialog = document.createElement("dialog");
+    dialog.className = "course-validation-dialog";
+    dialog.setAttribute("aria-labelledby", "course-validation-title");
+    dialog.innerHTML = '<h3 id="course-validation-title">Session does not match the course</h3>' +
+      '<p class="validation-summary"></p><p>Orange: GPS trace · Green: passed gate · Red dashed: missed gate</p>' +
+      '<div class="validation-map" aria-label="Course gates and session GPS trace"></div>' +
+      '<form method="dialog"><button class="btn btn-secondary">Close</button></form>';
+    dialog.querySelector(".validation-summary").textContent = diagnostics.reason === "gate_order"
+      ? "Your session crossed every gate, but did not complete them in the required order."
+      : "Missed gates: " + diagnostics.gates.filter((gate) => !gate.passed).map((gate) => gate.name).join(", ") + ".";
+    document.body.appendChild(dialog);
+    dialog.showModal();
+    const validationMap = L.map(dialog.querySelector(".validation-map"));
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; OpenStreetMap contributors', maxZoom: 19,
+    }).addTo(validationMap);
+    const layers = L.featureGroup().addTo(validationMap);
+    if (Array.isArray(data.latlng) && data.latlng.length >= 2) {
+      L.polyline(data.latlng, { color: "#e65c00", weight: 4 }).addTo(layers);
+    }
+    diagnostics.gates.forEach((gate) => {
+      L.polygon(gate.points.map((point) => [point.lat, point.lon]), {
+        color: gate.passed ? "#16803c" : "#c62828",
+        weight: gate.passed ? 3 : 5,
+        dashArray: gate.passed ? null : "6 4",
+        fillOpacity: gate.passed ? 0.15 : 0.35,
+      }).addTo(layers);
+    });
+    validationMap.invalidateSize();
+    if (layers.getBounds().isValid()) validationMap.fitBounds(layers.getBounds(), { padding: [40, 40], maxZoom: 16 });
+    dialog.addEventListener("close", () => {
+      validationMap.remove();
+      dialog.remove();
+    }, { once: true });
+  }
+
   function closeCalculateTimeModal() {
     const modal = document.getElementById("calculate-time-modal");
     if (modal) modal.classList.add("hidden");
@@ -818,10 +857,13 @@
               saveBtn.classList.remove("hidden");
               saveBtn.disabled = false;
             } else {
-              resultEl.innerHTML =
-                '<p class="error">Could not validate — track didn\'t pass all gates.</p>' +
-                (data.validationNote ? `<pre class="validation-note">${escapeHtml(data.validationNote)}</pre>` : "") +
-                (data.latlng && data.latlng.length >= 2 ? '<p class="track-hint">Your workout track is shown on the map.</p>' : '');
+              const noGates = data.gateDiagnostics?.reason === "no_gates";
+              const message = noGates
+                ? "This session is not near the selected course. Its GPS trace does not pass any course gates."
+                : data.error || "This session did not complete all course gates in the required order.";
+              resultEl.innerHTML = '<p class="error">' + escapeHtml(message) + '</p>';
+              if (noGates) clearTrackOnMap();
+              else showCourseValidation(data);
               saveBtn.classList.add("hidden");
               saveBtn.disabled = true;
             }
