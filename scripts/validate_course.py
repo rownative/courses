@@ -19,6 +19,10 @@ MIN_COURSE_LENGTH_M = 100
 MAX_COURSE_LENGTH_M = 25_000
 # Max gap between consecutive polygon centroids (catches coordinate typos; 5k head races have ~5k gap)
 MAX_CONSECUTIVE_GAP_M = 25_000
+# Optional traced centreline (`path`): every polygon centroid must lie within this distance of the
+# path, or within the polygon's own extent if that is larger (wide gates on wide water).
+PATH_GATE_TOLERANCE_M = 250
+MIN_PATH_POINTS = 2
 
 
 def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -39,6 +43,47 @@ def polygon_centroid(points: list[dict]) -> tuple[float, float]:
     lat_sum = sum(p["lat"] for p in points)
     lon_sum = sum(p["lon"] for p in points)
     return lat_sum / n, lon_sum / n
+
+
+def polygon_extent_m(points: list[dict]) -> float:
+    """Greatest distance in meters between any two vertices of a polygon."""
+    pts = strip_duplicate_closing_vertex(points)
+    if len(pts) < 2:
+        return 0.0
+    return max(haversine_m(a["lat"], a["lon"], b["lat"], b["lon"]) for a, b in combinations(pts, 2))
+
+
+def point_to_segment_m(lat: float, lon: float, a: dict, b: dict) -> float:
+    """
+    Distance in meters from (lat, lon) to segment a-b.
+    Uses a local equirectangular projection centred on the point; accurate for the
+    sub-kilometre distances this is used for.
+    """
+    k = math.pi / 180 * EARTH_RADIUS
+    cos_lat = math.cos(math.radians(lat))
+    ax, ay = (a["lon"] - lon) * k * cos_lat, (a["lat"] - lat) * k
+    bx, by = (b["lon"] - lon) * k * cos_lat, (b["lat"] - lat) * k
+    dx, dy = bx - ax, by - ay
+    if dx == 0 and dy == 0:
+        return math.hypot(ax, ay)
+    t = -(ax * dx + ay * dy) / (dx * dx + dy * dy)
+    t = max(0.0, min(1.0, t))
+    return math.hypot(ax + t * dx, ay + t * dy)
+
+
+def path_min_distance_m(path: list[dict], lat: float, lon: float) -> float:
+    """Smallest distance in meters from (lat, lon) to any segment of an ordered path."""
+    if len(path) == 1:
+        return haversine_m(lat, lon, path[0]["lat"], path[0]["lon"])
+    return min(point_to_segment_m(lat, lon, path[i], path[i + 1]) for i in range(len(path) - 1))
+
+
+def path_length_m(path: list[dict]) -> float:
+    """Traced length in meters of an ordered path."""
+    return sum(
+        haversine_m(path[i]["lat"], path[i]["lon"], path[i + 1]["lat"], path[i + 1]["lon"])
+        for i in range(len(path) - 1)
+    )
 
 
 def polygon_area_signed(points: list[dict]) -> float:
@@ -171,6 +216,42 @@ def polygons_overlap(points_a: list[dict], points_b: list[dict]) -> bool:
     return False
 
 
+def validate_path(path: object, polygons: list[dict]) -> str | None:
+    """
+    Validate the optional `path` field (traced centreline) against the schema and the
+    course's polygons. Returns an error message, or None if the path is acceptable.
+    """
+    if not isinstance(path, list):
+        return "path must be an array of {lat, lon} points"
+    if len(path) < MIN_PATH_POINTS:
+        return f"path: at least {MIN_PATH_POINTS} points required"
+    for j, p in enumerate(path):
+        if not isinstance(p, dict) or "lat" not in p or "lon" not in p:
+            return f"path point {j}: lat and lon required"
+        lat, lon = p["lat"], p["lon"]
+        if isinstance(lat, bool) or isinstance(lon, bool):
+            return f"path point {j}: lat/lon must be numbers"
+        if not isinstance(lat, (int, float)) or not isinstance(lon, (int, float)):
+            return f"path point {j}: lat/lon must be numbers"
+        if not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
+            return f"path point {j}: lat/lon out of range"
+    for j in range(len(path) - 1):
+        d = haversine_m(path[j]["lat"], path[j]["lon"], path[j + 1]["lat"], path[j + 1]["lon"])
+        if d > MAX_CONSECUTIVE_GAP_M:
+            return f"path: gap {d:.0f}m > {MAX_CONSECUTIVE_GAP_M}m between points {j} and {j + 1}"
+    for i, poly in enumerate(polygons):
+        pts = strip_duplicate_closing_vertex(poly["points"])
+        clat, clon = polygon_centroid(pts)
+        tolerance = max(PATH_GATE_TOLERANCE_M, polygon_extent_m(pts))
+        d = path_min_distance_m(path, clat, clon)
+        if d > tolerance:
+            return (
+                f"path passes {d:.0f}m from polygon {i} ({poly['name']}); "
+                f"must be within {tolerance:.0f}m"
+            )
+    return None
+
+
 def validate_course(path: Path) -> tuple[bool, str]:
     """
     Validate course file. Returns (ok, message).
@@ -252,6 +333,12 @@ def validate_course(path: Path) -> tuple[bool, str]:
         pb = strip_duplicate_closing_vertex(polygons[j]["points"])
         if polygons_overlap(pa, pb):
             return False, f"Polygons {i} ({polygons[i]['name']}) and {j} ({polygons[j]['name']}) overlap"
+
+    # Optional traced centreline
+    if "path" in data and data["path"] is not None:
+        err = validate_path(data["path"], polygons)
+        if err:
+            return False, err
 
     return True, "OK"
 

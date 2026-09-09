@@ -13,15 +13,21 @@ import pytest
 # Add scripts to path so we can import validate_course
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from validate_course import (
+    PATH_GATE_TOLERANCE_M,
     haversine_m,
+    path_length_m,
+    path_min_distance_m,
+    point_to_segment_m,
     polygon_centroid,
     polygon_area_signed,
+    polygon_extent_m,
     polygon_self_intersects,
     point_in_polygon,
     bboxes_overlap,
     polygons_overlap,
     segments_intersect,
     validate_course,
+    validate_path,
 )
 
 # Minimal valid course: two non-overlapping polygons ~300m apart
@@ -181,6 +187,120 @@ class TestSegmentsIntersect:
         assert segments_intersect(a1, a2, b1, b2) is False
 
 
+class TestPolygonExtent:
+    def test_two_points_is_their_distance(self):
+        pts = [{"lat": 52.0, "lon": 4.0}, {"lat": 52.0, "lon": 4.001}]
+        assert abs(polygon_extent_m(pts) - haversine_m(52.0, 4.0, 52.0, 4.001)) < 1e-6
+
+    def test_closing_vertex_ignored(self):
+        pts = [{"lat": 0, "lon": 0}, {"lat": 0, "lon": 0.001}, {"lat": 0.001, "lon": 0}]
+        closed = pts + [dict(pts[0])]
+        assert polygon_extent_m(closed) == polygon_extent_m(pts)
+
+    def test_single_point_is_zero(self):
+        assert polygon_extent_m([{"lat": 1, "lon": 1}]) == 0
+
+
+class TestPointToSegment:
+    def test_point_on_segment_is_zero(self):
+        a, b = {"lat": 52.0, "lon": 4.0}, {"lat": 52.0, "lon": 4.01}
+        assert point_to_segment_m(52.0, 4.005, a, b) < 0.01
+
+    def test_perpendicular_distance(self):
+        a, b = {"lat": 52.0, "lon": 4.0}, {"lat": 52.0, "lon": 4.01}
+        # 0.001 deg of latitude is ~111 m
+        d = point_to_segment_m(52.001, 4.005, a, b)
+        assert 110 < d < 112
+
+    def test_beyond_endpoint_measures_to_endpoint(self):
+        a, b = {"lat": 52.0, "lon": 4.0}, {"lat": 52.0, "lon": 4.01}
+        d = point_to_segment_m(52.0, 4.02, a, b)
+        assert abs(d - haversine_m(52.0, 4.02, 52.0, 4.01)) < 1.0
+
+    def test_degenerate_segment(self):
+        a = {"lat": 52.0, "lon": 4.0}
+        d = point_to_segment_m(52.001, 4.0, a, a)
+        assert 110 < d < 112
+
+
+class TestPathHelpers:
+    PATH = [{"lat": 52.0, "lon": 4.0}, {"lat": 52.0, "lon": 4.01}, {"lat": 52.01, "lon": 4.01}]
+
+    def test_min_distance_picks_nearest_segment(self):
+        d = path_min_distance_m(self.PATH, 52.005, 4.0101)
+        assert d < 10
+
+    def test_min_distance_single_point_path(self):
+        d = path_min_distance_m([{"lat": 52.0, "lon": 4.0}], 52.001, 4.0)
+        assert 110 < d < 112
+
+    def test_path_length(self):
+        expected = haversine_m(52.0, 4.0, 52.0, 4.01) + haversine_m(52.0, 4.01, 52.01, 4.01)
+        assert abs(path_length_m(self.PATH) - expected) < 1e-6
+        assert path_length_m(self.PATH[:1]) == 0
+
+
+# Path running through both VALID_COURSE gates (start centroid ~52.35, 4.9275; finish ~52.352, 4.9305)
+VALID_PATH = [
+    {"lat": 52.3498, "lon": 4.9272},
+    {"lat": 52.3510, "lon": 4.9290},
+    {"lat": 52.3522, "lon": 4.9308},
+]
+
+
+class TestValidatePath:
+    polygons = VALID_COURSE["polygons"]
+
+    def test_valid_path_accepted(self):
+        assert validate_path(VALID_PATH, self.polygons) is None
+
+    def test_not_a_list(self):
+        assert "array" in validate_path({"lat": 1, "lon": 2}, self.polygons)
+
+    def test_too_few_points(self):
+        assert "at least 2" in validate_path(VALID_PATH[:1], self.polygons)
+
+    def test_point_missing_lon(self):
+        bad = [dict(VALID_PATH[0]), {"lat": 52.351}, dict(VALID_PATH[2])]
+        assert "lat and lon required" in validate_path(bad, self.polygons)
+
+    def test_point_not_numeric(self):
+        bad = [dict(VALID_PATH[0]), {"lat": "52.351", "lon": 4.929}, dict(VALID_PATH[2])]
+        assert "must be numbers" in validate_path(bad, self.polygons)
+
+    def test_bool_rejected_as_number(self):
+        bad = [dict(VALID_PATH[0]), {"lat": True, "lon": 4.929}, dict(VALID_PATH[2])]
+        assert "must be numbers" in validate_path(bad, self.polygons)
+
+    def test_point_out_of_range(self):
+        bad = [dict(VALID_PATH[0]), {"lat": 95.0, "lon": 4.929}, dict(VALID_PATH[2])]
+        assert "out of range" in validate_path(bad, self.polygons)
+
+    def test_huge_gap_rejected(self):
+        bad = [dict(VALID_PATH[0]), {"lat": 0.0, "lon": 0.0}, dict(VALID_PATH[2])]
+        assert "gap" in validate_path(bad, self.polygons)
+
+    def test_path_missing_a_gate_rejected(self):
+        # Runs 2 km east of both gates
+        far = [{"lat": 52.3498, "lon": 4.9572}, {"lat": 52.3522, "lon": 4.9608}]
+        msg = validate_path(far, self.polygons)
+        assert msg is not None
+        assert "passes" in msg and "Start" in msg
+        assert f"within {PATH_GATE_TOLERANCE_M}m" in msg
+
+    def test_wide_gate_uses_its_own_extent_as_tolerance(self):
+        # A 1 km wide gate: path 400 m from centroid is still acceptable
+        wide = [
+            {"name": "Start", "order": 0, "points": [
+                {"lat": 52.3500, "lon": 4.9200},
+                {"lat": 52.3500, "lon": 4.9347},   # ~1 km east
+                {"lat": 52.3495, "lon": 4.9270},
+            ]},
+        ]
+        path = [{"lat": 52.3460, "lon": 4.9200}, {"lat": 52.3460, "lon": 4.9350}]  # ~430 m south
+        assert validate_path(path, wide) is None
+
+
 # --- Integration tests for validate_course ---
 
 
@@ -254,6 +374,40 @@ class TestValidateCourse:
         ok, msg = validate_course(path)
         assert ok is True, msg
         assert msg == "OK"
+
+    def test_course_with_valid_path_passes(self, tmp_path):
+        data = copy.deepcopy(VALID_COURSE)
+        data["path"] = VALID_PATH
+        path = tmp_path / "course.json"
+        write_course(path, data)
+        ok, msg = validate_course(path)
+        assert ok is True, msg
+
+    def test_course_with_null_path_passes(self, tmp_path):
+        data = copy.deepcopy(VALID_COURSE)
+        data["path"] = None
+        path = tmp_path / "course.json"
+        write_course(path, data)
+        ok, msg = validate_course(path)
+        assert ok is True, msg
+
+    def test_course_with_bad_path_fails(self, tmp_path):
+        data = copy.deepcopy(VALID_COURSE)
+        data["path"] = [{"lat": 52.3498, "lon": 4.9272}]
+        path = tmp_path / "course.json"
+        write_course(path, data)
+        ok, msg = validate_course(path)
+        assert ok is False
+        assert "path" in msg
+
+    def test_course_with_path_missing_gate_fails(self, tmp_path):
+        data = copy.deepcopy(VALID_COURSE)
+        data["path"] = [{"lat": 52.3498, "lon": 4.9572}, {"lat": 52.3522, "lon": 4.9608}]
+        path = tmp_path / "course.json"
+        write_course(path, data)
+        ok, msg = validate_course(path)
+        assert ok is False
+        assert "passes" in msg
 
     def test_nonexistent_file(self, tmp_path):
         path = tmp_path / "nonexistent.json"

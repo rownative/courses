@@ -69,6 +69,11 @@ Each course is stored as `courses/{id}.json`. Required fields:
 - `status` — `provisional` or `established`
 - `polygons` — at least two polygons (start, waypoints, finish)
 
+Optional fields:
+
+- `notes` — description shown on the course page
+- `path` — traced centreline as ordered `{lat, lon}` points, for drawing the course; gates in `polygons` stay authoritative
+
 See [`courses/SCHEMA.md`](courses/SCHEMA.md) for the full schema.
 
 ## Validation
@@ -86,6 +91,7 @@ Validation checks:
 - At least 2 polygons with ≥3 points each
 - Distance 100 m–25 km
 - No polygon overlap within the course
+- If a `path` is present: at least two points, and it passes every gate
 
 ## Contributing code or scripts
 

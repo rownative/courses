@@ -53,3 +53,36 @@ def test_course_to_kml_cn_uses_start_finish_names():
     kml = course_to_kml(MINIMAL_COURSE, cn=True)
     assert "Start" in kml
     assert "Finish" in kml
+
+
+def test_course_without_path_has_no_linestring():
+    kml = course_to_kml(MINIMAL_COURSE, cn=True)
+    assert "LineString" not in kml
+
+
+def test_course_with_path_emits_linestring_after_polygons():
+    course = dict(MINIMAL_COURSE)
+    course["path"] = [
+        {"lat": 52.0003, "lon": 4.9003},
+        {"lat": 52.005, "lon": 4.905},
+        {"lat": 52.0103, "lon": 4.9103},
+    ]
+    kml = course_to_kml(course, cn=True)
+    assert kml.count("<LineString>") == 1
+    assert "<name>Path</name>" in kml
+    assert "4.9003,52.0003,0 4.905,52.005,0 4.9103,52.0103,0" in kml
+    assert kml.rfind("<Polygon>") < kml.find("<LineString>")
+
+
+def test_include_path_false_omits_linestring():
+    course = dict(MINIMAL_COURSE)
+    course["path"] = [{"lat": 52.0, "lon": 4.9}, {"lat": 52.01, "lon": 4.91}]
+    kml = course_to_kml(course, cn=True, include_path=False)
+    assert "LineString" not in kml
+
+
+def test_single_point_path_is_ignored():
+    course = dict(MINIMAL_COURSE)
+    course["path"] = [{"lat": 52.0, "lon": 4.9}]
+    kml = course_to_kml(course, cn=True)
+    assert "LineString" not in kml
