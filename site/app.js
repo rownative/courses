@@ -454,6 +454,37 @@
       : { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
   }
 
+  /** Haversine distance in metres between two [lat, lon] pairs. */
+  function haversineM(a, b) {
+    const R = 6371000;
+    const toRad = (d) => (d * Math.PI) / 180;
+    const dLat = toRad(b[0] - a[0]);
+    const dLon = toRad(b[1] - a[1]);
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a[0])) * Math.cos(toRad(b[0])) * Math.sin(dLon / 2) ** 2;
+    return 2 * R * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+  }
+
+  /** Optional traced centreline (SCHEMA.md `path`) as [lat, lon] pairs, or [] when absent/invalid. */
+  function pathLatLngs(full) {
+    if (!Array.isArray(full?.path)) return [];
+    const pts = full.path
+      .filter((p) => p && typeof p.lat === "number" && typeof p.lon === "number")
+      .map((p) => [p.lat, p.lon]);
+    return pts.length >= 2 ? pts : [];
+  }
+
+  function pathLengthM(latlngs) {
+    let total = 0;
+    for (let i = 1; i < latlngs.length; i++) total += haversineM(latlngs[i - 1], latlngs[i]);
+    return total;
+  }
+
+  function getPathOptions() {
+    return highContrastMode
+      ? { color: "#b30000", weight: 4, opacity: 0.95, dashArray: "8 6" }
+      : { color: "#06c", weight: 3, opacity: 0.85, dashArray: "8 6" };
+  }
+
   function fmtTime(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = (seconds % 60).toFixed(1);
@@ -501,10 +532,12 @@
     const courseTimesSection = isSignedIn
       ? `<div class="detail-course-times"><strong>My times</strong><ul id="detail-course-times-list">Loading…</ul></div>`
       : "";
+    const pathPts = pathLatLngs(full);
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
       <p class="course-id"><strong>ID:</strong> <code>${idHtml}</code> — <code>courses/${idHtml}.json</code></p>
       <p><strong>Distance:</strong> ${meta.distance_m || "—"} m</p>
+      ${pathPts.length ? `<p><strong>Traced path:</strong> ${(pathLengthM(pathPts) / 1000).toFixed(1)} km (${pathPts.length} points)</p>` : ""}
       <p><strong>Country:</strong> ${escapeHtml(meta.country || "—")}</p>
       <p><strong>Status:</strong> <span class="badge ${meta.status}">${meta.status}</span></p>
       ${meta.notes ? `<p class="notes">${escapeHtml(meta.notes)}</p>` : ""}
@@ -533,13 +566,21 @@
       loadDetailCourseTimes(meta.id);
     }
 
-    if (full.polygons && full.polygons.length > 0 && courseDetailLayer) {
+    const hasPolygons = Array.isArray(full.polygons) && full.polygons.length > 0;
+    if ((hasPolygons || pathPts.length) && courseDetailLayer) {
       const bounds = [];
-      full.polygons.forEach((poly) => {
+      (full.polygons || []).forEach((poly) => {
         (poly.points || []).forEach((pt) => bounds.push([pt.lat, pt.lon]));
       });
+      pathPts.forEach((pt) => bounds.push(pt));
+      if (pathPts.length) {
+        // Drawn first so gate polygons sit on top of the line.
+        const line = L.polyline(pathPts, getPathOptions());
+        line.bindTooltip("Traced path (advisory)");
+        courseDetailLayer.addLayer(line);
+      }
       if (bounds.length > 0) {
-        full.polygons.forEach((poly, idx) => {
+        (full.polygons || []).forEach((poly, idx) => {
           const pts = (poly.points || []).map((p) => [p.lat, p.lon]);
           if (pts.length >= 2) {
             if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
