@@ -3,6 +3,8 @@
 Regenerate kml/*.kml from course JSON files.
 Port of Rowsandall coursetokml / getcoursefolder logic.
 Coordinates: lon,lat,0. Polygons sorted CCW. Optional crewnerdify (Start, WP1.., Finish).
+A course's optional `path` (traced centreline, see courses/SCHEMA.md) is emitted as a
+LineString Placemark named "Path" after the gate polygons.
 """
 
 import json
@@ -50,8 +52,11 @@ def crewnerdify_names(polygons: list[dict]) -> list[str]:
     return names
 
 
-def course_to_kml(course: dict, cn: bool = False) -> str:
-    """Generate KML string for a single course."""
+def course_to_kml(course: dict, cn: bool = False, include_path: bool = True) -> str:
+    """
+    Generate KML string for a single course.
+    include_path: emit the optional traced centreline as a LineString Placemark.
+    """
     top = Element("kml", attrib={"xmlns": KML_NS})
     doc_el = SubElement(top, "Document")
     SubElement(doc_el, "name").text = "courses"
@@ -75,6 +80,12 @@ def course_to_kml(course: dict, cn: bool = False) -> str:
     SubElement(SubElement(style_hl, "IconStyle"), "scale").text = "1.2"
     SubElement(SubElement(style_hl, "LineStyle"), "color").text = "ff00ffff"
     SubElement(SubElement(style_hl, "PolyStyle"), "color").text = "ff7fffff"
+
+    # Traced centreline style (line only)
+    style_path = SubElement(doc_el, "Style", attrib={"id": "path"})
+    path_line = SubElement(style_path, "LineStyle")
+    SubElement(path_line, "color").text = "ff00ffff"
+    SubElement(path_line, "width").text = "3"
 
     # Course folder
     folder = SubElement(doc_el, "Folder", id=str(course["id"]))
@@ -103,6 +114,16 @@ def course_to_kml(course: dict, cn: bool = False) -> str:
         if len(pts) > 1 and (pts[0]["lat"] != pts[-1]["lat"] or pts[0]["lon"] != pts[-1]["lon"]):
             coord_strs.append(f"{pts[0]['lon']},{pts[0]['lat']},0")
         coords_el.text = " ".join(coord_strs)
+
+    path = course.get("path") or []
+    if include_path and len(path) >= 2:
+        pm = SubElement(folder, "Placemark")
+        SubElement(pm, "name").text = "Path"
+        SubElement(pm, "description").text = "Traced course centreline (advisory; gates are authoritative)"
+        SubElement(pm, "styleUrl").text = "#path"
+        line = SubElement(pm, "LineString")
+        SubElement(line, "tessellate").text = "1"
+        SubElement(line, "coordinates").text = " ".join(f"{p['lon']},{p['lat']},0" for p in path)
 
     rough = tostring(top, encoding="unicode", method="xml")
     return minidom.parseString(rough).toprettyxml(indent="  ")

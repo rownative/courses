@@ -1,30 +1,36 @@
 [
   {
     "id": "1",
-    "name": "Quinsig South to North - Quinsig South to North",
+    "name": "Quinsig South to North",
     "country": "United States",
     "center_lat": 42.270555,
     "center_lon": -71.751438,
     "distance_m": 5306,
-    "status": "established"
+    "status": "established",
+    "notes": "The full lake, from the gazebo on the point in the south cove all the way up to past the Rt 290 bridge.",
+    "has_path": false
   },
   {
     "id": "102",
-    "name": "Fish Creek B2B - Fish Creek - Fish Creek B2B Rev D",
+    "name": "Fish Creek B2B Rev D",
     "country": "United States",
     "center_lat": 43.070005,
     "center_lon": -73.702417,
     "distance_m": 2909,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "104",
-    "name": "Seekonk North Stake Race - Seekonk North Stake Race Rev A",
+    "name": "Seekonk North Stake Race Rev A",
     "country": "United States",
     "center_lat": 41.834693,
     "center_lon": -71.376673,
     "distance_m": 4817,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "106",
@@ -33,43 +39,53 @@
     "center_lat": 41.833543,
     "center_lon": -71.377001,
     "distance_m": 4804,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "107",
-    "name": "Schuylkill River Sprint - Schuylkill River Sprint",
+    "name": "Schuylkill River Sprint",
     "country": "United States",
     "center_lat": 39.993007,
     "center_lon": -75.19572,
     "distance_m": 2017,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "109",
-    "name": "HOTS Stake Race Rev B - HOTS Stake Race Rev B",
+    "name": "HOTS Stake Race Rev B",
     "country": "United States",
     "center_lat": 41.833475,
     "center_lon": -71.376842,
     "distance_m": 4791,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "11",
-    "name": "Brno -  Prygl 2k",
+    "name": "Brno - Prygl 2k",
     "country": "Czechia",
     "center_lat": 49.236208,
     "center_lon": 16.509234,
     "distance_m": 1914,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "114",
-    "name": "Head of the Cuyahoga - Head of the Cuyahoga",
+    "name": "Head of the Cuyahoga",
     "country": "United States",
     "center_lat": 41.488688,
     "center_lon": -81.692422,
     "distance_m": 4731,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "115",
@@ -78,7 +94,9 @@
     "center_lat": 42.260188,
     "center_lon": -71.751506,
     "distance_m": 8681,
-    "status": "established"
+    "status": "established",
+    "notes": "Start at DRC going south, \nTurn at the islands (ala Wormtown Chase)\nCome all the way back to the DRC docks",
+    "has_path": false
   },
   {
     "id": "116",
@@ -87,7 +105,9 @@
     "center_lat": 42.284998,
     "center_lon": -71.757113,
     "distance_m": 2006,
-    "status": "established"
+    "status": "established",
+    "notes": "Start 5m north of 290 brodge\nFinish at the Regatta point finish tower",
+    "has_path": false
   },
   {
     "id": "117",
@@ -96,7 +116,9 @@
     "center_lat": 42.288038,
     "center_lon": -71.756213,
     "distance_m": 491,
-    "status": "established"
+    "status": "established",
+    "notes": "Start at the south edge of the Gazebo\nFinish in the center of the DRC docks",
+    "has_path": false
   },
   {
     "id": "12",
@@ -105,7 +127,9 @@
     "center_lat": 49.240849,
     "center_lon": 16.506286,
     "distance_m": 980,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "123",
@@ -114,7 +138,9 @@
     "center_lat": 53.581184,
     "center_lon": 9.998078,
     "distance_m": 4338,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "124",
@@ -123,7 +149,9 @@
     "center_lat": 53.590895,
     "center_lon": 9.998827,
     "distance_m": 7570,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "125",
@@ -132,7 +160,9 @@
     "center_lat": 42.364523,
     "center_lon": -71.144238,
     "distance_m": 3162,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "126",
@@ -141,7 +171,9 @@
     "center_lat": 41.670593,
     "center_lon": -70.486675,
     "distance_m": 7431,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "13",
@@ -150,7 +182,9 @@
     "center_lat": 49.232571,
     "center_lon": 16.512325,
     "distance_m": 826,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "14",
@@ -159,7 +193,9 @@
     "center_lat": 50.066345,
     "center_lon": 14.413801,
     "distance_m": 886,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "140",
@@ -168,7 +204,9 @@
     "center_lat": 52.164733,
     "center_lon": 4.709426,
     "distance_m": 14847,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "141",
@@ -177,16 +215,20 @@
     "center_lat": 39.43141,
     "center_lon": -81.461247,
     "distance_m": 11219,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "142",
-    "name": "Charles River - DeWolfe to Soldiers Field - Charles River - DeWolfe to Soldiers Field Rev F",
+    "name": "Charles River - DeWolfe to Soldiers Field Rev F",
     "country": "United States",
     "center_lat": 42.367861,
     "center_lon": -71.123336,
     "distance_m": 4688,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "143",
@@ -195,7 +237,9 @@
     "center_lat": 43.077196,
     "center_lon": -73.578035,
     "distance_m": 4714,
-    "status": "established"
+    "status": "established",
+    "notes": "Head race downstream of the Route 29 Bridge across the Hudson-Champlain Canal in Schuylerville, NY.",
+    "has_path": false
   },
   {
     "id": "146",
@@ -204,7 +248,9 @@
     "center_lat": 52.24166,
     "center_lon": 6.823994,
     "distance_m": 3780,
-    "status": "established"
+    "status": "established",
+    "notes": "Start - boei TWK 2\nFinish - Oud Thyro",
+    "has_path": false
   },
   {
     "id": "147",
@@ -213,7 +259,9 @@
     "center_lat": 52.24166,
     "center_lon": 6.823994,
     "distance_m": 3780,
-    "status": "established"
+    "status": "established",
+    "notes": "Start - Oud Thyro\nFinish - Boei TWK 2",
+    "has_path": false
   },
   {
     "id": "149",
@@ -222,7 +270,9 @@
     "center_lat": 52.225065,
     "center_lon": 6.845976,
     "distance_m": 643,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "15",
@@ -231,7 +281,9 @@
     "center_lat": 40.371951,
     "center_lon": -74.952483,
     "distance_m": 1689,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "150",
@@ -240,7 +292,9 @@
     "center_lat": 52.224511,
     "center_lon": 6.846857,
     "distance_m": 203,
-    "status": "established"
+    "status": "established",
+    "notes": "200m van einde versmalling tot einde vlot",
+    "has_path": false
   },
   {
     "id": "153",
@@ -249,16 +303,20 @@
     "center_lat": 42.367039,
     "center_lon": -71.132061,
     "distance_m": 9905,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "154",
-    "name": "Head of the Red - Head of the Red",
+    "name": "Head of the Red",
     "country": "United States",
     "center_lat": 37.521364,
     "center_lon": -122.205624,
     "distance_m": 5531,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "156",
@@ -267,7 +325,9 @@
     "center_lat": 37.508111,
     "center_lon": -122.214858,
     "distance_m": 1198,
-    "status": "established"
+    "status": "established",
+    "notes": "Marker 18 to finish of Head of the Red",
+    "has_path": false
   },
   {
     "id": "163",
@@ -276,7 +336,9 @@
     "center_lat": 49.439417,
     "center_lon": 8.462987,
     "distance_m": 994,
-    "status": "established"
+    "status": "established",
+    "notes": "1k on Kief",
+    "has_path": false
   },
   {
     "id": "164",
@@ -285,7 +347,9 @@
     "center_lat": 49.456029,
     "center_lon": 8.456872,
     "distance_m": 5907,
-    "status": "established"
+    "status": "established",
+    "notes": "about 6k up the river Rhein against the stream.",
+    "has_path": false
   },
   {
     "id": "166",
@@ -294,7 +358,9 @@
     "center_lat": 42.359656,
     "center_lon": -71.121997,
     "distance_m": 2807,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "168",
@@ -303,7 +369,9 @@
     "center_lat": 43.072719,
     "center_lon": -73.701375,
     "distance_m": 3230,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "17",
@@ -312,7 +380,9 @@
     "center_lat": 48.575169,
     "center_lon": 17.829359,
     "distance_m": 912,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "170",
@@ -321,7 +391,9 @@
     "center_lat": 52.226884,
     "center_lon": 6.844914,
     "distance_m": 1043,
-    "status": "established"
+    "status": "established",
+    "notes": "Test course for CrewNerd navigation\r\n\r\nRowsandall.com\r\nTesten van CrewNerd",
+    "has_path": false
   },
   {
     "id": "171",
@@ -330,7 +402,9 @@
     "center_lat": 52.224947,
     "center_lon": 0.158938,
     "distance_m": 2286,
-    "status": "established"
+    "status": "established",
+    "notes": "Standard Cam head",
+    "has_path": false
   },
   {
     "id": "172",
@@ -339,7 +413,9 @@
     "center_lat": 52.225114,
     "center_lon": 0.15991,
     "distance_m": 2170,
-    "status": "established"
+    "status": "established",
+    "notes": "Cantabrigian Rowing Club Winter head course - normally held in November",
+    "has_path": false
   },
   {
     "id": "173",
@@ -348,7 +424,9 @@
     "center_lat": 52.226212,
     "center_lon": 0.163613,
     "distance_m": 1674,
-    "status": "established"
+    "status": "established",
+    "notes": "City of Cambridge Head to head part one (downstream)",
+    "has_path": false
   },
   {
     "id": "174",
@@ -357,25 +435,31 @@
     "center_lat": 52.226212,
     "center_lon": 0.163613,
     "distance_m": 1674,
-    "status": "established"
+    "status": "established",
+    "notes": "City of Cambridge Head to head part two (upstream)",
+    "has_path": false
   },
   {
     "id": "175",
-    "name": "Stonehaven Return - Stonehaven Return",
+    "name": "Stonehaven Return",
     "country": "United Kingdom",
     "center_lat": 56.959194,
     "center_lon": -2.199599,
     "distance_m": 0,
-    "status": "established"
+    "status": "established",
+    "notes": "Out and return to Stonehaven Harbour\n\nStart and finish at outer harbour entrance",
+    "has_path": false
   },
   {
     "id": "176",
-    "name": " - Catterline Return",
+    "name": "Catterline Return",
     "country": "United Kingdom",
     "center_lat": 56.895039,
     "center_lon": -2.214855,
     "distance_m": 22,
-    "status": "established"
+    "status": "established",
+    "notes": "Start and finish at Catterline Pier",
+    "has_path": false
   },
   {
     "id": "177",
@@ -384,7 +468,9 @@
     "center_lat": 56.92669,
     "center_lon": -2.20713,
     "distance_m": 7259,
-    "status": "established"
+    "status": "established",
+    "notes": "Catterline Pier to Stonehaven harbour entrance",
+    "has_path": false
   },
   {
     "id": "178",
@@ -393,7 +479,9 @@
     "center_lat": 56.926922,
     "center_lon": -2.207468,
     "distance_m": 7165,
-    "status": "established"
+    "status": "established",
+    "notes": "Stonehaven harbour entrace to Catterline Pier",
+    "has_path": false
   },
   {
     "id": "179",
@@ -402,7 +490,9 @@
     "center_lat": 55.898148,
     "center_lon": -4.425161,
     "distance_m": 19599,
-    "status": "established"
+    "status": "established",
+    "notes": "From Dumbarton Castle to the Finnieston Crane",
+    "has_path": false
   },
   {
     "id": "18",
@@ -411,7 +501,9 @@
     "center_lat": 48.242233,
     "center_lon": 11.514727,
     "distance_m": 2004,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "180",
@@ -420,7 +512,9 @@
     "center_lat": 57.262285,
     "center_lon": -4.502088,
     "distance_m": 33446,
-    "status": "established"
+    "status": "established",
+    "notes": "Fort Augustus to Dores",
+    "has_path": false
   },
   {
     "id": "181",
@@ -429,7 +523,9 @@
     "center_lat": 56.959194,
     "center_lon": -2.199599,
     "distance_m": 0,
-    "status": "established"
+    "status": "established",
+    "notes": "Start and finish at outer harbour entrance",
+    "has_path": false
   },
   {
     "id": "182",
@@ -438,7 +534,9 @@
     "center_lat": 56.895039,
     "center_lon": -2.214855,
     "distance_m": 22,
-    "status": "established"
+    "status": "established",
+    "notes": "Start and finish at Catterline Pier",
+    "has_path": false
   },
   {
     "id": "183",
@@ -447,7 +545,9 @@
     "center_lat": 39.449251,
     "center_lon": -76.250308,
     "distance_m": 1883,
-    "status": "established"
+    "status": "established",
+    "notes": "Edgewood MD USA\n\n2k course on the Bush River between the Otter Point power line tower and the Bush River Yacht Club",
+    "has_path": false
   },
   {
     "id": "184",
@@ -456,7 +556,9 @@
     "center_lat": 41.825308,
     "center_lon": -71.382216,
     "distance_m": 4839,
-    "status": "established"
+    "status": "established",
+    "notes": "Rowsandall.com HOTS",
+    "has_path": false
   },
   {
     "id": "186",
@@ -465,7 +567,9 @@
     "center_lat": 41.850163,
     "center_lon": -71.376571,
     "distance_m": 4686,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "188",
@@ -474,7 +578,9 @@
     "center_lat": 41.861067,
     "center_lon": -71.377815,
     "distance_m": 1754,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "19",
@@ -483,7 +589,9 @@
     "center_lat": 48.245581,
     "center_lon": 11.519336,
     "distance_m": 996,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "193",
@@ -492,25 +600,31 @@
     "center_lat": 54.543602,
     "center_lon": -1.310646,
     "distance_m": 4967,
-    "status": "established"
+    "status": "established",
+    "notes": "Course map for Tees LDS/SBH in Stockton-on-Tees, England. Waypoints are included for entry and exit of each corner and a grade for the severity of each corner rally-style (1-6 with 1 being sharpest)",
+    "has_path": false
   },
   {
     "id": "194",
-    "name": "Tyne LDS/SBH - Tyne LDS/SBH",
+    "name": "Tyne LDS/SBH",
     "country": "United Kingdom",
     "center_lat": 54.9698,
     "center_lon": -1.725416,
     "distance_m": 4337,
-    "status": "established"
+    "status": "established",
+    "notes": "4.5km race in Newcastle-upon-Tyne, England. Waypoints are included marking entrance and exits of major corners and before bridges.",
+    "has_path": false
   },
   {
     "id": "195",
-    "name": "Wansbeck LDS and SBH 2024 - Wansbeck LDS and SBH 2024",
+    "name": "Wansbeck LDS and SBH 2024",
     "country": "United Kingdom",
     "center_lat": 55.169512,
     "center_lon": -1.583749,
     "distance_m": 1543,
-    "status": "established"
+    "status": "established",
+    "notes": "North Rowing Long Distance Sculls and Cambois Small Boats Head short course for 2024",
+    "has_path": false
   },
   {
     "id": "196",
@@ -519,34 +633,42 @@
     "center_lat": 55.169512,
     "center_lon": -1.583749,
     "distance_m": 1543,
-    "status": "established"
+    "status": "established",
+    "notes": "This is the course of the 2024 Wansbeck Long Distance Sculls and Cambois RC Small Boats Head",
+    "has_path": false
   },
   {
     "id": "197",
-    "name": "Head of the Schuylkill - Head of the Schuylkill",
+    "name": "Head of the Schuylkill",
     "country": "United States",
     "center_lat": 39.98579,
     "center_lon": -75.193955,
     "distance_m": 3948,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "198",
-    "name": "Head of the Schuylkill - Head of the Schuylkill",
+    "name": "Head of the Schuylkill",
     "country": "United States",
     "center_lat": 39.987395,
     "center_lon": -75.195096,
     "distance_m": 6150,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "199",
-    "name": "Head of the Schuylkill - Head of the Schuylkill",
+    "name": "Head of the Schuylkill",
     "country": "United States",
     "center_lat": 39.987395,
     "center_lon": -75.195096,
     "distance_m": 3810,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "202",
@@ -555,7 +677,9 @@
     "center_lat": 52.039177,
     "center_lon": 4.346336,
     "distance_m": 3928,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "204",
@@ -564,7 +688,9 @@
     "center_lat": 52.251522,
     "center_lon": 6.731118,
     "distance_m": 3989,
-    "status": "established"
+    "status": "established",
+    "notes": "4k Twentsche Winter Wedstrijden \r\nHengelo",
+    "has_path": false
   },
   {
     "id": "205",
@@ -573,7 +699,9 @@
     "center_lat": 52.24132,
     "center_lon": 6.825278,
     "distance_m": 5519,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "209",
@@ -582,7 +710,9 @@
     "center_lat": 52.326539,
     "center_lon": 4.905659,
     "distance_m": 6993,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "21",
@@ -591,7 +721,9 @@
     "center_lat": 52.32397,
     "center_lon": 5.087764,
     "distance_m": 498,
-    "status": "established"
+    "status": "established",
+    "notes": "Bij muiden\r\nstart is het gebouw van waternet (aan stuurbord zijde)\r\nfinish is waar de weg splitst van de vaart",
+    "has_path": false
   },
   {
     "id": "210",
@@ -600,7 +732,9 @@
     "center_lat": 51.392531,
     "center_lon": -2.425585,
     "distance_m": 2703,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "211",
@@ -609,7 +743,9 @@
     "center_lat": 39.925446,
     "center_lon": -75.07106,
     "distance_m": 1998,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "212",
@@ -618,7 +754,9 @@
     "center_lat": 39.925306,
     "center_lon": -75.073988,
     "distance_m": 2011,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "213",
@@ -627,7 +765,9 @@
     "center_lat": 39.925584,
     "center_lon": -75.073954,
     "distance_m": 2022,
-    "status": "established"
+    "status": "established",
+    "notes": "Camden, New Jersey",
+    "has_path": false
   },
   {
     "id": "214",
@@ -636,7 +776,9 @@
     "center_lat": 52.551207,
     "center_lon": 6.121874,
     "distance_m": 3306,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "215",
@@ -645,7 +787,9 @@
     "center_lat": 52.55119,
     "center_lon": 6.121826,
     "distance_m": 3315,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "216",
@@ -654,7 +798,9 @@
     "center_lat": 52.551218,
     "center_lon": 6.121852,
     "distance_m": 3314,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "217",
@@ -663,25 +809,31 @@
     "center_lat": 41.854848,
     "center_lon": -71.378901,
     "distance_m": 4781,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "218",
-    "name": " - Seekonk R - TOTS II Course",
+    "name": "Seekonk R - TOTS II Course",
     "country": "United States",
     "center_lat": 41.854848,
     "center_lon": -71.378901,
     "distance_m": 4573,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "219",
-    "name": " - Seekonk R - TOTS II Course",
+    "name": "Seekonk R - TOTS II Course",
     "country": "United States",
     "center_lat": 41.854848,
     "center_lon": -71.378901,
     "distance_m": 4573,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "22",
@@ -690,7 +842,9 @@
     "center_lat": 51.473467,
     "center_lon": -0.238153,
     "distance_m": 6224,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "227",
@@ -699,25 +853,31 @@
     "center_lat": 41.856906,
     "center_lon": -71.378545,
     "distance_m": 4230,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "228",
-    "name": "Seekonk R - Seekonk R - TOTS II Course",
+    "name": "Seekonk R - TOTS II Course",
     "country": "United States",
     "center_lat": 41.854599,
     "center_lon": -71.37901,
     "distance_m": 4571,
-    "status": "established"
+    "status": "established",
+    "notes": "Festival Pier South to Gatehouse",
+    "has_path": false
   },
   {
     "id": "229",
-    "name": "Seekonk R - Seekonk R - TOTS II Course",
+    "name": "Seekonk R - TOTS II Course",
     "country": "United States",
     "center_lat": 41.854599,
     "center_lon": -71.37901,
     "distance_m": 4571,
-    "status": "established"
+    "status": "established",
+    "notes": "Pier South to Gatehouse",
+    "has_path": false
   },
   {
     "id": "23",
@@ -726,16 +886,20 @@
     "center_lat": 51.473467,
     "center_lon": -0.238153,
     "distance_m": 6224,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "230",
-    "name": " - Seekonk R - TOTS TT",
+    "name": "Seekonk R - TOTS TT",
     "country": "United States",
     "center_lat": 41.854599,
     "center_lon": -71.37901,
     "distance_m": 4571,
-    "status": "established"
+    "status": "established",
+    "notes": "Festival South to GateHouse",
+    "has_path": false
   },
   {
     "id": "231",
@@ -744,7 +908,9 @@
     "center_lat": 41.854599,
     "center_lon": -71.37901,
     "distance_m": 4571,
-    "status": "established"
+    "status": "established",
+    "notes": "Festival South to Gatehoues",
+    "has_path": false
   },
   {
     "id": "232",
@@ -753,7 +919,9 @@
     "center_lat": 41.839101,
     "center_lon": -71.375444,
     "distance_m": 5687,
-    "status": "established"
+    "status": "established",
+    "notes": "Stake Race .  henderson to 18 back to henderson",
+    "has_path": false
   },
   {
     "id": "233",
@@ -762,16 +930,20 @@
     "center_lat": 41.839101,
     "center_lon": -71.375444,
     "distance_m": 4784,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "234",
-    "name": "HOTS Stake Race 8  2025 - Untitled project",
+    "name": "HOTS Stake Race 8 2025 - Untitled project",
     "country": "United States",
     "center_lat": 41.839102,
     "center_lon": -71.375567,
     "distance_m": 4793,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "236",
@@ -780,7 +952,9 @@
     "center_lat": 42.35966,
     "center_lon": -71.122207,
     "distance_m": 2778,
-    "status": "established"
+    "status": "established",
+    "notes": "11 km practice course above the dam on the River Tiber\n\nBoston's fall classic on the Charles River. Held in October - 3.2 mile course.",
+    "has_path": false
   },
   {
     "id": "237",
@@ -789,7 +963,9 @@
     "center_lat": 47.649065,
     "center_lon": -122.310062,
     "distance_m": 4567,
-    "status": "established"
+    "status": "established",
+    "notes": "11 km practice course above the dam on the River Tiber\n\nLargest head race in the west. Held in early November. Starts in Lake Union, near the I-5 bridge and finishes near the UW boathouse.",
+    "has_path": false
   },
   {
     "id": "238",
@@ -798,16 +974,20 @@
     "center_lat": 47.644784,
     "center_lon": -122.340126,
     "distance_m": 704,
-    "status": "established"
+    "status": "established",
+    "notes": "11 km practice course above the dam on the River Tiber\n\nOctober head race on Lake Union in Seattle. Great spectator viewing from Gas Works Park.",
+    "has_path": false
   },
   {
     "id": "24",
-    "name": "Textile River Regatta - Textile River Regatta Course",
+    "name": "Textile River Regatta Course",
     "country": "United States",
     "center_lat": 42.648236,
     "center_lon": -71.380185,
     "distance_m": 5875,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "243",
@@ -816,7 +996,9 @@
     "center_lat": 42.031273,
     "center_lon": 12.518076,
     "distance_m": 10915,
-    "status": "established"
+    "status": "established",
+    "notes": "11 km practice course upstream on the River Tiber\n\n<div>Home course,11 km practice upstream above the dam on the River Tiber<br></div>",
+    "has_path": false
   },
   {
     "id": "245",
@@ -825,7 +1007,9 @@
     "center_lat": 41.836227,
     "center_lon": -71.378166,
     "distance_m": 10867,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "246",
@@ -834,7 +1018,9 @@
     "center_lat": 41.836428,
     "center_lon": -71.377231,
     "distance_m": 4727,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "247",
@@ -843,7 +1029,9 @@
     "center_lat": 41.836428,
     "center_lon": -71.377231,
     "distance_m": 4727,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "248",
@@ -852,16 +1040,20 @@
     "center_lat": 41.836428,
     "center_lon": -71.377231,
     "distance_m": 4727,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "25",
-    "name": "Merrimack Chase - Merrimack Chase",
+    "name": "Merrimack Chase",
     "country": "United States",
     "center_lat": 42.695529,
     "center_lon": -71.222772,
     "distance_m": 5001,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "252",
@@ -870,7 +1062,9 @@
     "center_lat": 44.914233,
     "center_lon": -79.352043,
     "distance_m": 2943,
-    "status": "established"
+    "status": "established",
+    "notes": "Muskoka Fall Classic",
+    "has_path": false
   },
   {
     "id": "254",
@@ -879,7 +1073,9 @@
     "center_lat": 45.041334,
     "center_lon": 7.68137,
     "distance_m": 10192,
-    "status": "established"
+    "status": "established",
+    "notes": "Test Version with original waypoint name and Start & Finish waypoint modified to avoid overlap\r\n\r\nBased on original Rowsandall.com Turin Silver Skiff",
+    "has_path": false
   },
   {
     "id": "256",
@@ -888,25 +1084,31 @@
     "center_lat": 41.853957,
     "center_lon": -71.379438,
     "distance_m": 4771,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "257",
-    "name": "LaSalle Rowing Club - LaSalle Rowing Club course",
+    "name": "LaSalle Rowing Club course",
     "country": "Canada",
     "center_lat": 42.224641,
     "center_lon": -83.111962,
     "distance_m": 10955,
-    "status": "established"
+    "status": "established",
+    "notes": "<div>(End of Bay Marker)<br></div>",
+    "has_path": false
   },
   {
     "id": "258",
-    "name": "Rijnland 10km Challenge - Rijnland 10km Challenge",
+    "name": "Rijnland 10km Challenge",
     "country": "Netherlands",
     "center_lat": 52.116043,
     "center_lon": 4.44947,
     "distance_m": 9748,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "259",
@@ -915,16 +1117,20 @@
     "center_lat": 37.785993,
     "center_lon": -122.251332,
     "distance_m": 4765,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "26",
-    "name": "Quinsigmond Snake Regatta - Quinsigmond Snake Regatta",
+    "name": "Quinsigmond Snake Regatta",
     "country": "United States",
     "center_lat": 42.268173,
     "center_lon": -71.754597,
     "distance_m": 4111,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "260",
@@ -933,7 +1139,9 @@
     "center_lat": 52.932721,
     "center_lon": -1.143961,
     "distance_m": 4624,
-    "status": "established"
+    "status": "established",
+    "notes": "6k",
+    "has_path": false
   },
   {
     "id": "261",
@@ -942,16 +1150,20 @@
     "center_lat": 52.431187,
     "center_lon": 0.309407,
     "distance_m": 5092,
-    "status": "established"
+    "status": "established",
+    "notes": "5k",
+    "has_path": false
   },
   {
     "id": "262",
-    "name": "Rijnland Vliethead 6km - Rijnland Vliethead 6km",
+    "name": "Rijnland Vliethead 6km",
     "country": "Netherlands",
     "center_lat": 52.103054,
     "center_lon": 4.43058,
     "distance_m": 5869,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "263",
@@ -960,7 +1172,9 @@
     "center_lat": 52.099544,
     "center_lon": 4.426045,
     "distance_m": 4873,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "264",
@@ -969,7 +1183,9 @@
     "center_lat": 52.110207,
     "center_lon": 4.43898,
     "distance_m": 3917,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "265",
@@ -978,7 +1194,9 @@
     "center_lat": 52.110207,
     "center_lon": 4.43898,
     "distance_m": 3917,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "266",
@@ -987,7 +1205,9 @@
     "center_lat": 52.107011,
     "center_lon": 4.434387,
     "distance_m": 4900,
-    "status": "established"
+    "status": "established",
+    "notes": "Van HM 18.7 naar HM 13.7",
+    "has_path": false
   },
   {
     "id": "267",
@@ -996,7 +1216,9 @@
     "center_lat": 45.043112,
     "center_lon": 7.681595,
     "distance_m": 9255,
-    "status": "established"
+    "status": "established",
+    "notes": "Only Bridge",
+    "has_path": false
   },
   {
     "id": "268",
@@ -1005,7 +1227,9 @@
     "center_lat": 45.041331,
     "center_lon": 7.678659,
     "distance_m": 9403,
-    "status": "established"
+    "status": "established",
+    "notes": "Bridge & Waypoint",
+    "has_path": false
   },
   {
     "id": "269",
@@ -1014,7 +1238,9 @@
     "center_lat": 45.045112,
     "center_lon": 7.684531,
     "distance_m": 4592,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "270",
@@ -1023,7 +1249,9 @@
     "center_lat": 45.045112,
     "center_lon": 7.684531,
     "distance_m": 4675,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "271",
@@ -1032,7 +1260,9 @@
     "center_lat": 52.251466,
     "center_lon": 6.732011,
     "distance_m": 3989,
-    "status": "established"
+    "status": "established",
+    "notes": "Rowsandall.com\n4k Twentsche Winter Wedstrijden \nHengelo",
+    "has_path": false
   },
   {
     "id": "272",
@@ -1041,7 +1271,9 @@
     "center_lat": 52.240185,
     "center_lon": 6.827799,
     "distance_m": 1996,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "273",
@@ -1050,7 +1282,9 @@
     "center_lat": 52.236474546709815,
     "center_lon": 6.833510163159142,
     "distance_m": 1044,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "274",
@@ -1059,7 +1293,9 @@
     "center_lat": 52.233518591744414,
     "center_lon": 6.838097258842331,
     "distance_m": 525,
-    "status": "provisional"
+    "status": "provisional",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "275",
@@ -1068,7 +1304,9 @@
     "center_lat": 38.53843598265172,
     "center_lon": -121.5823175097457,
     "distance_m": 10987,
-    "status": "provisional"
+    "status": "provisional",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "276",
@@ -1077,7 +1315,9 @@
     "center_lat": 38.53843565846174,
     "center_lon": -121.58226360368042,
     "distance_m": 10974,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "277",
@@ -1085,8 +1325,10 @@
     "country": "Netherlands",
     "center_lat": 53.01218647601149,
     "center_lon": 5.850045879681905,
-    "distance_m": 13327,
-    "status": "provisional"
+    "distance_m": 8889,
+    "status": "provisional",
+    "notes": "Created with KML Creator Tool",
+    "has_path": true
   },
   {
     "id": "28",
@@ -1095,7 +1337,9 @@
     "center_lat": 52.309418,
     "center_lon": 5.127268,
     "distance_m": 1020,
-    "status": "established"
+    "status": "established",
+    "notes": "De finish is bij de eerste boom aan bakboord voor de A1/Kamelen brug\r\n\r\nDe start is net na het gebouw van \"de boer\" aanbstuurboordzijde\r\n\r\nDe richting is van Muiden naar Naarden. \"Terug roeien\"",
+    "has_path": false
   },
   {
     "id": "29",
@@ -1104,7 +1348,9 @@
     "center_lat": 52.308923,
     "center_lon": 5.128528,
     "distance_m": 4036,
-    "status": "established"
+    "status": "established",
+    "notes": "4000m\r\nRichting is van muiden naar naarden\r\nDe start is net na de hakkelaar de kleine stijger aan bakboord zijde.\r\nDe finish is vlak voor de irene brug 10 meter na de laatste boom aan bakboord zijde",
+    "has_path": false
   },
   {
     "id": "3",
@@ -1113,7 +1359,9 @@
     "center_lat": 47.644784,
     "center_lon": -122.340126,
     "distance_m": 704,
-    "status": "established"
+    "status": "established",
+    "notes": "October head race on Lake Union in Seattle. Great spectator viewing from Gas Works Park.",
+    "has_path": false
   },
   {
     "id": "30",
@@ -1122,16 +1370,20 @@
     "center_lat": 53.408129,
     "center_lon": -2.33508,
     "distance_m": 992,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "32",
-    "name": "Schuylkill 400m Dash - Schuylkill 400m Dash",
+    "name": "Schuylkill 400m Dash",
     "country": "United States",
     "center_lat": 39.987282,
     "center_lon": -75.20187,
     "distance_m": 384,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "35",
@@ -1140,7 +1392,9 @@
     "center_lat": 52.944948,
     "center_lon": -1.086717,
     "distance_m": 986,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "36",
@@ -1149,7 +1403,9 @@
     "center_lat": 45.041354,
     "center_lon": 7.681403,
     "distance_m": 10142,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "37",
@@ -1158,7 +1414,9 @@
     "center_lat": 51.494247,
     "center_lon": -0.665049,
     "distance_m": 1973,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "4",
@@ -1167,7 +1425,9 @@
     "center_lat": 47.651957,
     "center_lon": -122.308671,
     "distance_m": 2377,
-    "status": "established"
+    "status": "established",
+    "notes": "Largest head race in the west. Held in early November. Starts in Lake Union, near the I-5 bridge and finishes near the UW boathouse.",
+    "has_path": false
   },
   {
     "id": "41",
@@ -1176,7 +1436,9 @@
     "center_lat": 38.894687,
     "center_lon": -77.065023,
     "distance_m": 932,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "42",
@@ -1185,7 +1447,9 @@
     "center_lat": 38.895092,
     "center_lon": -77.065195,
     "distance_m": 913,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "43",
@@ -1194,16 +1458,20 @@
     "center_lat": 48.189032,
     "center_lon": 16.470661,
     "distance_m": 969,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "44",
-    "name": "Carnegie Lake - Carnegie Lake 1k",
+    "name": "Carnegie Lake 1k",
     "country": "United States",
     "center_lat": 40.363721,
     "center_lon": -74.624812,
     "distance_m": 926,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "47",
@@ -1212,7 +1480,9 @@
     "center_lat": 38.902986,
     "center_lon": -77.081883,
     "distance_m": 4690,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "48",
@@ -1221,7 +1491,9 @@
     "center_lat": 38.887803,
     "center_lon": -77.056603,
     "distance_m": 2083,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "49",
@@ -1230,7 +1502,9 @@
     "center_lat": 38.894059,
     "center_lon": -77.056883,
     "distance_m": 3483,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "5",
@@ -1239,7 +1513,9 @@
     "center_lat": 42.25576,
     "center_lon": -71.748578,
     "distance_m": 5349,
-    "status": "established"
+    "status": "established",
+    "notes": "The full lake, from the gazebo on the point in the south cove all the way up to past the Rt 290 bridge.",
+    "has_path": false
   },
   {
     "id": "50",
@@ -1248,7 +1524,9 @@
     "center_lat": 49.245812,
     "center_lon": 16.499989,
     "distance_m": 5343,
-    "status": "established"
+    "status": "established",
+    "notes": "6k na prehrade. Start v Rokli, toci se u sirky. Z Rokle k Sirce musis jet v draze",
+    "has_path": false
   },
   {
     "id": "51",
@@ -1257,7 +1535,9 @@
     "center_lat": 49.093657,
     "center_lon": 17.48764,
     "distance_m": 5445,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "53",
@@ -1266,7 +1546,9 @@
     "center_lat": 52.338158,
     "center_lon": 4.907334,
     "distance_m": 3864,
-    "status": "established"
+    "status": "established",
+    "notes": "'t Kalfje - De Hoop (parcours Novembervieren)\r\n\r\nStartlijn is bij de eerste rotonde aan bakboord na het Kalfje.\r\n\r\nFinishlijn is bij het vlot van De Hoop",
+    "has_path": false
   },
   {
     "id": "56",
@@ -1275,7 +1557,9 @@
     "center_lat": 27.371885,
     "center_lon": -82.45352,
     "distance_m": 865,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "57",
@@ -1284,16 +1568,20 @@
     "center_lat": 50.056673,
     "center_lon": 14.41279,
     "distance_m": 6071,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "58",
-    "name": "Hodonin - Hodonin 1k",
+    "name": "Hodonin 1k",
     "country": "Czechia",
     "center_lat": 48.844036,
     "center_lon": 17.151369,
     "distance_m": 954,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "6",
@@ -1302,7 +1590,9 @@
     "center_lat": 42.363424,
     "center_lon": -71.246333,
     "distance_m": 2519,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "61",
@@ -1311,7 +1601,9 @@
     "center_lat": 42.3677,
     "center_lon": -71.123349,
     "distance_m": 4703,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "66",
@@ -1320,16 +1612,20 @@
     "center_lat": 42.3677,
     "center_lon": -71.123349,
     "distance_m": 4703,
-    "status": "established"
+    "status": "established",
+    "notes": "4700m\r\nStart at the downstream edge of DeWolfe\r\nFinish at the metal posts at Soldiers Field",
+    "has_path": false
   },
   {
     "id": "67",
-    "name": "Lake Quinsigamond - South Cove to DRC Docks - Lake Quinsigamond - South Cove to DRC",
+    "name": "Lake Quinsigamond - South Cove to DRC Docks",
     "country": "United States",
     "center_lat": 42.255542,
     "center_lon": -71.748028,
     "distance_m": 4873,
-    "status": "established"
+    "status": "established",
+    "notes": "Start is at the little gazebo.\r\nFinish is at the south end of the DRC docks",
+    "has_path": false
   },
   {
     "id": "69",
@@ -1338,7 +1634,9 @@
     "center_lat": 42.282999,
     "center_lon": -71.757148,
     "distance_m": 1564,
-    "status": "established"
+    "status": "established",
+    "notes": "Start is at the south edge of the DRC docks.\r\nFinish is the 2k finish line tower.",
+    "has_path": false
   },
   {
     "id": "7",
@@ -1347,7 +1645,9 @@
     "center_lat": 42.362358,
     "center_lon": -71.245785,
     "distance_m": 2726,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "71",
@@ -1356,25 +1656,31 @@
     "center_lat": 27.371516,
     "center_lon": -82.45381,
     "distance_m": 1004,
-    "status": "established"
+    "status": "established",
+    "notes": "Start at 1k mark of the course\r\nFinish at the finish tower\r\nwesternmost 3 lanes",
+    "has_path": false
   },
   {
     "id": "72",
-    "name": "NBP 2K Sprint - NBP 2K Sprint",
+    "name": "NBP 2K Sprint",
     "country": "United States",
     "center_lat": 27.367162,
     "center_lon": -82.453782,
     "distance_m": 1965,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "73",
-    "name": "Battle of the Bridges - Battle of the Bridges",
+    "name": "Battle of the Bridges",
     "country": "United States",
     "center_lat": 27.090511,
     "center_lon": -82.436547,
     "distance_m": 5086,
-    "status": "established"
+    "status": "established",
+    "notes": "course set per this map: https://www.regattacentral.com/cms/uploads/sarasota_scullers/media/BOB%20fullmap_wLogo25.jpg",
+    "has_path": false
   },
   {
     "id": "78",
@@ -1383,7 +1689,9 @@
     "center_lat": 40.049233,
     "center_lon": -83.100497,
     "distance_m": 4379,
-    "status": "established"
+    "status": "established",
+    "notes": "Head race piece on Griggs Reservoir",
+    "has_path": false
   },
   {
     "id": "79",
@@ -1392,7 +1700,9 @@
     "center_lat": 40.050568,
     "center_lon": -83.10346,
     "distance_m": 6827,
-    "status": "established"
+    "status": "established",
+    "notes": "7k peice OSU rows in the fall",
+    "has_path": false
   },
   {
     "id": "8",
@@ -1401,7 +1711,9 @@
     "center_lat": 49.242384,
     "center_lon": 16.506172,
     "distance_m": 2657,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "80",
@@ -1410,7 +1722,9 @@
     "center_lat": 40.041098,
     "center_lon": -83.099196,
     "distance_m": 4219,
-    "status": "established"
+    "status": "established",
+    "notes": "Speakmon Memorial Regatta course",
+    "has_path": false
   },
   {
     "id": "84",
@@ -1419,7 +1733,9 @@
     "center_lat": 37.553927,
     "center_lon": -122.265046,
     "distance_m": 5100,
-    "status": "established"
+    "status": "established",
+    "notes": "5Km race course in Foster City, CA",
+    "has_path": false
   },
   {
     "id": "85",
@@ -1428,25 +1744,31 @@
     "center_lat": 40.125572,
     "center_lon": -82.882393,
     "distance_m": 1011,
-    "status": "established"
+    "status": "established",
+    "notes": "Start just south of the Smothers rd bridge (roughly the line of trees)\r\nFinish at the Walnut Street Boat Ramp.",
+    "has_path": false
   },
   {
     "id": "86",
-    "name": "Hoover Reservoir 2K - Hoover Reservoir 2K",
+    "name": "Hoover Reservoir 2K",
     "country": "United States",
     "center_lat": 40.121012,
     "center_lon": -82.882249,
     "distance_m": 2019,
-    "status": "established"
+    "status": "established",
+    "notes": "Start just south of the Smothers Rd Bridge\r\nFinish by the dock at the south end of the lake.",
+    "has_path": false
   },
   {
     "id": "88",
-    "name": "Mission Bay GPS Speed Order - Mission Bay GPS Speed Order",
+    "name": "Mission Bay GPS Speed Order",
     "country": "United States",
     "center_lat": 32.774524,
     "center_lon": -117.235155,
     "distance_m": 5455,
-    "status": "established"
+    "status": "established",
+    "notes": "Start at Quivira Point\r\nW Mission Bay Bridge\r\nIngraham St Bridge\r\nStony Point\r\nRadio Island\r\nFisherman's Channel\r\nFinish at SDRC",
+    "has_path": false
   },
   {
     "id": "9",
@@ -1455,7 +1777,9 @@
     "center_lat": 49.244067,
     "center_lon": 16.500433,
     "distance_m": 2498,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "90",
@@ -1464,43 +1788,53 @@
     "center_lat": 41.825357,
     "center_lon": -71.382276,
     "distance_m": 4840,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "93",
-    "name": "Fish Creek - Fish Creek 2K",
+    "name": "Fish Creek 2K",
     "country": "United States",
     "center_lat": 43.063188,
     "center_lon": -73.71111,
     "distance_m": 2023,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "94",
-    "name": "Fish Creek - Fish Creek 1K",
+    "name": "Fish Creek 1K",
     "country": "United States",
     "center_lat": 43.059503,
     "center_lon": -73.715825,
     "distance_m": 1018,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "95",
-    "name": "Lake Nockamixon Stake Race - Lake Nockamixon Stake Race",
+    "name": "Lake Nockamixon Stake Race",
     "country": "United States",
     "center_lat": 40.456238,
     "center_lon": -75.23344,
     "distance_m": 12250,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "96",
-    "name": "Lake Nockamixon 6K Home - Lake Nockamixon 6K home",
+    "name": "Lake Nockamixon 6K home",
     "country": "United States",
     "center_lat": 40.457,
     "center_lon": -75.233979,
     "distance_m": 5981,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "97",
@@ -1509,15 +1843,19 @@
     "center_lat": 42.367795,
     "center_lon": -71.123225,
     "distance_m": 4698,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   },
   {
     "id": "99",
-    "name": "Lake Quinsigamond - Wormtown Chase - Lake Quinsigamond - Wormtown Chase",
+    "name": "Lake Quinsigamond - Wormtown Chase",
     "country": "United States",
     "center_lat": 42.258317,
     "center_lon": -71.751117,
     "distance_m": 5252,
-    "status": "established"
+    "status": "established",
+    "notes": "",
+    "has_path": false
   }
 ]

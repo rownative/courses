@@ -31,6 +31,12 @@ pytest scripts/test_validate_course.py \
   --cov-fail-under=70
 ```
 
+Audit script tests:
+
+```bash
+pytest scripts/test_audit_courses.py
+```
+
 `generate_kml` smoke test only:
 
 ```bash

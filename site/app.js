@@ -342,6 +342,70 @@
     });
   }
 
+  // --- search helpers ---
+  /** Lower-case and strip diacritics so "Uherské" matches "uherske". */
+  function foldText(s) {
+    return String(s || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+  }
+
+  /** Damerau-Levenshtein (optimal string alignment) distance, capped: returns max + 1 once it cannot be <= max. */
+  function editDistance(a, b, max) {
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    const rows = a.length + 1;
+    const cols = b.length + 1;
+    const d = Array.from({ length: rows }, () => new Array(cols).fill(0));
+    for (let i = 0; i < rows; i++) d[i][0] = i;
+    for (let j = 0; j < cols; j++) d[0][j] = j;
+    for (let i = 1; i < rows; i++) {
+      let rowMin = Infinity;
+      for (let j = 1; j < cols; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        let v = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+          v = Math.min(v, d[i - 2][j - 2] + 1);
+        }
+        d[i][j] = v;
+        if (v < rowMin) rowMin = v;
+      }
+      if (rowMin > max) return max + 1;
+    }
+    return d[a.length][b.length];
+  }
+
+  /** Allowed typos for a query word: none under 5 letters, one up to 7, two from 8. */
+  function maxEditsFor(token) {
+    if (token.length >= 8) return 2;
+    if (token.length >= 5) return 1;
+    return 0;
+  }
+
+  /** True if a query word matches any word in the text: as a prefix, or within a few edits. */
+  function tokenMatches(token, words) {
+    const max = maxEditsFor(token);
+    return words.some((w) => {
+      if (w.startsWith(token)) return true;
+      if (!max) return false;
+      // Compare against the word's leading letters too, so "quinsigamund" finds "quinsigamond"
+      // and "schuykill" finds "schuylkill" even when the word carries a suffix.
+      return editDistance(token, w, max) <= max || (w.length > token.length && editDistance(token, w.slice(0, token.length + max), max) <= max);
+    });
+  }
+
+  /** Match a course against a free-text query over its name, notes and ID. */
+  function courseMatchesSearch(course, query) {
+    const q = foldText(query).trim();
+    if (!q) return true;
+    const haystack = foldText(`${course.name || ""} ${course.notes || ""} ${course.id || ""}`);
+    if (haystack.includes(q)) return true;
+    const words = haystack.split(/[^a-z0-9]+/).filter(Boolean);
+    const tokens = q.split(/\s+/).filter(Boolean);
+    return tokens.every((t) => tokenMatches(t, words));
+  }
+  // --- end search helpers ---
+
   function fillCountryFilter() {
     const countries = [...new Set(courses.map((c) => c.country).filter(Boolean))].sort();
     countryFilter.innerHTML = '<option value="">All countries</option>';
@@ -354,7 +418,7 @@
   }
 
   function applyFilters() {
-    const search = (searchEl?.value || "").toLowerCase();
+    const search = searchEl?.value || "";
     const country = countryFilter?.value || "";
     const rangeVal = distanceRange?.value || "0-25";
     const [minKm, maxKm] = rangeVal.split("-").map((s) => parseFloat(s) || 0);
@@ -364,7 +428,7 @@
     const showEstablished = filterEstablished?.checked !== false;
 
     return courses.filter((c) => {
-      if (search && !(c.name || "").toLowerCase().includes(search)) return false;
+      if (search && !courseMatchesSearch(c, search)) return false;
       if (country && c.country !== country) return false;
       const d = c.distance_m || 0;
       if (d < dMin || d > dMax) return false;
@@ -454,6 +518,37 @@
       : { color: "#0af", fillColor: "#0af", fillOpacity: 0.2, weight: 2 };
   }
 
+  /** Haversine distance in metres between two [lat, lon] pairs. */
+  function haversineM(a, b) {
+    const R = 6371000;
+    const toRad = (d) => (d * Math.PI) / 180;
+    const dLat = toRad(b[0] - a[0]);
+    const dLon = toRad(b[1] - a[1]);
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a[0])) * Math.cos(toRad(b[0])) * Math.sin(dLon / 2) ** 2;
+    return 2 * R * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+  }
+
+  /** Optional traced centreline (SCHEMA.md `path`) as [lat, lon] pairs, or [] when absent/invalid. */
+  function pathLatLngs(full) {
+    if (!Array.isArray(full?.path)) return [];
+    const pts = full.path
+      .filter((p) => p && typeof p.lat === "number" && typeof p.lon === "number")
+      .map((p) => [p.lat, p.lon]);
+    return pts.length >= 2 ? pts : [];
+  }
+
+  function pathLengthM(latlngs) {
+    let total = 0;
+    for (let i = 1; i < latlngs.length; i++) total += haversineM(latlngs[i - 1], latlngs[i]);
+    return total;
+  }
+
+  function getPathOptions() {
+    return highContrastMode
+      ? { color: "#b30000", weight: 4, opacity: 0.95, dashArray: "8 6" }
+      : { color: "#06c", weight: 3, opacity: 0.85, dashArray: "8 6" };
+  }
+
   function fmtTime(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = (seconds % 60).toFixed(1);
@@ -501,10 +596,12 @@
     const courseTimesSection = isSignedIn
       ? `<div class="detail-course-times"><strong>My times</strong><ul id="detail-course-times-list">Loading…</ul></div>`
       : "";
+    const pathPts = pathLatLngs(full);
     let html = `
       <h2>${escapeHtml(meta.name)}</h2>
       <p class="course-id"><strong>ID:</strong> <code>${idHtml}</code> — <code>courses/${idHtml}.json</code></p>
       <p><strong>Distance:</strong> ${meta.distance_m || "—"} m</p>
+      ${pathPts.length ? `<p><strong>Traced path:</strong> ${(pathLengthM(pathPts) / 1000).toFixed(1)} km (${pathPts.length} points)</p>` : ""}
       <p><strong>Country:</strong> ${escapeHtml(meta.country || "—")}</p>
       <p><strong>Status:</strong> <span class="badge ${meta.status}">${meta.status}</span></p>
       ${meta.notes ? `<p class="notes">${escapeHtml(meta.notes)}</p>` : ""}
@@ -533,13 +630,21 @@
       loadDetailCourseTimes(meta.id);
     }
 
-    if (full.polygons && full.polygons.length > 0 && courseDetailLayer) {
+    const hasPolygons = Array.isArray(full.polygons) && full.polygons.length > 0;
+    if ((hasPolygons || pathPts.length) && courseDetailLayer) {
       const bounds = [];
-      full.polygons.forEach((poly) => {
+      (full.polygons || []).forEach((poly) => {
         (poly.points || []).forEach((pt) => bounds.push([pt.lat, pt.lon]));
       });
+      pathPts.forEach((pt) => bounds.push(pt));
+      if (pathPts.length) {
+        // Drawn first so gate polygons sit on top of the line.
+        const line = L.polyline(pathPts, getPathOptions());
+        line.bindTooltip("Traced path (advisory)");
+        courseDetailLayer.addLayer(line);
+      }
       if (bounds.length > 0) {
-        full.polygons.forEach((poly, idx) => {
+        (full.polygons || []).forEach((poly, idx) => {
           const pts = (poly.points || []).map((p) => [p.lat, p.lon]);
           if (pts.length >= 2) {
             if (pts[0][0] !== pts[pts.length - 1][0] || pts[0][1] !== pts[pts.length - 1][1]) {
