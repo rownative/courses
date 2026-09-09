@@ -667,3 +667,18 @@ main {
     border-bottom: 1px solid #ddd;
   }
 }
+
+.course-validation-dialog {
+  width: min(900px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  box-sizing: border-box;
+  overflow: auto;
+  border: 0;
+  border-radius: 10px;
+  padding: 1.25rem;
+  color: #222;
+  background: white;
+}
+.course-validation-dialog::backdrop { background: rgb(0 0 0 / 55%); }
+.course-validation-dialog .validation-map { height: min(55vh, 500px); min-height: 240px; }
+.course-validation-dialog form { margin-top: 1rem; text-align: right; }
