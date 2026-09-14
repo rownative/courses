@@ -35,6 +35,12 @@
         <color>ff7fffff</color>
       </PolyStyle>
     </Style>
+    <Style id="path">
+      <LineStyle>
+        <color>ff00ffff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
     <Folder id="102">
       <name>Fish Creek B2B - Fish Creek - Fish Creek B2B Rev D</name>
       <open>1</open>

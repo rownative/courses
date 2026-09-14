@@ -35,6 +35,12 @@
         <color>ff7fffff</color>
       </PolyStyle>
     </Style>
+    <Style id="path">
+      <LineStyle>
+        <color>ff00ffff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
     <Folder id="173">
       <name>Cambridge Cam courses - H2H 1</name>
       <open>1</open>

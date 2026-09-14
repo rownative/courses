@@ -19,6 +19,20 @@ MIN_COURSE_LENGTH_M = 100
 MAX_COURSE_LENGTH_M = 25_000
 # Max gap between consecutive polygon centroids (catches coordinate typos; 5k head races have ~5k gap)
 MAX_CONSECUTIVE_GAP_M = 25_000
+# Optional traced centreline (`path`): every polygon centroid must lie within this distance of the
+# path, or within the polygon's own extent if that is larger (wide gates on wide water).
+PATH_GATE_TOLERANCE_M = 250
+MIN_PATH_POINTS = 2
+
+# Non-fatal data-quality warnings (reported alongside OK; never fail validation).
+# Gate extents in the library: median ~100 m, 99th percentile ~420 m.
+POLYGON_EXTENT_WARN_M = 500
+# A polygon this large with this many vertices is almost certainly a traced route, not a gate.
+PATH_LIKE_MIN_VERTICES = 12
+PATH_LIKE_MIN_EXTENT_M = 1000
+# distance_m is warned about when it disagrees with the polygon chain by more than both of these.
+DISTANCE_MISMATCH_WARN_FRACTION = 0.10
+DISTANCE_MISMATCH_WARN_MIN_M = 50
 
 
 def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -39,6 +53,47 @@ def polygon_centroid(points: list[dict]) -> tuple[float, float]:
     lat_sum = sum(p["lat"] for p in points)
     lon_sum = sum(p["lon"] for p in points)
     return lat_sum / n, lon_sum / n
+
+
+def polygon_extent_m(points: list[dict]) -> float:
+    """Greatest distance in meters between any two vertices of a polygon."""
+    pts = strip_duplicate_closing_vertex(points)
+    if len(pts) < 2:
+        return 0.0
+    return max(haversine_m(a["lat"], a["lon"], b["lat"], b["lon"]) for a, b in combinations(pts, 2))
+
+
+def point_to_segment_m(lat: float, lon: float, a: dict, b: dict) -> float:
+    """
+    Distance in meters from (lat, lon) to segment a-b.
+    Uses a local equirectangular projection centred on the point; accurate for the
+    sub-kilometre distances this is used for.
+    """
+    k = math.pi / 180 * EARTH_RADIUS
+    cos_lat = math.cos(math.radians(lat))
+    ax, ay = (a["lon"] - lon) * k * cos_lat, (a["lat"] - lat) * k
+    bx, by = (b["lon"] - lon) * k * cos_lat, (b["lat"] - lat) * k
+    dx, dy = bx - ax, by - ay
+    if dx == 0 and dy == 0:
+        return math.hypot(ax, ay)
+    t = -(ax * dx + ay * dy) / (dx * dx + dy * dy)
+    t = max(0.0, min(1.0, t))
+    return math.hypot(ax + t * dx, ay + t * dy)
+
+
+def path_min_distance_m(path: list[dict], lat: float, lon: float) -> float:
+    """Smallest distance in meters from (lat, lon) to any segment of an ordered path."""
+    if len(path) == 1:
+        return haversine_m(lat, lon, path[0]["lat"], path[0]["lon"])
+    return min(point_to_segment_m(lat, lon, path[i], path[i + 1]) for i in range(len(path) - 1))
+
+
+def path_length_m(path: list[dict]) -> float:
+    """Traced length in meters of an ordered path."""
+    return sum(
+        haversine_m(path[i]["lat"], path[i]["lon"], path[i + 1]["lat"], path[i + 1]["lon"])
+        for i in range(len(path) - 1)
+    )
 
 
 def polygon_area_signed(points: list[dict]) -> float:
@@ -95,13 +150,68 @@ def segments_intersect(a1: dict, a2: dict, b1: dict, b2: dict) -> bool:
 
 
 def strip_duplicate_closing_vertex(points: list[dict]) -> list[dict]:
-    """If first and last vertices coincide (KML closed ring), drop the duplicate for geometry."""
-    if len(points) < 4:
-        return points
-    a, b = points[0], points[-1]
-    if a["lat"] == b["lat"] and a["lon"] == b["lon"]:
-        return points[:-1]
-    return points
+    """
+    Normalise a ring for geometry checks.
+
+    Drops consecutive duplicate vertices (zero-length edges, common in KML exports, which
+    otherwise trip the self-intersection check) and, if the first and last vertices then
+    coincide (KML closed ring), drops the closing duplicate.
+    """
+    out: list[dict] = []
+    for p in points:
+        if out and out[-1]["lat"] == p["lat"] and out[-1]["lon"] == p["lon"]:
+            continue
+        out.append(p)
+    if len(out) >= 4 and out[0]["lat"] == out[-1]["lat"] and out[0]["lon"] == out[-1]["lon"]:
+        out = out[:-1]
+    return out
+
+
+def polygon_chain_length_m(polygons: list[dict]) -> float:
+    """Sum of centroid-to-centroid distances along polygons (assumed sorted by order)."""
+    centroids = [polygon_centroid(strip_duplicate_closing_vertex(p["points"])) for p in polygons]
+    return sum(
+        haversine_m(centroids[i][0], centroids[i][1], centroids[i + 1][0], centroids[i + 1][1])
+        for i in range(len(centroids) - 1)
+    )
+
+
+def course_warnings(data: dict) -> list[str]:
+    """
+    Non-fatal data-quality warnings for a structurally valid course dict.
+    These do not fail validation; they are surfaced so a reviewer can look.
+    """
+    warnings: list[str] = []
+    polygons = sorted(data.get("polygons") or [], key=lambda p: p.get("order", 0))
+
+    for i, poly in enumerate(polygons):
+        pts = strip_duplicate_closing_vertex(poly["points"])
+        extent = polygon_extent_m(pts)
+        if len(pts) >= PATH_LIKE_MIN_VERTICES and extent >= PATH_LIKE_MIN_EXTENT_M:
+            warnings.append(
+                f"polygon {i} ({poly['name']}) looks like a traced route "
+                f"({len(pts)} vertices, {extent:.0f}m across); store it in `path` instead"
+            )
+        elif extent > POLYGON_EXTENT_WARN_M:
+            warnings.append(
+                f"polygon {i} ({poly['name']}) is {extent:.0f}m across "
+                f"(> {POLYGON_EXTENT_WARN_M}m); check for a stray vertex"
+            )
+
+    orders = [p.get("order") for p in polygons]
+    if polygons and orders != list(range(len(polygons))):
+        warnings.append(f"polygon orders are {orders}; expected 0..{len(polygons) - 1}")
+
+    declared = data.get("distance_m")
+    if len(polygons) >= 2 and isinstance(declared, (int, float)) and not isinstance(declared, bool):
+        chain = polygon_chain_length_m(polygons)
+        diff = abs(declared - chain)
+        if chain > 0 and diff > DISTANCE_MISMATCH_WARN_MIN_M and diff / chain > DISTANCE_MISMATCH_WARN_FRACTION:
+            warnings.append(
+                f"distance_m is {declared:.0f} but the polygon chain measures {chain:.0f}m"
+            )
+
+    return warnings
 
 
 def polygon_self_intersects(points: list[dict]) -> bool:
@@ -169,6 +279,42 @@ def polygons_overlap(points_a: list[dict], points_b: list[dict]) -> bool:
             if segments_intersect(a1, a2, b1, b2):
                 return True
     return False
+
+
+def validate_path(path: object, polygons: list[dict]) -> str | None:
+    """
+    Validate the optional `path` field (traced centreline) against the schema and the
+    course's polygons. Returns an error message, or None if the path is acceptable.
+    """
+    if not isinstance(path, list):
+        return "path must be an array of {lat, lon} points"
+    if len(path) < MIN_PATH_POINTS:
+        return f"path: at least {MIN_PATH_POINTS} points required"
+    for j, p in enumerate(path):
+        if not isinstance(p, dict) or "lat" not in p or "lon" not in p:
+            return f"path point {j}: lat and lon required"
+        lat, lon = p["lat"], p["lon"]
+        if isinstance(lat, bool) or isinstance(lon, bool):
+            return f"path point {j}: lat/lon must be numbers"
+        if not isinstance(lat, (int, float)) or not isinstance(lon, (int, float)):
+            return f"path point {j}: lat/lon must be numbers"
+        if not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
+            return f"path point {j}: lat/lon out of range"
+    for j in range(len(path) - 1):
+        d = haversine_m(path[j]["lat"], path[j]["lon"], path[j + 1]["lat"], path[j + 1]["lon"])
+        if d > MAX_CONSECUTIVE_GAP_M:
+            return f"path: gap {d:.0f}m > {MAX_CONSECUTIVE_GAP_M}m between points {j} and {j + 1}"
+    for i, poly in enumerate(polygons):
+        pts = strip_duplicate_closing_vertex(poly["points"])
+        clat, clon = polygon_centroid(pts)
+        tolerance = max(PATH_GATE_TOLERANCE_M, polygon_extent_m(pts))
+        d = path_min_distance_m(path, clat, clon)
+        if d > tolerance:
+            return (
+                f"path passes {d:.0f}m from polygon {i} ({poly['name']}); "
+                f"must be within {tolerance:.0f}m"
+            )
+    return None
 
 
 def validate_course(path: Path) -> tuple[bool, str]:
@@ -253,7 +399,23 @@ def validate_course(path: Path) -> tuple[bool, str]:
         if polygons_overlap(pa, pb):
             return False, f"Polygons {i} ({polygons[i]['name']}) and {j} ({polygons[j]['name']}) overlap"
 
+    # Optional traced centreline
+    if "path" in data and data["path"] is not None:
+        err = validate_path(data["path"], polygons)
+        if err:
+            return False, err
+
     return True, "OK"
+
+
+def validate_course_detailed(path: Path) -> tuple[bool, str, list[str]]:
+    """Like validate_course, plus the non-fatal warnings for a course that passed."""
+    ok, msg = validate_course(path)
+    warnings: list[str] = []
+    if ok:
+        with open(path, encoding="utf-8") as f:
+            warnings = course_warnings(json.load(f))
+    return ok, msg, warnings
 
 
 def main() -> None:
@@ -268,9 +430,11 @@ def main() -> None:
             print(f"{path}: file not found", file=sys.stderr)
             all_ok = False
             continue
-        ok, msg = validate_course(path)
+        ok, msg, warnings = validate_course_detailed(path)
         if ok:
             print(f"{path}: OK")
+            for w in warnings:
+                print(f"{path}: warning: {w}")
         else:
             print(f"{path}: {msg}", file=sys.stderr)
             all_ok = False

@@ -35,6 +35,12 @@
         <color>ff7fffff</color>
       </PolyStyle>
     </Style>
+    <Style id="path">
+      <LineStyle>
+        <color>ff00ffff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
     <Folder id="104">
       <name>Seekonk North Stake Race - Seekonk North Stake Race Rev A</name>
       <open>1</open>

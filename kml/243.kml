@@ -35,6 +35,12 @@
         <color>ff7fffff</color>
       </PolyStyle>
     </Style>
+    <Style id="path">
+      <LineStyle>
+        <color>ff00ffff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
     <Folder id="243">
       <name>River Tiber above the dam - Tiber Upstream Practice</name>
       <open>1</open>

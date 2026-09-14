@@ -35,6 +35,12 @@
         <color>ff7fffff</color>
       </PolyStyle>
     </Style>
+    <Style id="path">
+      <LineStyle>
+        <color>ff00ffff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
     <Folder id="22">
       <name>Vets HORR - Mortlake to Putney</name>
       <open>1</open>

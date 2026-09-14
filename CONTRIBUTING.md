@@ -69,6 +69,11 @@ Each course is stored as `courses/{id}.json`. Required fields:
 - `status` — `provisional` or `established`
 - `polygons` — at least two polygons (start, waypoints, finish)
 
+Optional fields:
+
+- `notes` — description shown on the course page
+- `path` — traced centreline as ordered `{lat, lon}` points, for drawing the course; gates in `polygons` stay authoritative
+
 See [`courses/SCHEMA.md`](courses/SCHEMA.md) for the full schema.
 
 ## Validation
@@ -86,6 +91,16 @@ Validation checks:
 - At least 2 polygons with ≥3 points each
 - Distance 100 m–25 km
 - No polygon overlap within the course
+- If a `path` is present: at least two points, and it passes every gate
+
+Validation also prints non-fatal **warnings** (a gate wider than 500 m, a polygon that looks like a traced route, `distance_m` far from the polygon chain, odd polygon ordering). They appear in the PR comment so a reviewer can take a look; they do not block a merge. A course that already failed validation on the base branch is reported as pre-existing rather than failing the check, so a rename or status change on a legacy course is not blocked by old geometry problems.
+
+To audit the whole library at once:
+
+```bash
+python scripts/audit_courses.py            # text report
+python scripts/audit_courses.py --json     # machine-readable
+```
 
 ## Contributing code or scripts
 

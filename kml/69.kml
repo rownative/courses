@@ -35,6 +35,12 @@
         <color>ff7fffff</color>
       </PolyStyle>
     </Style>
+    <Style id="path">
+      <LineStyle>
+        <color>ff00ffff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
     <Folder id="69">
       <name>DRC to Regatta Point Sprint - DRC to Regatta Pt Sprint</name>
       <open>1</open>

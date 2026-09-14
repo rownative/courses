@@ -35,6 +35,12 @@
         <color>ff7fffff</color>
       </PolyStyle>
     </Style>
+    <Style id="path">
+      <LineStyle>
+        <color>ff00ffff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
     <Folder id="97">
       <name>Charles River - DeWolfe to Soldiers Field - Rev B - DeWolfe to Soldiers Field Rev B</name>
       <open>1</open>

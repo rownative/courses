@@ -33,6 +33,12 @@ pip install -r scripts/requirements.txt
 python scripts/validate_course.py courses/your-course.json
 ```
 
+To audit every course for data-quality problems (oversized gates, routes stored as polygons, `distance_m` mismatches):
+
+```bash
+python scripts/audit_courses.py
+```
+
 ## License
 
 Course data: [Open Database License (ODbL) 1.0](LICENSE) — you are free to use, share, and adapt the data as long as you attribute and keep it open.

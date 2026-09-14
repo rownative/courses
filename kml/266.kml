@@ -35,6 +35,12 @@
         <color>ff7fffff</color>
       </PolyStyle>
     </Style>
+    <Style id="path">
+      <LineStyle>
+        <color>ff00ffff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
     <Folder id="266">
       <name>Rijnland Nieuwjaarswedstrijd 18.7 - Nieuwjaarswedstrijd 18.7</name>
       <open>1</open>
