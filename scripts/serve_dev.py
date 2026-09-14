@@ -17,6 +17,7 @@ Use --no-reload to disable watching and browser refresh.
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timedelta
 import errno
 import json
 import threading
@@ -165,10 +166,11 @@ def _is_client_disconnect_oserror(exc: OSError) -> bool:
     return False
 
 
-class ReusableTCPServer(socketserver.TCPServer):
-    """Allow quick restart after Ctrl+C without waiting for TIME_WAIT (especially on Windows)."""
+class ReusableTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    """Keep browser preconnections from blocking other requests; allow quick restarts."""
 
     allow_reuse_address = True
+    daemon_threads = True
 
 
 # In-memory mock state (persists for the lifetime of the server process)
@@ -179,6 +181,7 @@ MOCK_CHALLENGES = []  # type: list[dict]
 MOCK_CHALLENGE_RESULTS = []  # type: list[dict]
 MOCK_CHALLENGE_ID = 1
 MOCK_RESULT_ID = 1
+MOCK_COURSE_PATHS = {}  # (challenge id, result id) -> public synthetic segment
 MOCK_STANDARD_COLLECTIONS = []  # type: list[dict]
 
 
@@ -381,8 +384,8 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             return True
         # Mock OTW rowing activities for the calculate-time modal
         activities = [
-            {"id": "mock-activity-1", "name": "Morning row", "start_date_local": "2025-03-15T08:00:00"},
-            {"id": "mock-activity-2", "name": "5k time trial", "start_date_local": "2025-03-18T09:30:00"},
+            {"id": "mock-activity-1", "name": "Morning row", "start_date_local": (datetime.now() - timedelta(days=2)).isoformat()},
+            {"id": "mock-activity-2", "name": "5k time trial", "start_date_local": (datetime.now() - timedelta(days=1)).isoformat()},
         ]
         self._send_json({"activities": activities})
         return True
@@ -517,9 +520,9 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
                 "name": "Charles River March Speed Order",
                 "courseId": "1",
                 "courseName": course_names.get("1", "Course 1"),
-                "rowStart": "2026-03-01T00:00:00",
-                "rowEnd": "2026-03-25T23:59:59",
-                "submitEnd": "2026-03-30T23:59:59",
+                "rowStart": (datetime.now() - timedelta(days=30)).isoformat(),
+                "rowEnd": (datetime.now() + timedelta(days=30)).isoformat(),
+                "submitEnd": (datetime.now() + timedelta(days=35)).isoformat(),
                 "collectionId": "hocr",
                 "hasHandicap": True,
                 "organizerId": "mock-123",
@@ -556,7 +559,6 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             },
         ]
         filtered = [c for c in all_challenges if c["id"] not in removed]
-        from datetime import datetime
         now = datetime.utcnow()
         result = []
         for c in filtered:
@@ -591,9 +593,9 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
                 "name": "Charles River March Speed Order",
                 "courseId": "1",
                 "courseName": course_names.get("1", "Course 1"),
-                "rowStart": "2026-03-01T00:00:00",
-                "rowEnd": "2026-03-25T23:59:59",
-                "submitEnd": "2026-03-30T23:59:59",
+                "rowStart": (datetime.now() - timedelta(days=30)).isoformat(),
+                "rowEnd": (datetime.now() + timedelta(days=30)).isoformat(),
+                "submitEnd": (datetime.now() + timedelta(days=35)).isoformat(),
                 "collectionId": "hocr",
                 "collectionName": "HOCR",
                 "hasHandicap": True,
@@ -644,6 +646,29 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             self._send_json({"error": "Not found"}, 404)
         return True
 
+    def _mock_course_path(self, challenge_id, variant=0):
+        """Synthetic course-local lines for UI testing, not athlete GPS."""
+        course_id = "102" if challenge_id == "mock-ch-3" else "1"
+        course = json.loads((COURSES_DIR / f"{course_id}.json").read_text())
+        centers = [[sum(p["lat"] for p in gate["points"]) / len(gate["points"]),
+                    sum(p["lon"] for p in gate["points"]) / len(gate["points"])]
+                   for gate in course["polygons"] if gate["points"]]
+        if len(centers) < 2:
+            return []
+        start, finish = centers[0], centers[-1]
+        return [start, [(start[0] + finish[0]) / 2,
+                        (start[1] + finish[1]) / 2 + variant * 0.0003], finish]
+
+    def _handle_api_challenge_course_track(self, challenge_id, result_id):
+        if challenge_id in _load_removed_challenges():
+            self._send_json({"error": "Not found"}, 404)
+            return True
+        path = MOCK_COURSE_PATHS.get((challenge_id, result_id))
+        if not path and challenge_id in ("mock-ch-1", "mock-ch-2", "mock-ch-3") and result_id in ("r1", "r2"):
+            path = self._mock_course_path(challenge_id, 1 if result_id == "r2" else 0)
+        self._send_json({"latlng": path} if path else {"error": "Not found"}, 200 if path else 404)
+        return True
+
     def _handle_api_challenges_results(self, challenge_id: str) -> bool:
         """GET /api/challenges/{id}/results"""
         removed = _load_removed_challenges()
@@ -653,9 +678,9 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         results = [r for r in MOCK_CHALLENGE_RESULTS if r.get("challengeId") == challenge_id]
         if not results and challenge_id in ("mock-ch-1", "mock-ch-2", "mock-ch-3"):
             results = [
-                {"id": "r1", "rank": 1, "displayName": "Alice R.", "boatType": "1x", "sex": "F", "crewAvgAge": 28, "rawTimeS": 1320, "correctedTimeS": 1280, "points": 98.5, "workoutDate": "2026-03-10", "validationStatus": "valid"},
-                {"id": "r2", "rank": 2, "displayName": "Bob M.", "boatType": "1x", "sex": "M", "crewAvgAge": 35, "rawTimeS": 1280, "correctedTimeS": 1290, "points": 97.2, "workoutDate": "2026-03-12", "validationStatus": "valid"},
-                {"id": "r3", "rank": 3, "displayName": "Crew Masters 8+", "boatType": "8+", "sex": "M", "crewAvgAge": 52, "rawTimeS": 1100, "correctedTimeS": 1305, "points": 96.1, "workoutDate": "2026-03-14", "validationStatus": "valid"},
+                {"id": "r1", "hasCourseTrack": True, "rank": 1, "displayName": "Alice R.", "boatType": "1x", "sex": "F", "crewAvgAge": 28, "rawTimeS": 1320, "courseDistanceM": 5000, "correctedTimeS": 1280, "points": 98.5, "workoutDate": "2026-03-10", "validationStatus": "valid"},
+                {"id": "r2", "hasCourseTrack": True, "rank": 2, "displayName": "Bob M.", "boatType": "1x", "sex": "M", "crewAvgAge": 35, "rawTimeS": 1280, "courseDistanceM": 5000, "correctedTimeS": 1290, "points": 97.2, "workoutDate": "2026-03-12", "validationStatus": "valid"},
+                {"id": "r3", "hasCourseTrack": False, "rank": 3, "displayName": "Crew Masters 8+", "boatType": "8+", "sex": "M", "crewAvgAge": 52, "rawTimeS": 1100, "courseDistanceM": None, "correctedTimeS": 1305, "points": 96.1, "workoutDate": "2026-03-14", "validationStatus": "valid"},
             ]
         self._send_json({"results": results})
         return True
@@ -685,11 +710,15 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             "sex": data.get("sex", "M"),
             "crewAvgAge": data.get("crewAvgAge"),
             "rawTimeS": raw_time,
+            "courseDistanceM": data.get("courseDistanceM", 5000),
             "correctedTimeS": data.get("correctedTimeS", raw_time),
             "points": data.get("points", 95),
             "workoutDate": data.get("workoutDate", "2026-03-15"),
             "validationStatus": "valid",
         }
+        new_result["hasCourseTrack"] = data.get("shareCoursePath") is True
+        if new_result["hasCourseTrack"]:
+            MOCK_COURSE_PATHS[(challenge_id, result_id)] = self._mock_course_path(challenge_id)
         MOCK_CHALLENGE_RESULTS.append(new_result)
         results_for_challenge = [r for r in MOCK_CHALLENGE_RESULTS if r.get("challengeId") == challenge_id]
         rank = len(results_for_challenge)
@@ -874,8 +903,8 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
         results = [r for r in MOCK_CHALLENGE_RESULTS if r.get("challengeId") == challenge_id]
         if not results and challenge_id in ("mock-ch-1", "mock-ch-2", "mock-ch-3"):
             results = [
-                {"id": "r1", "rank": 1, "displayName": "Alice R.", "boatType": "1x", "rawTimeS": 1320, "validationStatus": "valid"},
-                {"id": "r2", "rank": 2, "displayName": "Bob M.", "boatType": "1x", "rawTimeS": 1280, "validationStatus": "pending"},
+                {"id": "r1", "hasCourseTrack": True, "rank": 1, "displayName": "Alice R.", "boatType": "1x", "rawTimeS": 1320, "validationStatus": "valid"},
+                {"id": "r2", "hasCourseTrack": True, "rank": 2, "displayName": "Bob M.", "boatType": "1x", "rawTimeS": 1280, "validationStatus": "pending"},
             ]
         self._send_json({"results": results})
         return True
@@ -940,6 +969,10 @@ class MockAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             return self._handle_oauth_authorize()
         if path in ("/oauth/logout", "/oauth/logout/"):
             return self._handle_oauth_logout()
+
+        m = re.match(r"^/api/challenges/([^/]+)/results/([^/]+)/track/?$", path)
+        if m and self.command == "GET":
+            return self._handle_api_challenge_course_track(m.group(1), m.group(2))
 
         # API (GET-only for read endpoints so POST in do_POST is not misrouted)
         if path in ("/api/me", "/api/me/") and self.command == "GET":

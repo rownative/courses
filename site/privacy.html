@@ -47,7 +47,7 @@
 
   <main class="privacy-page">
   <h1>Privacy Policy</h1>
-  <p>Last updated: March 2026</p>
+  <p>Last updated: September 2026</p>
 
   <p>rownative.icu is an open-source, community-maintained platform for GPS-defined rowing courses. This policy describes what data we collect, why, and how it is handled.</p>
 
@@ -62,20 +62,24 @@
     <li><strong>Session cookie.</strong> After you sign in, we store an encrypted HTTP-only cookie (<code>rn_session</code>) in your browser containing your athlete ID and OAuth tokens. This cookie is used to keep you logged in and is never sent to third parties.</li>
     <li><strong>Liked courses.</strong> If you like a course, your athlete ID and the list of liked course IDs are stored in Cloudflare KV (key-value storage). This is used to sync your liked courses to CrewNerd.</li>
     <li><strong>Submitted courses.</strong> If you submit a course, the course geometry (GPS polygon data) is stored in this repository as a public file. No personal information is included in the course file.</li>
+    <li><strong>Challenge results.</strong> When you submit a challenge result, we store the submitting athlete ID, submitted display name or crew name, activity ID, result time, measured course distance, workout date, category details, and validation status so the leaderboard and challenge administration can work. A reduced-detail GPS track of the submitted workout is also retained for the challenge organiser to review the result.</li>
   </ul>
 
-  <h2>What we do not store</h2>
+  <h2>Other data practices</h2>
   <ul>
-    <li>We do not store your name, email address, or any personal profile information from intervals.icu beyond your athlete ID.</li>
-    <li>We do not store your GPS tracks or workout data.</li>
+    <li>We do not store your email address or full intervals.icu profile. A name or crew name is stored only when it is submitted with a challenge result.</li>
     <li>We do not use advertising or tracking cookies.</li>
-    <li>We do not sell or share your data with third parties.</li>
+    <li>We do not sell your data. Submitted courses, leaderboard results, and opted-in course paths are publicly accessible.</li>
   </ul>
+
+  <h2>Challenge course-path sharing</h2>
+  <p>On a challenge submission, you may choose to share the timed start-to-finish course segment on the public leaderboard map. If you select the checkbox, we store that course-only path and other leaderboard visitors can display it. If you leave it unchecked, we do not store a new public course path.</p>
+  <p>The checkbox controls public sharing only; it does not change the challenge organiser’s access to the reduced-detail GPS track used for result review. While submissions are open, resubmitting the same result category with the checkbox unchecked clears the public course path. After submissions close, use the <a href="https://github.com/rownative/courses/issues">repository contact route</a> to request a change.</p>
 
   <h2>Third-party services</h2>
   <ul>
     <li><strong>intervals.icu</strong> — identity provider. Their <a href="https://intervals.icu/privacy">privacy policy</a> applies to your intervals.icu account.</li>
-    <li><strong>Cloudflare</strong> — Worker compute and KV storage. Cloudflare may log request metadata (IP address, timestamp) as part of normal infrastructure operation.</li>
+    <li><strong>Cloudflare</strong> — Worker compute, KV storage, and D1 database storage. Cloudflare may log request metadata (IP address, timestamp) as part of normal infrastructure operation.</li>
     <li><strong>GitHub Pages</strong> — static site hosting. GitHub may log request metadata per their <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy policy</a>.</li>
   </ul>
 

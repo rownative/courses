@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .challenge-page { max-width: 64rem; margin: 0 auto; padding: 0 1rem; display: grid; grid-template-columns: 1fr 280px; gap: 1.5rem; }
-    @media (max-width: 768px) { .challenge-page { grid-template-columns: 1fr; } }
+    .challenge-page { max-width: 76rem; margin: 0 auto; padding: 0 1rem; display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 1.5rem; }
+    @media (max-width: 768px) { .challenge-page { grid-template-columns: minmax(0, 1fr); } }
     .challenge-page h1 { margin-top: 0; }
     .challenge-header .meta { color: #666; font-size: 0.9rem; margin: 0.5rem 0; }
     .challenge-header .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
@@ -18,12 +18,20 @@
     .challenge-header .badge.upcoming { background: #e8e8f4; color: #2d2d5a; }
     #challenge-map { height: 300px; border-radius: 8px; margin: 1rem 0; }
     .leaderboard-section h3 { margin: 1rem 0 0.5rem; }
-    .leaderboard-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .leaderboard-table-wrap { overflow-x: auto; }
+    .leaderboard-table { width: 100%; min-width: 840px; border-collapse: collapse; font-size: 0.9rem; }
     .leaderboard-table th, .leaderboard-table td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #ddd; }
     .leaderboard-table th { background: #f0f0f0; }
     .leaderboard-table .time { font-variant-numeric: tabular-nums; }
+    .leaderboard-table .time, .leaderboard-table .distance, .leaderboard-table .date, .leaderboard-table .numeric-header { white-space: nowrap; }
     .leaderboard-table th.sortable { cursor: pointer; user-select: none; }
     .leaderboard-table th.sortable:hover { text-decoration: underline; }
+    .leaderboard-table .course-track-row.track-selected { box-shadow: inset 4px 0 var(--course-track-color); }
+    .course-track-toggle { display: inline-flex; align-items: center; gap: 0.35rem; margin: 0; font-weight: normal; }
+    .course-track-toggle input { width: auto; }
+    .course-track-swatch { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--course-track-color); display: inline-block; }
+    .course-track-unavailable { color: #666; font-size: 0.85rem; }
+    .course-track-message { margin: 0.5rem 0; color: #9b1c1c; font-size: 0.9rem; }
     .leaderboard-filters { margin: 0.5rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .leaderboard-filters select { padding: 0.35rem 0.5rem; }
     .submit-result-btn { margin: 1rem 0; }
@@ -37,6 +45,8 @@
     .submit-modal label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
     .submit-modal .form-hint { display: block; margin-top: 0.25rem; font-size: 0.85rem; color: #666; }
     .submit-modal input, .submit-modal select { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .submit-modal .checkbox-label { display: flex; align-items: flex-start; gap: 0.5rem; font-weight: normal; }
+    .submit-modal .checkbox-label input { width: auto; padding: 0; margin-top: 0.2rem; }
     .submit-modal .actions { margin-top: 1.5rem; display: flex; gap: 0.5rem; }
     .hidden { display: none !important; }
     .btn { padding: 0.5rem 1rem; background: #1a3a4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; font-size: 0.9rem; }
@@ -102,6 +112,7 @@
       <div class="leaderboard-section">
         <h3>Leaderboard</h3>
         <div class="leaderboard-filters" id="leaderboard-filters"></div>
+        <div class="leaderboard-table-wrap">
         <table class="leaderboard-table" id="leaderboard-table">
           <thead>
             <tr>
@@ -109,15 +120,20 @@
               <th>Athlete</th>
               <th>Boat</th>
               <th id="age-header" class="hidden">Age</th>
-              <th id="raw-time-header" class="sortable" role="button" tabindex="0" title="Click to sort by raw time">Raw time</th>
+              <th id="raw-time-header" class="sortable numeric-header" role="button" tabindex="0" title="Click to sort by raw time">Raw time</th>
+              <th class="numeric-header">Distance (m)</th>
+              <th class="numeric-header" title="Average pace per 500 metres">Avg Pace</th>
+              <th>Show path</th>
               <th id="corrected-header" class="hidden">Corrected</th>
               <th id="points-header" class="hidden">Points</th>
-              <th>Date</th>
+              <th class="numeric-header">Date</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody id="leaderboard-body"></tbody>
         </table>
+        </div>
+        <p id="course-track-message" class="course-track-message hidden" role="status" aria-live="polite"></p>
       </div>
       <div id="submit-result-section" class="hidden">
         <button type="button" class="btn submit-result-btn" id="submit-result-btn">Submit my result</button>
@@ -140,6 +156,13 @@
           <select id="submit-activity">
             <option value="">Loading…</option>
           </select>
+        </div>
+        <div class="form-row">
+          <label class="checkbox-label" for="submit-share-course-path">
+            <input type="checkbox" id="submit-share-course-path" />
+            <span>Allow my timed course path to be shown on the challenge leaderboard.</span>
+          </label>
+          <small class="form-hint">Only the timed start-to-finish segment will be shared publicly. The organiser can still view your submitted workout track for validation.</small>
         </div>
         <div class="form-row">
           <label for="submit-boat-type">Boat type</label>
@@ -188,6 +211,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="api-config.js"></script>
   <script src="nav.js"></script>
+  <script src="challenge-format.js"></script>
   <script src="challenge.js"></script>
 </body>
 </html>
